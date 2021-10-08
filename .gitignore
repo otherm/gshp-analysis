@@ -10,7 +10,7 @@ configuration.py
 *.so
 
 # txt data files
-*.txt
+
 # Distribution / packaging
 .Python
 build/
