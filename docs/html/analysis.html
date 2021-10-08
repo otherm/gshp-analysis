@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>analysis package &mdash; oTherm GSHP analysis  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="utilities package" href="utilities.html" />
+    <link rel="prev" title="Modules" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> oTherm GSHP analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="otherm_project.html">oTherm Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">Code Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html#analysis">analysis</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">analysis package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modules">Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analysis-daily-summaries-module">analysis.daily_summaries module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analysis-ewt-violins-module">analysis.ewt_violins module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analysis-geoexchange-proxies-module">analysis.geoexchange_proxies module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analysis-hp-mfr-plots-module">analysis.hp_mfr_plots module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-analysis.kwh_per_sf">analysis.kwh_per_sf module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analysis-load-factor-module">analysis.load_factor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-analysis.spf_calc">analysis.spf_calc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analysis-time-of-day-usage-module">analysis.time_of_day_usage module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#utilities">utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#db-tools">db_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="otherm_field_names.html">oTherm Database Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Credits and Disclaimers</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">oTherm GSHP analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">Modules</a> &raquo;</li>
+      <li>analysis package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/analysis.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="analysis-package">
+<h1>analysis package<a class="headerlink" href="#analysis-package" title="Permalink to this headline"></a></h1>
+<p>The analysis packages provided provide some examples of the potential uses of oTherm GSHP data.  These are provided as is and have the following limitations:</p>
+<ul class="simple">
+<li><p>Each site has a single heat pump.  The analyses presented can, in the future, be extended to multiple pieces of equipment.</p></li>
+</ul>
+<section id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="analysis-daily-summaries-module">
+<h2>analysis.daily_summaries module<a class="headerlink" href="#analysis-daily-summaries-module" title="Permalink to this headline"></a></h2>
+</section>
+<section id="analysis-ewt-violins-module">
+<h2>analysis.ewt_violins module<a class="headerlink" href="#analysis-ewt-violins-module" title="Permalink to this headline"></a></h2>
+</section>
+<section id="analysis-geoexchange-proxies-module">
+<h2>analysis.geoexchange_proxies module<a class="headerlink" href="#analysis-geoexchange-proxies-module" title="Permalink to this headline"></a></h2>
+</section>
+<section id="analysis-hp-mfr-plots-module">
+<h2>analysis.hp_mfr_plots module<a class="headerlink" href="#analysis-hp-mfr-plots-module" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-analysis.kwh_per_sf">
+<span id="analysis-kwh-per-sf-module"></span><h2>analysis.kwh_per_sf module<a class="headerlink" href="#module-analysis.kwh_per_sf" title="Permalink to this headline"></a></h2>
+<p>Created on Sat Mar  3 18:17:51 2018</p>
+<p>&#64;author: M Davis</p>
+<p>calculatoin and plotting of kwh per SF as function of OAT</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.kwh_per_sf.create_kwh_per_sf_plots">
+<span class="sig-prename descclassname"><span class="pre">analysis.kwh_per_sf.</span></span><span class="sig-name descname"><span class="pre">create_kwh_per_sf_plots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol_color</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.kwh_per_sf.create_kwh_per_sf_plots" title="Permalink to this definition"></a></dt>
+<dd><p>Add up two integer numbers.</p>
+<p>This function simply wraps the <code class="docutils literal notranslate"><span class="pre">+</span></code> operator, and does not
+do anything interesting, except for illustrating what
+the docstring of a very simple function looks like.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num1</strong> (<em>int</em>) – First number to add.</p></li>
+<li><p><strong>num2</strong> (<em>int</em>) – Second number to add.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The sum of <code class="docutils literal notranslate"><span class="pre">num1</span></code> and <code class="docutils literal notranslate"><span class="pre">num2</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">subtract</span></code></dt><dd><p>Subtract one integer from another.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">25</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="analysis-load-factor-module">
+<h2>analysis.load_factor module<a class="headerlink" href="#analysis-load-factor-module" title="Permalink to this headline"></a></h2>
+<p>Because adoption of GSHP systems will often replace fossil-fuel fired systems and represent more energy intensive appliances in a home, electric utilities are also interested in the load factors for typical residential GSHP systems and the month-to-month variation in load factors over the course of a year.  For the purposes here, the load factor is defined as the ratio of the electricity consumed over a period of time, such as one month, to the consumption that would have occurred if the peak demand operated over the entire month.   The load factor ranges from 0 to 1, with higher values representing more uniform and predictable demand.</p>
+<div class="math notranslate nohighlight">
+\[Load Factor = \frac{kWh_{used \: in \: period}}{{kW_{peak} \cdot (hours \: in \: period)} }\]</div>
+</section>
+<section id="module-analysis.spf_calc">
+<span id="analysis-spf-calc-module"></span><h2>analysis.spf_calc module<a class="headerlink" href="#module-analysis.spf_calc" title="Permalink to this headline"></a></h2>
+<p>Created on Tue Jun 15 17:10:56 2021</p>
+<p>&#64;author: rtc50</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.elec_error">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">elec_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.elec_error" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.elec_error_one">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">elec_error_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.elec_error_one" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.english_to_metric">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">english_to_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.english_to_metric" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.error_heat_from_ground">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">error_heat_from_ground</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mrl_hr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E_deltaT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.error_heat_from_ground" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.heat_from_ground">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">heat_from_ground</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pfcf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.heat_from_ground" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.spf_cooling">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_cooling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_cooling" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.spf_cooling_by_EWT">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_cooling_by_EWT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spf_cool_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Interval</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_cooling_by_EWT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.spf_cooling_error_monthly">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_cooling_error_monthly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spf_cool_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_cooling_error_monthly" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.spf_cooling_monthly">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_cooling_monthly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monthly_cooling</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percent_max</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_cooling_monthly" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.spf_cooling_one_elec">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_cooling_one_elec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_cooling_one_elec" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.spf_heating">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_heating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_heating" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.spf_heating_by_EWT">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_heating_by_EWT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spf_heat_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Interval</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_heating_by_EWT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.spf_heating_error_monthly">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_heating_error_monthly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spf_heat_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_heating_error_monthly" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.spf_heating_monthly">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_heating_monthly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monthly_heating</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percent_max</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_heating_monthly" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.spf_heating_one_elec">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_heating_one_elec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_heating_one_elec" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.to_kilowatts">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">to_kilowatts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">derate</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.to_kilowatts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_calc.total_ground_heat">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">total_ground_heat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spf_heat_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.total_ground_heat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="analysis-time-of-day-usage-module">
+<h2>analysis.time_of_day_usage module<a class="headerlink" href="#analysis-time-of-day-usage-module" title="Permalink to this headline"></a></h2>
+<p>There is a growing interest in quantifying hourly demand profiles for building heat and cooling to manage generation assets and explore models for demand-response programs (e.g., National Academies, 2021).   While heat pump usage patterns tend to vary with season – with winters having higher demand in morning and summer a higher demand in the afternoon – specific usage patterns depend on preferences of building occupants and individual usage patterns.  Quantifying patterns of usage across a large number of heat pumps in a given regions will help to inform utilities in forecasting weather-dependent generation patterns and identify opportunities for demand response measures.</p>
+<span class="target" id="module-analysis.time_of_day_usage"></span><p>&#64;author: Matt Davis</p>
+<p>9.2.2018
+Aggregate statistics for kW on an hourly, time-of-day basis
+Currently calculates mean and 90th quantile for each hour and
+creates matplotlib plot</p>
+<p>Set up for a single year but should be extendable to multiple years
+using methods similar to ewt_aggregate_stats.py</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.time_of_day_usage.hourly_daily_stats">
+<span class="sig-prename descclassname"><span class="pre">analysis.time_of_day_usage.</span></span><span class="sig-name descname"><span class="pre">hourly_daily_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hp_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.time_of_day_usage.hourly_daily_stats" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>site</strong> – </p></li>
+<li><p><strong>hp_data</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Example output:</p>
+<a class="reference internal image-reference" href="images/time_of_day_usage.png"><img alt="Alternative text" src="images/time_of_day_usage.png" style="width: 400px;" /></a>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utilities.html" class="btn btn-neutral float-right" title="utilities package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matt Davis, Univeristy of New Hampshire.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
