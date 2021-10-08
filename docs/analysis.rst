@@ -12,42 +12,23 @@ Modules
 analysis.daily\_summaries module
 --------------------------------
 
-.. automodule:: analysis.daily_summaries
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 analysis.ewt\_violins module
 ----------------------------
 
-.. automodule:: analysis.ewt_violins
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 analysis.geoexchange\_proxies module
 ------------------------------------
 
-.. automodule:: analysis.geoexchange_proxies
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 analysis.hp\_mfr\_plots module
 ------------------------------
 
-.. automodule:: analysis.hp_mfr_plots
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 analysis.kwh\_per\_sf module
 ----------------------------
 
-.. automodule:: analysis.kwh_per_sf
-   :members:
-   :undoc-members:
-   :show-inheritance:
+
 
 analysis.load\_factor module
 ----------------------------------
@@ -57,10 +38,7 @@ Because adoption of GSHP systems will often replace fossil-fuel fired systems an
    Load Factor = \frac{kWh_{used \: in \: period}}{{kW_{peak} \cdot (hours \: in \: period)} }
 
 
-.. automodule:: analysis.load_factor
-   :members:
-   :undoc-members:
-   :show-inheritance:
+
 
 analysis.spf\_calc module
 -------------------------
