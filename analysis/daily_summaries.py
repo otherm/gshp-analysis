@@ -17,18 +17,8 @@ def daily_summary(data, site, **kwargs):
 
     :param pandas.DataFram data: minute-resolution operating data
     :param class site: site dataclass
-    :param dict kwargs:
-    :return: DataFrame with Daily Summaries::
-
-            class Equipment:
-                id: int
-                uuid: str
-                model: str
-                description: Optional[str]
-                type: int
-                site: int
-                manufacturer: int
-
+    :param dict kwargs: key work arguments
+    :return: DataFrame with daily summary class object
 
     """
     # Some additional columns to minute resolution data to facilitate
