@@ -60,7 +60,5 @@ There is a growing interest in quantifying hourly demand profiles for building h
 
 Example output:
 
-.. image:: ./images/time_of_day_usage.png
-   :width: 400
-   :alt: Alternative text
+
 
