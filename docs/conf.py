@@ -31,7 +31,7 @@ author = 'Matt Davis'
 extensions = ["sphinx.ext.autodoc"]
 #extensions = ['autoapi.extension']
 
-autodoc_mock_imports = ["configuration"]
+autodoc_mock_imports = ["configuration", "admin_tools"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

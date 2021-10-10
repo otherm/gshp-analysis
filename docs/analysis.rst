@@ -11,7 +11,10 @@ Modules
 
 analysis.daily\_summaries module
 --------------------------------
-
+.. automodule:: analysis.daily_summaries
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 analysis.ewt\_violins module
 ----------------------------
@@ -60,5 +63,7 @@ There is a growing interest in quantifying hourly demand profiles for building h
 
 Example output:
 
-
+.. image:: ./html/images/time_of_day_usage.png
+   :width: 600
+   :alt: Example plot of time of day usage for a site with the ground source heat pump
 

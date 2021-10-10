@@ -11,14 +11,20 @@ from db_tools import otherm_db_reader
 
 palette = {'Heating': 'darkorange', 'Cooling': 'dodgerblue'}
 
-def daily_summary(data, site, **kwargs):
+def daily_summary(data, site):
     """
-    Calculates daily summaries
 
-    :param pandas.DataFram data: minute-resolution operating data
-    :param class site: site dataclass
-    :param dict kwargs: key work arguments
-    :return: DataFrame with daily summary class object
+    Parameters
+    ----------
+    data :  DataFrame
+        Pandas ddataframe containing minute-resolution operating data
+
+    site :  dict
+        Dataclass object containing site information
+
+    Returns
+    -------
+
 
     """
     # Some additional columns to minute resolution data to facilitate
@@ -134,7 +140,7 @@ if __name__ == "__main__":
             geo_cooling.append(-geo[i])
             outdoor_temp_cooling.append(outdoor_temp[i])
 
-    """Insert Display Name for "Site" """
+
     title = 'Daily Load Profile'
 
     plt.plot(outdoor_temp_heating, geo_heating, 'o', c=palette['Heating'], label="Geo Heat Extraction")
