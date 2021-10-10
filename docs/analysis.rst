@@ -45,11 +45,7 @@ Because adoption of GSHP systems will often replace fossil-fuel fired systems an
 
 analysis.spf\_calc module
 -------------------------
-
-.. automodule:: analysis.spf_calc
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Note:  add back in automodule when ready
 
 analysis.time\_of\_day\_usage module
 ------------------------------------
@@ -64,6 +60,6 @@ There is a growing interest in quantifying hourly demand profiles for building h
 Example output:
 
 .. image:: ./html/images/time_of_day_usage.png
-   :width: 600
+   :width: 400
    :alt: Example plot of time of day usage for a site with the ground source heat pump
 

@@ -16,9 +16,36 @@ The tools also contain scripts for:
     - Retrieving heat pump peformance data from a local SQLite database (*note*, the SQLite database is not part
       of the oTherm database.
 
-.. note:: The scripts provided here to access the oTherm database result in data objects that have similar structures
-        and naming conventions in the oTherm database.  However, the ``@dataclass`` objects that are used for analyzing
-        data differ from the classes in the oTherm application.
+.. note::
+    The names and types of data elements  used in the analyses differ from the oTherm data model specification.
+
+The *dataclass* objects use for analysis are constructed from json objects returned from the oTherm database.
+However, because the *dataclass* objects represent a single instance, the data elements are reorganized into
+a simpler representation than the original json response.
+
+Example
+-------
+    The input typicall consists of a site_name and start and end dates.  The functions can be called from analyses
+    modules.  For example ::
+
+     site_name = 'GES649'
+     start_date = '2015-01-01'
+     end_date = '2021-01-01'
+
+     #Get site information
+     site = get_site_info(site_name)
+
+     #Get equipment information and dataframe of heat pump operating data
+     equipment, hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone)
+
+     #Get monitoring system information and measurement specifications
+     equip_monitoring_system = get_equipment_monitoring_system(equipment.id)
+
+     #Get weather data for station
+     wx_data = get_weather_data(site.weather_station.nws_id, site.timezone, start_date, end_date)
+
+     #Get thermal source specifications
+     source_specs = get_source_specs(site)
 
 """
 
@@ -146,7 +173,7 @@ def get_equipment_data(site_id, start_date, end_date, timezone):
         *pandas.DataFrame* containing heat pump operating data over the specified time range.  The DataFrame contains
         all fields stored for the piece of equipment in the influxDB database.
 
-    .. note:: The index of the *DataFrame* is set to the ``time`` field and localized according the ``site.timezone`` attribute
+        .. note:: The index of the *DataFrame* is set to the ``time`` field and localized according the ``site.timezone`` attribute
 
     """
 
@@ -184,59 +211,7 @@ def get_equipment_data(site_id, start_date, end_date, timezone):
     return equipment, hp_data
 
 
-def get_monitoring_system(name):
-    """
-    Retrieves the monitoring_system attributes for a given monitoring system by name. This function requires
-    the exact name of the monitoring system, as specified in the oTherm database
 
-    Parameters
-    ----------
-    name : str
-           The name of the monitoring system
-
-    Returns
-    -------
-    dict
-            All specifications of a monitoring system in the oTherm database.  Refer to oTherm documentation for detais.
-
-            The example below shows a monitoring system with a single measurement point wiht name ``heatpump_power``.
-
-            Note that ``measurement_spec`` is a *list* with length equal to the number of measurement points.
-    Examples
-    --------
-    >>> monitoring_system = {'id': 1,
-                             'name': 'GxTracker Power',
-                             'description': '',
-                             'manufacturer': 1,
-                             'monitoring_system_specs':
-                                [{'measurement_spec': {'name': 'HPP VA W 8% EP',
-                                                       'description': 'Heat pump power, volt-amps, electrical panel',
-                                                       'type': {'name': 'heatpump_power',
-                                                                'msp_columns': None,
-                                                                'description': ''},
-                                                        'accuracy': '8.00000',
-                                                        'accuracy_pct': True,
-                                                        'meas_bias_abs': 0.0,
-                                                        'meas_bias_pct': 0.0,
-                                                        'location': {'name': 'Electrical Panel',
-                                                                     'description': ''},
-                                                        'unit': {'name': 'W',
-                                                                 'description': 'watts'}}},
-                                                      }
-                                 }
-                            }
-    """
-
-    mon_sys_url = "http://localhost:8000/api/monitoring_system/?name=%s" % (name)
-    response = requests.get(mon_sys_url)
-
-    #mon_sys_url = "http://otherm.iol.unh.edu/api/monitoring_system/?name=%s" % (name)
-    #response = requests.get(mon_sys_url, auth=(configuration.otherm_creds['user'],
-    #                                   configuration.otherm_creds['password']))
-
-    mon_sys_json = response.json()[0]
-
-    return mon_sys_json
 
 def get_equipment_monitoring_system(equip_id):
     """
@@ -267,10 +242,13 @@ def get_equipment_monitoring_system(equip_id):
     can be accessed by
 
     >>> monitoring_system.info.specs
-    `[{'measurement_spec': {'name': 'HPP VA W 8% EP', 'description': 'Heat pump power, volt-amps, electrical panel', 'type': {'name': 'heatpump_power', 'msp_columns': None, 'description': ''}, 'accuracy': '8.00000', 'accuracy_pct': True, 'meas_bias_abs': 0.0, 'meas_bias_pct': 0.0, 'location': {'name': 'Electrical Panel', 'description': ''}, 'unit': {'name': 'W', 'description': 'watts'}}}, {'measurement_spec': {'name': 'LWT OMP 0.1 C', 'description': 'source return temperature, on metal pipe, calibrated', 'type': {'name': 'source_returntemp_C', 'msp_columns': None, 'description': 'source return (leaving) water temperature'}, 'accuracy': '0.10000', 'accuracy_pct': False, 'meas_bias_abs': 0.0, 'meas_bias_pct': 0.0, 'location': {'name': 'on metal pipe', 'description': ''}, 'unit': {'name': 'C', 'description': 'degrees Celsius'}}}, {'measurement_spec': {'name': 'EWT OMP 0.1 C', 'description': 'source fluid supply temp on metal pipe, calibrated sensor', 'type': {'name': 'source_supplytemp_C', 'msp_columns': None, 'description': 'ground loop source (entering) water temperature'}, 'accuracy': '0.10000', 'accuracy_pct': False, 'meas_bias_abs': 0.0, 'meas_bias_pct': 0.0, 'location': {'name': 'on metal pipe', 'description': ''}, 'unit': {'name': 'C', 'description': 'degrees Celsius'}}}, {'measurement_spec': {'name': 'AuP VA W 8% HP', 'description': 'Aux power with volt-amps in heat pump', 'type': {'name': 'heatpump_aux', 'msp_columns': None, 'description': 'auxiliary electric heat'}, 'accuracy': '8.00000', 'accuracy_pct': True, 'meas_bias_abs': 0.0, 'meas_bias_pct': 0.0, 'location': {'name': 'heat pump', 'description': ''}, 'unit': {'name': 'W', 'description': 'watts'}}}]'
+    `[{'measurement_spec': {'name': 'HPP VA W 8% EP', 'description': 'Heat pump power, volt-amps, electrical panel', ...`
 
     The monitoring system specifications is a list of measurements performed by the monitoring system, each measurement
     has its own set of specifications.  See oTherm documentation for more details.
+
+    The list can be search for individual measurements specifications with ``utilities.get_measurement_specs``
+
     """
     @dataclass
     class MonitoringSysInfo:
@@ -377,7 +355,7 @@ def get_source_specs(site):
     source_spec_url = "http://localhost:8000/api/thermal_source/?site=%s" % site.id
     source_spec_response = requests.get(source_spec_url)
     otherm_spec_dict = source_spec_response.json()[0]
-
+    '''
     source_spec_dict = {}
     source_spec_dict.update({'site': site.name, 'site_id': site.id})
     source_spec_dict.update({'source_name': otherm_spec_dict['name']})
@@ -397,6 +375,8 @@ def get_source_specs(site):
 
     source_spec = from_dict(data_class=SourceSpec, data=source_spec_dict)
     return source_spec, otherm_spec_dict
+    '''
+    return otherm_spec_dict
 
 def get_mfr_data(parameters):
 
@@ -407,25 +387,53 @@ def get_mfr_data(parameters):
     ge.close()
     return ds_data
 
+def get_monitoring_system(name):
+    """
+
+    Similar to ``get_equipment_monitoring_system`` but returns monitoring_system attributes for a given monitoring
+    system by name rather than equipment being monitored.  This function requires the exact name of the monitoring
+    system, as specified in the oTherm database
+
+    Parameters
+    ----------
+    name : str
+           The name of the monitoring system
+
+    Returns
+    -------
+    dict
+            All specifications of a monitoring system in the oTherm database.  Refer to oTherm documentation for detais.
+
+    Notes
+    -----
+        For more explanation of the parameters and return values, see ``get_equipment_monitoring_system``
+
+    """
+
+    mon_sys_url = "http://localhost:8000/api/monitoring_system/?name=%s" % (name)
+    response = requests.get(mon_sys_url)
+
+    #mon_sys_url = "http://otherm.iol.unh.edu/api/monitoring_system/?name=%s" % (name)
+    #response = requests.get(mon_sys_url, auth=(configuration.otherm_creds['user'],
+    #                                   configuration.otherm_creds['password']))
+
+    mon_sys_json = response.json()[0]
+
+    return mon_sys_json
+
 
 if __name__ == '__main__':
     site_name = 'GES649'
     start_date = '2015-01-01'
     end_date = '2021-01-01'
 
-
     site = get_site_info(site_name)
-
     equipment, hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone)
-
     equip_monitoring_system = get_equipment_monitoring_system(equipment.id)
-
     wx_data = get_weather_data(site.weather_station.nws_id, site.timezone, start_date, end_date)
-
     monitoring_system_dict = get_monitoring_system(equip_monitoring_system.info.name)
-
     source_spec, otherm_source = get_source_specs(site)
-
+    otherm_source = get_source_specs(site)
 #                equipment_specs
 
 
