@@ -83,7 +83,6 @@
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#S"><strong>S</strong></a>
- | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
  | <a href="#W"><strong>W</strong></a>
  
@@ -92,10 +91,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
-    analysis.spf_calc
+    analysis.daily_summaries
 
       <ul>
-        <li><a href="analysis.html#module-analysis.spf_calc">module</a>
+        <li><a href="analysis.html#module-analysis.daily_summaries">module</a>
 </li>
       </ul></li>
   </ul></td>
@@ -121,6 +120,8 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="analysis.html#analysis.daily_summaries.daily_summary">daily_summary() (in module analysis.daily_summaries)</a>
+</li>
       <li>
     db_tools.influx_lp_writer
 
@@ -145,16 +146,6 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="analysis.html#analysis.spf_calc.elec_error">elec_error() (in module analysis.spf_calc)</a>
-</li>
-      <li><a href="analysis.html#analysis.spf_calc.elec_error_one">elec_error_one() (in module analysis.spf_calc)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="analysis.html#analysis.spf_calc.english_to_metric">english_to_metric() (in module analysis.spf_calc)</a>
-</li>
-      <li><a href="analysis.html#analysis.spf_calc.error_heat_from_ground">error_heat_from_ground() (in module analysis.spf_calc)</a>
-</li>
       <li><a href="utilities.html#utilities.df_plots.ewt_violin">ewt_violin() (in module utilities.df_plots)</a>
 </li>
   </ul></td>
@@ -164,6 +155,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="utilities.html#utilities.misc_functions.F_to_C">F_to_C() (in module utilities.misc_functions)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="utilities.html#utilities.get_measurement_spec.find_measurement_spec">find_measurement_spec() (in module utilities.get_measurement_spec)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -197,10 +192,6 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="analysis.html#analysis.spf_calc.heat_from_ground">heat_from_ground() (in module analysis.spf_calc)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="analysis.html#analysis.time_of_day_usage.hourly_daily_stats">hourly_daily_stats() (in module analysis.time_of_day_usage)</a>
 </li>
   </ul></td>
@@ -221,7 +212,7 @@
     module
 
       <ul>
-        <li><a href="analysis.html#module-analysis.spf_calc">analysis.spf_calc</a>
+        <li><a href="analysis.html#module-analysis.daily_summaries">analysis.daily_summaries</a>
 </li>
         <li><a href="analysis.html#module-analysis.time_of_day_usage">analysis.time_of_day_usage</a>
 </li>
@@ -232,6 +223,8 @@
         <li><a href="utilities.html#module-utilities.df_plots">utilities.df_plots</a>
 </li>
         <li><a href="utilities.html#module-utilities.df_processing">utilities.df_processing</a>
+</li>
+        <li><a href="utilities.html#module-utilities.get_measurement_spec">utilities.get_measurement_spec</a>
 </li>
         <li><a href="utilities.html#module-utilities.misc_functions">utilities.misc_functions</a>
 </li>
@@ -245,40 +238,6 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="utilities.html#utilities.save_responses_as_csv.save_responses_csv">save_responses_csv() (in module utilities.save_responses_as_csv)</a>
-</li>
-      <li><a href="analysis.html#analysis.spf_calc.spf_cooling">spf_cooling() (in module analysis.spf_calc)</a>
-</li>
-      <li><a href="analysis.html#analysis.spf_calc.spf_cooling_by_EWT">spf_cooling_by_EWT() (in module analysis.spf_calc)</a>
-</li>
-      <li><a href="analysis.html#analysis.spf_calc.spf_cooling_error_monthly">spf_cooling_error_monthly() (in module analysis.spf_calc)</a>
-</li>
-      <li><a href="analysis.html#analysis.spf_calc.spf_cooling_monthly">spf_cooling_monthly() (in module analysis.spf_calc)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="analysis.html#analysis.spf_calc.spf_cooling_one_elec">spf_cooling_one_elec() (in module analysis.spf_calc)</a>
-</li>
-      <li><a href="analysis.html#analysis.spf_calc.spf_heating">spf_heating() (in module analysis.spf_calc)</a>
-</li>
-      <li><a href="analysis.html#analysis.spf_calc.spf_heating_by_EWT">spf_heating_by_EWT() (in module analysis.spf_calc)</a>
-</li>
-      <li><a href="analysis.html#analysis.spf_calc.spf_heating_error_monthly">spf_heating_error_monthly() (in module analysis.spf_calc)</a>
-</li>
-      <li><a href="analysis.html#analysis.spf_calc.spf_heating_monthly">spf_heating_monthly() (in module analysis.spf_calc)</a>
-</li>
-      <li><a href="analysis.html#analysis.spf_calc.spf_heating_one_elec">spf_heating_one_elec() (in module analysis.spf_calc)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="T">T</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="analysis.html#analysis.spf_calc.to_kilowatts">to_kilowatts() (in module analysis.spf_calc)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="analysis.html#analysis.spf_calc.total_ground_heat">total_ground_heat() (in module analysis.spf_calc)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -298,6 +257,13 @@
 
       <ul>
         <li><a href="utilities.html#module-utilities.df_processing">module</a>
+</li>
+      </ul></li>
+      <li>
+    utilities.get_measurement_spec
+
+      <ul>
+        <li><a href="utilities.html#module-utilities.get_measurement_spec">module</a>
 </li>
       </ul></li>
   </ul></td>

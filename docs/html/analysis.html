@@ -46,13 +46,13 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html#analysis">analysis</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">analysis package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#modules">Modules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#analysis-daily-summaries-module">analysis.daily_summaries module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-analysis.daily_summaries">analysis.daily_summaries module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-ewt-violins-module">analysis.ewt_violins module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-geoexchange-proxies-module">analysis.geoexchange_proxies module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-hp-mfr-plots-module">analysis.hp_mfr_plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-kwh-per-sf-module">analysis.kwh_per_sf module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-load-factor-module">analysis.load_factor module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-analysis.spf_calc">analysis.spf_calc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analysis-spf-calc-module">analysis.spf_calc module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-time-of-day-usage-module">analysis.time_of_day_usage module</a></li>
 </ul>
 </li>
@@ -98,8 +98,21 @@
 <section id="modules">
 <h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline"></a></h2>
 </section>
-<section id="analysis-daily-summaries-module">
-<h2>analysis.daily_summaries module<a class="headerlink" href="#analysis-daily-summaries-module" title="Permalink to this headline"></a></h2>
+<section id="module-analysis.daily_summaries">
+<span id="analysis-daily-summaries-module"></span><h2>analysis.daily_summaries module<a class="headerlink" href="#module-analysis.daily_summaries" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.daily_summaries.daily_summary">
+<span class="sig-prename descclassname"><span class="pre">analysis.daily_summaries.</span></span><span class="sig-name descname"><span class="pre">daily_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">site</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.daily_summaries.daily_summary" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>DataFrame</em>) – Pandas ddataframe containing minute-resolution operating data</p></li>
+<li><p><strong>site</strong> (<em>dict</em>) – Dataclass object containing site information</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="analysis-ewt-violins-module">
 <h2>analysis.ewt_violins module<a class="headerlink" href="#analysis-ewt-violins-module" title="Permalink to this headline"></a></h2>
@@ -119,95 +132,9 @@
 <div class="math notranslate nohighlight">
 \[Load Factor = \frac{kWh_{used \: in \: period}}{{kW_{peak} \cdot (hours \: in \: period)} }\]</div>
 </section>
-<section id="module-analysis.spf_calc">
-<span id="analysis-spf-calc-module"></span><h2>analysis.spf_calc module<a class="headerlink" href="#module-analysis.spf_calc" title="Permalink to this headline"></a></h2>
-<p>Created on Tue Jun 15 17:10:56 2021</p>
-<p>&#64;author: rtc50</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.elec_error">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">elec_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.elec_error" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.elec_error_one">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">elec_error_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.elec_error_one" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.english_to_metric">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">english_to_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.english_to_metric" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.error_heat_from_ground">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">error_heat_from_ground</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mrl_hr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E_deltaT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.error_heat_from_ground" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.heat_from_ground">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">heat_from_ground</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pfcf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.heat_from_ground" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.spf_cooling">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_cooling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_cooling" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.spf_cooling_by_EWT">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_cooling_by_EWT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spf_cool_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Interval</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_cooling_by_EWT" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.spf_cooling_error_monthly">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_cooling_error_monthly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spf_cool_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_cooling_error_monthly" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.spf_cooling_monthly">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_cooling_monthly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monthly_cooling</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percent_max</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_cooling_monthly" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.spf_cooling_one_elec">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_cooling_one_elec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_cooling_one_elec" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.spf_heating">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_heating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_heating" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.spf_heating_by_EWT">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_heating_by_EWT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spf_heat_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Interval</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_heating_by_EWT" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.spf_heating_error_monthly">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_heating_error_monthly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spf_heat_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_heating_error_monthly" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.spf_heating_monthly">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_heating_monthly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monthly_heating</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percent_max</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_heating_monthly" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.spf_heating_one_elec">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">spf_heating_one_elec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.spf_heating_one_elec" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.to_kilowatts">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">to_kilowatts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">derate</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.to_kilowatts" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="analysis.spf_calc.total_ground_heat">
-<span class="sig-prename descclassname"><span class="pre">analysis.spf_calc.</span></span><span class="sig-name descname"><span class="pre">total_ground_heat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spf_heat_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_calc.total_ground_heat" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
+<section id="analysis-spf-calc-module">
+<h2>analysis.spf_calc module<a class="headerlink" href="#analysis-spf-calc-module" title="Permalink to this headline"></a></h2>
+<p>Note:  add back in automodule when ready</p>
 </section>
 <section id="analysis-time-of-day-usage-module">
 <h2>analysis.time_of_day_usage module<a class="headerlink" href="#analysis-time-of-day-usage-module" title="Permalink to this headline"></a></h2>
@@ -233,6 +160,7 @@ using methods similar to ewt_aggregate_stats.py</p>
 </dd></dl>
 
 <p>Example output:</p>
+<a class="reference internal image-reference" href="_images/time_of_day_usage.png"><img alt="Example plot of time of day usage for a site with the ground source heat pump" src="_images/time_of_day_usage.png" style="width: 400px;" /></a>
 </section>
 </section>
 

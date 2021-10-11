@@ -86,7 +86,9 @@
 <h1>db_tools package<a class="headerlink" href="#db-tools-package" title="Permalink to this headline"></a></h1>
 <section id="modules">
 <h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline"></a></h2>
-<p>There are two essential database scripts.  The first is to write a set of influxDB line protocol text files that can be uploaded to the oTherm database, and the second is a set of functions that use API requests to retrieve and store data into local <em>dataclass</em> objects</p>
+<p>There are two essential database scripts.  The first is to write a set of influxDB line protocol text files that
+can be uploaded to the oTherm database, and the second is a set of functions that use API requests to retrieve
+and store data into local <em>pandas.DataFrame</em> and <em>dataclass</em> objects.</p>
 </section>
 <section id="module-db_tools.influx_lp_writer">
 <span id="db-tools-influx-lp-writer-module"></span><h2>db_tools.influx_lp_writer module<a class="headerlink" href="#module-db_tools.influx_lp_writer" title="Permalink to this headline"></a></h2>
@@ -170,140 +172,34 @@ of the oTherm database.</p></li>
 </div></blockquote>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The scripts provided here to access the oTherm database result in data objects that have similar structures
-and naming conventions in the oTherm database.  However, the <code class="docutils literal notranslate"><span class="pre">&#64;dataclass</span></code> objects that are used for analyzing
-data differ from the classes in the oTherm application.</p>
+<p>The names and types of data elements  used in the analyses differ from the oTherm data model specification.</p>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_equipment_data">
-<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_equipment_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_equipment_data" title="Permalink to this definition"></a></dt>
-<dd><p>Uses ‘request’ method to reads heat pump operating data from otherm influx database and returns a pandas dataframe
-equipment_id is not currently used, but expect it will be added to query, as well as time range.</p>
-<p>The data DataFrame returned includes all records for the equipment at a site.  At present, the script is limited
-to a single piece of equipment at a site.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>site_id</strong> (<em>int</em>) – The site_id in the PostgreSQL database.  Can be obtained from <em>site.id</em></p></li>
-<li><p><strong>start_date</strong> (<em>str</em>) – start date (e.g. 2018-1-1)</p></li>
-<li><p><strong>end_date</strong> (<em>str</em>) – end date (e.g. 2018-12-31)</p></li>
-<li><p><strong>timezone</strong> (<em>str</em>) – (e.g. ‘US/Eastern’)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>Equipment dataclass contains equipment information in the following fields:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Equipment</span><span class="p">:</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">uuid</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">site</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">manufacturer</span><span class="p">:</span> <span class="nb">int</span>
+<p>The <em>dataclass</em> objects use for analysis are constructed from json objects returned from the oTherm database.
+However, because the <em>dataclass</em> objects represent a single instance, the data elements are reorganized into
+a simpler representation than the original json response.</p>
+<p class="rubric">Example</p>
+<p>The input typicall consists of a site_name and start and end dates.  The functions can be called from analyses
+modules.  For example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">site_name</span> <span class="o">=</span> <span class="s1">&#39;GES649&#39;</span>
+<span class="n">start_date</span> <span class="o">=</span> <span class="s1">&#39;2015-01-01&#39;</span>
+<span class="n">end_date</span> <span class="o">=</span> <span class="s1">&#39;2021-01-01&#39;</span>
+
+<span class="c1">#Get site information</span>
+<span class="n">site</span> <span class="o">=</span> <span class="n">get_site_info</span><span class="p">(</span><span class="n">site_name</span><span class="p">)</span>
+
+<span class="c1">#Get equipment information and dataframe of heat pump operating data</span>
+<span class="n">equipment</span><span class="p">,</span> <span class="n">hp_data</span> <span class="o">=</span> <span class="n">get_equipment_data</span><span class="p">(</span><span class="n">site</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">site</span><span class="o">.</span><span class="n">timezone</span><span class="p">)</span>
+
+<span class="c1">#Get monitoring system information and measurement specifications</span>
+<span class="n">equip_monitoring_system</span> <span class="o">=</span> <span class="n">get_equipment_monitoring_system</span><span class="p">(</span><span class="n">equipment</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+<span class="c1">#Get weather data for station</span>
+<span class="n">wx_data</span> <span class="o">=</span> <span class="n">get_weather_data</span><span class="p">(</span><span class="n">site</span><span class="o">.</span><span class="n">weather_station</span><span class="o">.</span><span class="n">nws_id</span><span class="p">,</span> <span class="n">site</span><span class="o">.</span><span class="n">timezone</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+
+<span class="c1">#Get thermal source specifications</span>
+<span class="n">source_specs</span> <span class="o">=</span> <span class="n">get_source_specs</span><span class="p">(</span><span class="n">site</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><em>pandas.DataFrame</em> containing heat pump operating data over the specified time range.  The DataFrame contains
-all fields stored for the piece of equipment in the influxDB database.</p>
-</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The index of the <em>DataFrame</em> is set to the <code class="docutils literal notranslate"><span class="pre">time</span></code> field and localized according the <code class="docutils literal notranslate"><span class="pre">site.timezone</span></code> attribute</p>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_equipment_monitoring_system">
-<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_equipment_monitoring_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">equip_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_equipment_monitoring_system" title="Permalink to this definition"></a></dt>
-<dd><p>Retrieves the equipment monitoring system and specifications</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>uuid</strong> (<em>str</em>) – <em>uuid</em> of thermal equipment</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>Dataclass object with equipment monitoring system specifications</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">MonitoringSysInfo</span><span class="p">:</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">specs</span><span class="p">:</span> <span class="nb">list</span>
-
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">EquipmentMonitor</span><span class="p">:</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">end_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">equip_id</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">monitoring_system_spec</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">info</span><span class="p">:</span> <span class="n">MonitoringSysInfo</span>
-</pre></div>
-</div>
-</p>
-</dd>
-</dl>
-<p>To access data elements, use the dot syntax.  For example, the <em>list</em> containing the monitoring system specifications
-can be accessed by</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">monitoring_system</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">specs</span>
-<span class="go">`[{&#39;measurement_spec&#39;: {&#39;name&#39;: &#39;HPP VA W 8% EP&#39;, &#39;description&#39;: &#39;Heat pump power, volt-amps, electrical panel&#39;, &#39;type&#39;: {&#39;name&#39;: &#39;heatpump_power&#39;, &#39;msp_columns&#39;: None, &#39;description&#39;: &#39;&#39;}, &#39;accuracy&#39;: &#39;8.00000&#39;, &#39;accuracy_pct&#39;: True, &#39;meas_bias_abs&#39;: 0.0, &#39;meas_bias_pct&#39;: 0.0, &#39;location&#39;: {&#39;name&#39;: &#39;Electrical Panel&#39;, &#39;description&#39;: &#39;&#39;}, &#39;unit&#39;: {&#39;name&#39;: &#39;W&#39;, &#39;description&#39;: &#39;watts&#39;}}}, {&#39;measurement_spec&#39;: {&#39;name&#39;: &#39;LWT OMP 0.1 C&#39;, &#39;description&#39;: &#39;source return temperature, on metal pipe, calibrated&#39;, &#39;type&#39;: {&#39;name&#39;: &#39;source_returntemp_C&#39;, &#39;msp_columns&#39;: None, &#39;description&#39;: &#39;source return (leaving) water temperature&#39;}, &#39;accuracy&#39;: &#39;0.10000&#39;, &#39;accuracy_pct&#39;: False, &#39;meas_bias_abs&#39;: 0.0, &#39;meas_bias_pct&#39;: 0.0, &#39;location&#39;: {&#39;name&#39;: &#39;on metal pipe&#39;, &#39;description&#39;: &#39;&#39;}, &#39;unit&#39;: {&#39;name&#39;: &#39;C&#39;, &#39;description&#39;: &#39;degrees Celsius&#39;}}}, {&#39;measurement_spec&#39;: {&#39;name&#39;: &#39;EWT OMP 0.1 C&#39;, &#39;description&#39;: &#39;source fluid supply temp on metal pipe, calibrated sensor&#39;, &#39;type&#39;: {&#39;name&#39;: &#39;source_supplytemp_C&#39;, &#39;msp_columns&#39;: None, &#39;description&#39;: &#39;ground loop source (entering) water temperature&#39;}, &#39;accuracy&#39;: &#39;0.10000&#39;, &#39;accuracy_pct&#39;: False, &#39;meas_bias_abs&#39;: 0.0, &#39;meas_bias_pct&#39;: 0.0, &#39;location&#39;: {&#39;name&#39;: &#39;on metal pipe&#39;, &#39;description&#39;: &#39;&#39;}, &#39;unit&#39;: {&#39;name&#39;: &#39;C&#39;, &#39;description&#39;: &#39;degrees Celsius&#39;}}}, {&#39;measurement_spec&#39;: {&#39;name&#39;: &#39;AuP VA W 8% HP&#39;, &#39;description&#39;: &#39;Aux power with volt-amps in heat pump&#39;, &#39;type&#39;: {&#39;name&#39;: &#39;heatpump_aux&#39;, &#39;msp_columns&#39;: None, &#39;description&#39;: &#39;auxiliary electric heat&#39;}, &#39;accuracy&#39;: &#39;8.00000&#39;, &#39;accuracy_pct&#39;: True, &#39;meas_bias_abs&#39;: 0.0, &#39;meas_bias_pct&#39;: 0.0, &#39;location&#39;: {&#39;name&#39;: &#39;heat pump&#39;, &#39;description&#39;: &#39;&#39;}, &#39;unit&#39;: {&#39;name&#39;: &#39;W&#39;, &#39;description&#39;: &#39;watts&#39;}}}]&#39;</span>
-</pre></div>
-</div>
-<p>The monitoring system specifications is a list of measurements performed by the monitoring system, each measurement
-has its own set of specifications.  See oTherm documentation for more details.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_mfr_data">
-<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_mfr_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_mfr_data" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_monitoring_system">
-<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_monitoring_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_monitoring_system" title="Permalink to this definition"></a></dt>
-<dd><p>Retrieves the monitoring_system attributes for a given monitoring system by name. This function requires
-the exact name of the monitoring system, as specified in the oTherm database</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The name of the monitoring system</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>All specifications of a monitoring system in the oTherm database.  Refer to oTherm documentation for detais.</p>
-<p>The example below shows a monitoring system with a single measurement point wiht name <code class="docutils literal notranslate"><span class="pre">heatpump_power</span></code>.</p>
-<p>Note that <code class="docutils literal notranslate"><span class="pre">measurement_spec</span></code> is a <em>list</em> with length equal to the number of measurement points.</p>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">monitoring_system</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-<span class="go">                         &#39;name&#39;: &#39;GxTracker Power&#39;,</span>
-<span class="go">                         &#39;description&#39;: &#39;&#39;,</span>
-<span class="go">                         &#39;manufacturer&#39;: 1,</span>
-<span class="go">                         &#39;monitoring_system_specs&#39;:</span>
-<span class="go">                            [{&#39;measurement_spec&#39;: {&#39;name&#39;: &#39;HPP VA W 8% EP&#39;,</span>
-<span class="go">                                                   &#39;description&#39;: &#39;Heat pump power, volt-amps, electrical panel&#39;,</span>
-<span class="go">                                                   &#39;type&#39;: {&#39;name&#39;: &#39;heatpump_power&#39;,</span>
-<span class="go">                                                            &#39;msp_columns&#39;: None,</span>
-<span class="go">                                                            &#39;description&#39;: &#39;&#39;},</span>
-<span class="go">                                                    &#39;accuracy&#39;: &#39;8.00000&#39;,</span>
-<span class="go">                                                    &#39;accuracy_pct&#39;: True,</span>
-<span class="go">                                                    &#39;meas_bias_abs&#39;: 0.0,</span>
-<span class="go">                                                    &#39;meas_bias_pct&#39;: 0.0,</span>
-<span class="go">                                                    &#39;location&#39;: {&#39;name&#39;: &#39;Electrical Panel&#39;,</span>
-<span class="go">                                                                 &#39;description&#39;: &#39;&#39;},</span>
-<span class="go">                                                    &#39;unit&#39;: {&#39;name&#39;: &#39;W&#39;,</span>
-<span class="go">                                                             &#39;description&#39;: &#39;watts&#39;}}},</span>
-<span class="go">                                                  }</span>
-<span class="go">                             }</span>
-<span class="go">                        }</span>
-</pre></div>
-</div>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_site_info">
 <span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_site_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_site_info" title="Permalink to this definition"></a></dt>
@@ -354,9 +250,85 @@ the exact name of the monitoring system, as specified in the oTherm database</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_source_specs">
-<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_source_specs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_source_specs" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_equipment_data">
+<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_equipment_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_equipment_data" title="Permalink to this definition"></a></dt>
+<dd><p>Uses ‘request’ method to reads heat pump operating data from otherm influx database and returns a pandas dataframe
+equipment_id is not currently used, but expect it will be added to query, as well as time range.</p>
+<p>The data DataFrame returned includes all records for the equipment at a site.  At present, the script is limited
+to a single piece of equipment at a site.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>site_id</strong> (<em>int</em>) – The site_id in the PostgreSQL database.  Can be obtained from <em>site.id</em></p></li>
+<li><p><strong>start_date</strong> (<em>str</em>) – start date (e.g. 2018-1-1)</p></li>
+<li><p><strong>end_date</strong> (<em>str</em>) – end date (e.g. 2018-12-31)</p></li>
+<li><p><strong>timezone</strong> (<em>str</em>) – (e.g. ‘US/Eastern’)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Equipment dataclass contains equipment information in the following fields:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Equipment</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">uuid</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">site</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">manufacturer</span><span class="p">:</span> <span class="nb">int</span>
+</pre></div>
+</div>
+<p><em>pandas.DataFrame</em> containing heat pump operating data over the specified time range.  The DataFrame contains
+all fields stored for the piece of equipment in the influxDB database.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The index of the <em>DataFrame</em> is set to the <code class="docutils literal notranslate"><span class="pre">time</span></code> field and localized according the <code class="docutils literal notranslate"><span class="pre">site.timezone</span></code> attribute</p>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_equipment_monitoring_system">
+<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_equipment_monitoring_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">equip_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_equipment_monitoring_system" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the equipment monitoring system and specifications</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>uuid</strong> (<em>str</em>) – <em>uuid</em> of thermal equipment</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Dataclass object with equipment monitoring system specifications</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">MonitoringSysInfo</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">specs</span><span class="p">:</span> <span class="nb">list</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EquipmentMonitor</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">end_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">equip_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">monitoring_system_spec</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">info</span><span class="p">:</span> <span class="n">MonitoringSysInfo</span>
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+<p>To access data elements, use the dot syntax.  For example, the <em>list</em> containing the monitoring system specifications
+can be accessed by</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">monitoring_system</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">specs</span>
+<span class="go">`[{&#39;measurement_spec&#39;: {&#39;name&#39;: &#39;HPP VA W 8% EP&#39;, &#39;description&#39;: &#39;Heat pump power, volt-amps, electrical panel&#39;, ...`</span>
+</pre></div>
+</div>
+<p>The monitoring system specifications is a list of measurements performed by the monitoring system, each measurement
+has its own set of specifications.  See oTherm documentation for more details.</p>
+<p>The list can be search for individual measurements specifications with <code class="docutils literal notranslate"><span class="pre">utilities.get_measurement_specs</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_weather_data">
@@ -380,6 +352,37 @@ the exact name of the monitoring system, as specified in the oTherm database</p>
 </dl>
 <p class="rubric">Notes</p>
 <p>The index of the <em>DataFrame</em> is set to the <code class="docutils literal notranslate"><span class="pre">time</span></code> field and localized according the <code class="docutils literal notranslate"><span class="pre">site.timezone</span></code> attribute</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_source_specs">
+<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_source_specs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_source_specs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_mfr_data">
+<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_mfr_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_mfr_data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_monitoring_system">
+<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_monitoring_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_monitoring_system" title="Permalink to this definition"></a></dt>
+<dd><p>Similar to <code class="docutils literal notranslate"><span class="pre">get_equipment_monitoring_system</span></code> but returns monitoring_system attributes for a given monitoring
+system by name rather than equipment being monitored.  This function requires the exact name of the monitoring
+system, as specified in the oTherm database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The name of the monitoring system</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>All specifications of a monitoring system in the oTherm database.  Refer to oTherm documentation for detais.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>For more explanation of the parameters and return values, see <code class="docutils literal notranslate"><span class="pre">get_equipment_monitoring_system</span></code></p>
 </dd></dl>
 
 </section>

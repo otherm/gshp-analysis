@@ -50,6 +50,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-utilities.df_processing">utilities.df_processing module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-utilities.misc_functions">utilities.misc_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-utilities.save_responses_as_csv">utilities.save_responses_as_csv module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-utilities.get_measurement_spec">utilities.get_measurement_spec module</a></li>
 </ul>
 </li>
 </ul>
@@ -158,6 +159,30 @@ the other when heat pump is cooling</p>
 <dt class="sig sig-object py" id="utilities.save_responses_as_csv.save_responses_csv">
 <span class="sig-prename descclassname"><span class="pre">utilities.save_responses_as_csv.</span></span><span class="sig-name descname"><span class="pre">save_responses_csv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utilities.save_responses_as_csv.save_responses_csv" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+</section>
+<section id="module-utilities.get_measurement_spec">
+<span id="utilities-get-measurement-spec-module"></span><h2>utilities.get_measurement_spec module<a class="headerlink" href="#module-utilities.get_measurement_spec" title="Permalink to this headline"></a></h2>
+<p>Finds the dictionary for the measurement specification based on the name of the measurement.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="utilities.get_measurement_spec.find_measurement_spec">
+<span class="sig-prename descclassname"><span class="pre">utilities.get_measurement_spec.</span></span><span class="sig-name descname"><span class="pre">find_measurement_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monitoring_system_specs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utilities.get_measurement_spec.find_measurement_spec" title="Permalink to this definition"></a></dt>
+<dd><p>Scans the list of specs and returns dictionary of specifications for the named measurement type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>monitoring_system_specs</strong> (<em>list</em>) – The list of all measurement specs for a monitoring system</p></li>
+<li><p><strong>measurement_type</strong> (<em>str</em>) – The name of the measurement type to be located</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>measurement specifications</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 </section>
