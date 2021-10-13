@@ -24,7 +24,12 @@ def daily_summary(data, site):
 
     Returns
     -------
+    pandas.DataFrame
+        Dataframe with daily values
 
+        ============    ========================
+        column_name     Description
+        ============    ========================
 
     """
     # Some additional columns to minute resolution data to facilitate

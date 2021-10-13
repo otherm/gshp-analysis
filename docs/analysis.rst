@@ -43,9 +43,14 @@ Because adoption of GSHP systems will often replace fossil-fuel fired systems an
 
 
 
-analysis.spf\_calc module
--------------------------
+analysis.spf\_with\_uncertainty module
+--------------------------------------
 Note:  add back in automodule when ready
+
+.. automodule:: analysis.spf_with_uncertainty
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 analysis.time\_of\_day\_usage module
 ------------------------------------

@@ -25,7 +25,7 @@ a simpler representation than the original json response.
 
 Example
 -------
-    The input typicall consists of a site_name and start and end dates.  The functions can be called from analyses
+    The input typically consists of a site_name and start and end dates.  The functions can be called from analyses
     modules.  For example ::
 
      site_name = 'GES649'
@@ -308,12 +308,11 @@ def get_weather_data(nws_id,timezone, start_date, end_date):
     -------
         pandas.DataFrame
 
-        The returned DataFrame containing weather station data over the specified time range and contains all \
+        The returned DataFrame contains weather station data over the specified time range and contains all \
         fields stored for the weather station.
 
-    Notes
-    -----
-        The index of the *DataFrame* is set to the ``time`` field and localized according the ``site.timezone`` attribute
+
+        .. note::    The index of the *DataFrame* is set to the ``time`` field and localized according the ``site.timezone`` attribute
 
     """
     weather_url = "https://othermdev.iol.unh.edu/api/weather_station/?nws_id=%s&start_date=%s&end_date=%s" % (nws_id, start_date, end_date)
@@ -355,7 +354,7 @@ def get_source_specs(site):
     source_spec_url = "http://localhost:8000/api/thermal_source/?site=%s" % site.id
     source_spec_response = requests.get(source_spec_url)
     otherm_spec_dict = source_spec_response.json()[0]
-    '''
+
     source_spec_dict = {}
     source_spec_dict.update({'site': site.name, 'site_id': site.id})
     source_spec_dict.update({'source_name': otherm_spec_dict['name']})
@@ -375,7 +374,7 @@ def get_source_specs(site):
 
     source_spec = from_dict(data_class=SourceSpec, data=source_spec_dict)
     return source_spec, otherm_spec_dict
-    '''
+
     return otherm_spec_dict
 
 def get_mfr_data(parameters):
@@ -390,7 +389,7 @@ def get_mfr_data(parameters):
 def get_monitoring_system(name):
     """
 
-    Similar to ``get_equipment_monitoring_system`` but returns monitoring_system attributes for a given monitoring
+    Similar to :func:`get_equipment_monitoring_system` but returns monitoring_system attributes for a given monitoring
     system by name rather than equipment being monitored.  This function requires the exact name of the monitoring
     system, as specified in the oTherm database
 
@@ -404,9 +403,8 @@ def get_monitoring_system(name):
     dict
             All specifications of a monitoring system in the oTherm database.  Refer to oTherm documentation for detais.
 
-    Notes
-    -----
-        For more explanation of the parameters and return values, see ``get_equipment_monitoring_system``
+
+    For more explanation of the parameters and return values, see :func:`get_equipment_monitoring_system`
 
     """
 

@@ -18,7 +18,7 @@ def get_data_for_influx(installation_id, start, end, msp_columns):
     :param date end: end date (e.g. 2018-12-31)
     :param str msp_columns: list of columns for the SQL query (see below)
 
-    :return:   *pandas.DataFrame*  containing data records.
+    :return:   *pandas.DataFrame*  containing data records for the columns in ``msp_columns``.
 
     .. note::
 
@@ -50,7 +50,7 @@ def write_files(db_name, uuid, df, column_mapping, chunk_size):
     using influx line protocol.
 
     :param str db_name: Name of the influx database, default is 'otherm-data'
-    :param str uuid:  oTherm code:: uuid of the thermal equipment, this is that influx db tag
+    :param str uuid:  oTherm uuid of the thermal equipment, this is that influx db tag
     :param pandas.DataFrame df: Monitoring system data
     :param dict column_mapping: Mapping of monitoring system column names to standardized oTherm column names
     :param int chunk_size: Number of lines in each chunk file, recommended value is 8000
@@ -58,11 +58,10 @@ def write_files(db_name, uuid, df, column_mapping, chunk_size):
 
     The influx db line protocol consists of three *space delimited* elements: (1) a comma delimited pair of \
     the database name and the measurement tag, (2) a comma delimited list of fields and values (no spaces), and (3) \
-    a timestamp in epoch time.  For example:
+    a timestamp in epoch time.  For example, with spaces shown with `|_|`:
 
-    ``otherm-data,equipment=59468786-1ab3-4203-82d9-78f480ce0600\
-    source_supplytemp=6.88,source_returntemp=4.59,heatpump_power=2100.0\
-    1454768864``
+    ``otherm-data,equipment=59468786-1ab3-4203-82d9-78f480ce0600|_|\
+    source_supplytemp=6.88,source_returntemp=4.59,heatpump_power=2100.0|_|1454768864``
 
     There is one line for each record.
 
