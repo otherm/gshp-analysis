@@ -12,7 +12,7 @@ import datetime
 from db_tools import otherm_db_reader
 
 def lag_temps(initial_data):
-    '''Lag temperature measurements by one value.
+    """Lag temperature measurements by one value.
 
     Necessary for on-pipe measurements.
     Allows raw data to line up with precalculated heat flow/electricity values.
@@ -32,7 +32,8 @@ def lag_temps(initial_data):
         DeltaT  circulating fluid temperature change (as `float`)
         ======  ======================================================
 
-    '''
+    """
+
     # lag temp measurements by 1 datapoint for on pipe measurements
     initial_data['ewt_1'] = initial_data['ewt_1'].shift(-1)
     initial_data['lwt_1'] = initial_data['lwt_1'].shift(-1)
@@ -42,7 +43,7 @@ def lag_temps(initial_data):
 
 
 def to_kilowatts(data, derate, power_fac):
-    '''Unit conversion and electricity usage/heat rate adjustments.
+    """Unit conversion and electricity usage/heat rate adjustments.
 
     Converts heat flow from btu/hr to kW and electricity from W to kW.
     Scales heat flow and electricity consumption values.
@@ -68,7 +69,8 @@ def to_kilowatts(data, derate, power_fac):
         kw_used  electricity usage in kW with scaling (as `float`)
         =======  =======================================================
 
-    '''
+    """
+
     # btu/hr to kw
     data['q'] = derate*(0.29307107*data['heat_flow_1'])/1000
     data['q'].fillna(0.0, inplace=True)
@@ -78,7 +80,7 @@ def to_kilowatts(data, derate, power_fac):
 
 
 def error_heat_from_ground(mrl_hr, E_deltaT, e_v, data):
-    '''Calculates error associated with heat transfer from ground.
+    """Calculates error associated with heat transfer from ground.
 
     Converts heat flow from btu/hr to kW and electricity from W to kW.
     Scales heat flow and electricity consumption values.
@@ -110,36 +112,45 @@ def error_heat_from_ground(mrl_hr, E_deltaT, e_v, data):
         E_Q            absolute uncertainity in kWh to/from ground (as `float`)
         =============  ========================================================
 
-    '''
+    """
+
     error_data = data.copy()
+
     # fractional uncertainty temp difference
     error_data['e_deltaT'] = abs(E_deltaT/error_data['DeltaT'])
+
     # fractional uncertainty heat transfer rate
     error_data['e_q'] = ((e_v**2)+(error_data['e_deltaT']**2))**(0.5)
+
     # absolute uncertainty heat transfer rate
     error_data['E_q'] = error_data['e_q']*error_data['q']
+
     # elapsed time for each timestep
     error_data['tvalue'] = error_data.index
+
     # fill first timestep with zero seconds
     z_sec = pd.Timedelta(seconds=0)
     error_data['timedelta'] = (error_data['tvalue'] -
                                error_data['tvalue'].shift()).fillna(z_sec)
+
     # median time step to fill empty initial timestep
     mts = error_data['timedelta'].median()
     error_data.loc[data.index[0], 'timedelta'] = mts
     error_data['elapsed_hours'] = (error_data['timedelta']
                                    .dt.total_seconds())/(60*60)
     meh = error_data['elapsed_hours'].median()
+
     # set upper limit of elapsed hours
     error_data['elapsed_hours'] = error_data['elapsed_hours'].where(
         error_data['elapsed_hours'] <= mrl_hr, meh)
+
     # absolute uncertainity in thermal energy (kWh)
     error_data['E_Q'] = error_data['E_q']*error_data['elapsed_hours']
     return error_data
 
 
-def elec_error_one_value(e_e, error_data):
-    '''Calculates absolute electrical error.
+def elec_error_single_elec_measurement(e_e, error_data):
+    """Calculates absolute electrical error.
 
     For datasets that include a single electricity consumption value.
     Calculates absolute electrical error for each timestep in kWh.
@@ -161,19 +172,20 @@ def elec_error_one_value(e_e, error_data):
         E_W  absolute electrical uncertainity in kWh (as `float`)
         ===  =======================================================
 
-    '''
+    """
     # no need to add in quadrature if single measurement
     # absolute electrical error
     error_data['E_w'] = (error_data['kw_used'] *
                          error_data['elapsed_hours'] * e_e)
+
     return error_data
 
 
-def heat_calcs_one_elec(error_data, pump_power):
-    '''Calculates heat flow and electricity usage during heating periods.
+def heat_calcs_single_elec_measurement(error_data, pump_power):
+    """Calculates heat flow and electricity usage during heating periods.
 
     For datasets that include a single electricity consumption value.
-    Considers electricity consumption of single sage pump that will not
+    Considers electricity consumption of single stage circulating pump that will not
     contribute useful heat to building.
 
     Parameters
@@ -181,7 +193,7 @@ def heat_calcs_one_elec(error_data, pump_power):
     error_data : pd.Dateframe
         Heatpump operational data.
     pump_power : float
-        Electricity consumption of single sage pump.
+        Electricity consumption of single stage circulating pump.
 
     Returns
     -------
@@ -196,7 +208,9 @@ def heat_calcs_one_elec(error_data, pump_power):
         heat_provided    heat provided to building in kWh (as `float`)
         ===============  ====================================================
 
-    '''
+    """
+
+
     heating_data = error_data.copy()
     # filter to only where heating occurs
     vals_to_filter = ['E_Q', 'E_w', 'kw_used', 'q']
@@ -221,7 +235,7 @@ def heat_calcs_one_elec(error_data, pump_power):
 
 
 def total_heat_sum_error(spf_heat_data):
-    '''Total values for heating and overall heating spf.
+    """Total values for heating and overall heating spf.
 
     Uses heating operational data. Calculate total heat extracted from
     ground and absolute error. Also calculates spf and fractional error.
@@ -242,7 +256,7 @@ def total_heat_sum_error(spf_heat_data):
     ah_e_spf : float
         Heating fractional uncertainity of SPF.
 
-    '''
+    """
     # total heat from ground (kWh)
     total_ground_heat = spf_heat_data['hfg'].sum()
     # total heat from ground absolute error
@@ -261,7 +275,7 @@ def total_heat_sum_error(spf_heat_data):
 
 
 def monthly_ground_heat(spf_heat_data, percent_max):
-    '''Calculates monthly heat flow and spf values for plotting.
+    """Calculates monthly heat flow and spf values for plotting.
 
     Resamples data to monthly values.
     Determines which months have signifigant heating loads to be plotted.
@@ -290,7 +304,7 @@ def monthly_ground_heat(spf_heat_data, percent_max):
         E_spf                absolute uncertainity heating SPF (as `float`)
         ===================  ==================================================
 
-    '''
+    """
     # resample to monthly values
     monthly_heating = spf_heat_data.resample('M').agg({'electricity_kWh':
                                                        np.sum,
@@ -385,10 +399,10 @@ if __name__ == '__main__':
     error_data = error_heat_from_ground(mrl_hr, E_deltaT, e_v, data)
 
     # calculate electrical error when single electricity value
-    error_data = elec_error_one_value(e_e, error_data)
+    error_data = elec_error_single_elec_measurement(e_e, error_data)
 
     # calculate useful heat, heat from ground etc.
-    heating_data = heat_calcs_one_elec(error_data, pump_power)
+    heating_data = heat_calcs_single_elec_measurement(error_data, pump_power)
 
     # sums heat values and calculates cumulative errors
     total_ground_heat, total_gh_error, annual_heat_spf, ah_e_spf = (
