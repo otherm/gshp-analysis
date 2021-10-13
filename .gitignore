@@ -122,3 +122,6 @@ venv.bak/
 *.png
 
 *.pickle
+
+#temp files for local use
+/temp_files

@@ -64,7 +64,7 @@ def hourly_daily_stats(site, hp_data):
     plt.ylabel('Average Hourly Demand [kW]')
     plt.title(site.name)
     plt.legend(loc='upper right')
-    fig_name = 'kwh_hourly_stats_{}.png'.format(str(site.name))
+    fig_name = '../temp_files/kwh_hourly_stats_{}.png'.format(str(site.name))
     print(fig_name)
     plt.savefig(fig_name)
     return fig_name
