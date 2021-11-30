@@ -108,7 +108,7 @@ and outputs .dat file using the influx line protocol</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>pandas.DataFrame</em>  containing data records.</p>
+<dd class="field-even"><p><em>pandas.DataFrame</em>  containing data records for the columns in <code class="docutils literal notranslate"><span class="pre">msp_columns</span></code>.</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -134,7 +134,7 @@ using influx line protocol.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>db_name</strong> (<em>str</em>) – Name of the influx database, default is ‘otherm-data’</p></li>
-<li><p><strong>uuid</strong> (<em>str</em>) – oTherm code:: uuid of the thermal equipment, this is that influx db tag</p></li>
+<li><p><strong>uuid</strong> (<em>str</em>) – oTherm uuid of the thermal equipment, this is that influx db tag</p></li>
 <li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Monitoring system data</p></li>
 <li><p><strong>column_mapping</strong> (<em>dict</em>) – Mapping of monitoring system column names to standardized oTherm column names</p></li>
 <li><p><strong>chunk_size</strong> (<em>int</em>) – Number of lines in each chunk file, recommended value is 8000</p></li>
@@ -144,8 +144,8 @@ using influx line protocol.</p>
 <dd class="field-even"><p>Function produces a set of line-protocol text files</p>
 </dd>
 </dl>
-<p>The influx db line protocol consists of three <em>space delimited</em> elements: (1) a comma delimited pair of     the database name and the measurement tag, (2) a comma delimited list of fields and values (no spaces), and (3)     a timestamp in epoch time.  For example:</p>
-<p><code class="docutils literal notranslate"><span class="pre">otherm-data,equipment=59468786-1ab3-4203-82d9-78f480ce0600</span>&#160;&#160;&#160; <span class="pre">source_supplytemp=6.88,source_returntemp=4.59,heatpump_power=2100.0</span>&#160;&#160;&#160; <span class="pre">1454768864</span></code></p>
+<p>The influx db line protocol consists of three <em>space delimited</em> elements: (1) a comma delimited pair of     the database name and the measurement tag, (2) a comma delimited list of fields and values (no spaces), and (3)     a timestamp in epoch time.  For example, with spaces shown with <cite>|_|</cite>:</p>
+<p><code class="docutils literal notranslate"><span class="pre">otherm-data,equipment=59468786-1ab3-4203-82d9-78f480ce0600|_|</span>&#160;&#160;&#160; <span class="pre">source_supplytemp=6.88,source_returntemp=4.59,heatpump_power=2100.0|_|1454768864</span></code></p>
 <p>There is one line for each record.</p>
 </dd></dl>
 
@@ -178,7 +178,7 @@ of the oTherm database.</p></li>
 However, because the <em>dataclass</em> objects represent a single instance, the data elements are reorganized into
 a simpler representation than the original json response.</p>
 <p class="rubric">Example</p>
-<p>The input typicall consists of a site_name and start and end dates.  The functions can be called from analyses
+<p>The input typically consists of a site_name and start and end dates.  The functions can be called from analyses
 modules.  For example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">site_name</span> <span class="o">=</span> <span class="s1">&#39;GES649&#39;</span>
 <span class="n">start_date</span> <span class="o">=</span> <span class="s1">&#39;2015-01-01&#39;</span>
@@ -344,14 +344,21 @@ has its own set of specifications.  See oTherm documentation for more details.</
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><em>pandas.DataFrame</em></p></li>
-<li><p><em>The returned DataFrame containing weather station data over the specified time range and contains all         fields stored for the weather station.</em></p></li>
+<li><dl class="simple">
+<dt><em>pandas.DataFrame</em></dt><dd><ul>
+<li><p><em>The returned DataFrame contains weather station data over the specified time range and contains all         fields stored for the weather station.</em></p></li>
 </ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The index of the <em>DataFrame</em> is set to the <code class="docutils literal notranslate"><span class="pre">time</span></code> field and localized according the <code class="docutils literal notranslate"><span class="pre">site.timezone</span></code> attribute</p>
+</div>
 </p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>The index of the <em>DataFrame</em> is set to the <code class="docutils literal notranslate"><span class="pre">time</span></code> field and localized according the <code class="docutils literal notranslate"><span class="pre">site.timezone</span></code> attribute</p>
 </dd></dl>
 
 <dl class="py function">
@@ -367,7 +374,7 @@ has its own set of specifications.  See oTherm documentation for more details.</
 <dl class="py function">
 <dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_monitoring_system">
 <span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_monitoring_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_monitoring_system" title="Permalink to this definition"></a></dt>
-<dd><p>Similar to <code class="docutils literal notranslate"><span class="pre">get_equipment_monitoring_system</span></code> but returns monitoring_system attributes for a given monitoring
+<dd><p>Similar to <a class="reference internal" href="#db_tools.otherm_db_reader.get_equipment_monitoring_system" title="db_tools.otherm_db_reader.get_equipment_monitoring_system"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_equipment_monitoring_system()</span></code></a> but returns monitoring_system attributes for a given monitoring
 system by name rather than equipment being monitored.  This function requires the exact name of the monitoring
 system, as specified in the oTherm database</p>
 <dl class="field-list simple">
@@ -381,8 +388,7 @@ system, as specified in the oTherm database</p>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>For more explanation of the parameters and return values, see <code class="docutils literal notranslate"><span class="pre">get_equipment_monitoring_system</span></code></p>
+<p>For more explanation of the parameters and return values, see <a class="reference internal" href="#db_tools.otherm_db_reader.get_equipment_monitoring_system" title="db_tools.otherm_db_reader.get_equipment_monitoring_system"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_equipment_monitoring_system()</span></code></a></p>
 </dd></dl>
 
 </section>

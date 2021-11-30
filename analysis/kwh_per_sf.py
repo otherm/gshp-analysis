@@ -58,7 +58,7 @@ def create_kwh_per_sf_plots(site, data, symbol_color):
 
     kWh_perSF = (data['totalunitpower'] * data['time_elapsed']).resample('D').sum() / (1000 * area)
     OAT_F = (data['outdoor_temperature'] * (9 / 5) + 32).resample('D').mean()
-    plt.scatter(OAT_F, kWh_perSF, marker='o', s=2, alpha=0.75, mc= symbol_color, label=site.name)
+    plt.scatter(OAT_F, kWh_perSF, marker='o', s=2, alpha=0.75, c=symbol_color, label=site.name)
 
 
     plt.ylabel('kWh/SF per day')
@@ -69,14 +69,17 @@ def create_kwh_per_sf_plots(site, data, symbol_color):
 
 
 if __name__ == '__main__':
+    site_names = ['01886']
     site_names = ['GES649']
     start_date = '2016-01-01'
     end_date = '2016-12-31'
     symbol_color = ['b', 'r', 'g', 'o']
+    db = 'otherm'
+    db = 'localhost'
     for name in site_names:
-        site = otherm_db_reader.get_site_info(name)
+        site = otherm_db_reader.get_site_info(name, db)
 
-        equipment, hp_data = otherm_db_reader.get_equipment_data(site.id, start_date, end_date, site.timezone)
+        equipment, hp_data = otherm_db_reader.get_equipment_data(site.id, start_date, end_date, site.timezone, db)
 
         if len(hp_data) > 100:
-            create_kwh_per_sf_plots(site, hp_data, symbol_color)
+            create_kwh_per_sf_plots(site, hp_data, symbol_color[0])

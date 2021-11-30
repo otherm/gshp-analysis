@@ -45,7 +45,7 @@ def get_data_for_influx(installation_id, start, end, msp_columns):
     return data
 
 
-def write_files(db_name, uuid, df, column_mapping, chunk_size):
+def write_files(db_name, uuid, df, column_mapping, chunk_size, slug):
     """ Takes heat pump operating data as pandas dataframe and writes to datafile 
     using influx line protocol.
 
@@ -68,13 +68,15 @@ def write_files(db_name, uuid, df, column_mapping, chunk_size):
     """
 
     df.rename(mapper=column_mapping, inplace=True, axis=1)
+    if 'heat_flow_rate' in column_mapping.values():
+        df['heat_flow_rate'] = df['heat_flow_rate'].fillna(0)
     line_reference = ",".join([db_name, "=".join(['equipment', uuid])])
     columns = df.columns.tolist()
     chunks = int(len(df)/chunk_size)
     df_split = np.array_split(df, chunks)
     print (len(df_split))
     for i in range(len(df_split)):
-        lp_file_name = ['./chunks/'+ db_name, install, ('chunk_%d.txt' % i )]
+        lp_file_name = ['../temp_files/'+slug+'_hp_data/'+ db_name, slug, ('chunk_%d.txt' % i )]
         lp_file_for_chunk = open("_".join(lp_file_name), 'w')
         for index, row in df_split[i].iterrows():
             measures = []
@@ -93,10 +95,11 @@ def write_files(db_name, uuid, df, column_mapping, chunk_size):
 if __name__ == '__main__':
     db_name = 'otherm-data'
     install_id = '1649'
-    hp_uuid = '3c0847d4-878b-46ad-b8cf-dd2273bd8224'
+    hp_uuid = '5406f27f-5b03-4435-b705-fbdd3e814696'
+    output_file_slug = '01886'
     start = datetime.datetime(2016, 1, 1)
     stop = datetime.datetime(2016, 12, 31)
-    msp_columns = 'ewt_1, lwt_1, compressor_1, created, q_1_device, auxiliary_1, outdoor_temperature'
+    msp_columns = 'ewt_1, lwt_1, compressor_1, created, q_1_device, auxiliary_1, heat_flow_1, outdoor_temperature'
     chunk_size = 8000
 
     print('Working on .db_to_influx...   ', install_id)
@@ -111,7 +114,7 @@ if __name__ == '__main__':
 
     data = get_data_for_influx(install_id, start, stop, msp_columns)
 
-    write_files(db_name, hp_uuid, data, column_mapping)
+    write_files(db_name, hp_uuid, data, column_mapping, chunk_size, output_file_slug)
 
 
 

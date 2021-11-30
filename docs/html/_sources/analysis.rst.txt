@@ -11,7 +11,10 @@ Modules
 
 analysis.daily\_summaries module
 --------------------------------
-
+.. automodule:: analysis.daily_summaries
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 analysis.ewt\_violins module
 ----------------------------
@@ -40,10 +43,11 @@ Because adoption of GSHP systems will often replace fossil-fuel fired systems an
 
 
 
-analysis.spf\_calc module
--------------------------
+analysis.spf\_with\_uncertainty module
+--------------------------------------
+Note:  add back in automodule when ready
 
-.. automodule:: analysis.spf_calc
+.. automodule:: analysis.spf_with_uncertainty
    :members:
    :undoc-members:
    :show-inheritance:
@@ -60,5 +64,7 @@ There is a growing interest in quantifying hourly demand profiles for building h
 
 Example output:
 
-
+.. image:: ./html/images/time_of_day_usage.png
+   :width: 400
+   :alt: Example plot of time of day usage for a site with the ground source heat pump
 

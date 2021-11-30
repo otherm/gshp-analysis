@@ -52,7 +52,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#analysis-hp-mfr-plots-module">analysis.hp_mfr_plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-kwh-per-sf-module">analysis.kwh_per_sf module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-load-factor-module">analysis.load_factor module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#analysis-spf-calc-module">analysis.spf_calc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analysis-spf-with-uncertainty-module">analysis.spf_with_uncertainty module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-time-of-day-usage-module">analysis.time_of_day_usage module</a></li>
 </ul>
 </li>
@@ -110,6 +110,24 @@
 <li><p><strong>site</strong> (<em>dict</em>) – Dataclass object containing site information</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Dataframe with daily values</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 67%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>degree_days</p></td>
+<td><p>Degree days</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -132,9 +150,294 @@
 <div class="math notranslate nohighlight">
 \[Load Factor = \frac{kWh_{used \: in \: period}}{{kW_{peak} \cdot (hours \: in \: period)} }\]</div>
 </section>
-<section id="analysis-spf-calc-module">
-<h2>analysis.spf_calc module<a class="headerlink" href="#analysis-spf-calc-module" title="Permalink to this headline"></a></h2>
+<section id="analysis-spf-with-uncertainty-module">
+<h2>analysis.spf_with_uncertainty module<a class="headerlink" href="#analysis-spf-with-uncertainty-module" title="Permalink to this headline"></a></h2>
 <p>Note:  add back in automodule when ready</p>
+<span class="target" id="module-analysis.spf_with_uncertainty"></span><p>Created on Thu Oct  7 12:12:38 2021</p>
+<p>&#64;author: rtc50</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_with_uncertainty.lag_temps">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_with_uncertainty.</span></span><span class="sig-name descname"><span class="pre">lag_temps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_with_uncertainty.lag_temps" title="Permalink to this definition"></a></dt>
+<dd><p>Lag temperature measurements by one value.</p>
+<p>Necessary for on-pipe measurements.
+Allows raw data to line up with precalculated heat flow/electricity values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>initial_data</strong> (<em>pd.DataFrame</em>) – Data as initially pulled from database.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Dataframe with lagged temperature measurements. Additional column
+is as follows:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>DeltaT</p></td>
+<td><p>circulating fluid temperature change (as <cite>float</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_with_uncertainty.to_kilowatts">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_with_uncertainty.</span></span><span class="sig-name descname"><span class="pre">to_kilowatts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">derate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power_fac</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_with_uncertainty.to_kilowatts" title="Permalink to this definition"></a></dt>
+<dd><p>Unit conversion and electricity usage/heat rate adjustments.</p>
+<p>Converts heat flow from btu/hr to kW and electricity from W to kW.
+Scales heat flow and electricity consumption values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>pd.DataFrame</em>) – Heat pump operational data.</p></li>
+<li><p><strong>derate</strong> (<em>float</em>) – Scales heat flow values.</p></li>
+<li><p><strong>power_fac</strong> (<em>float</em>) – Scales electricity usage.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Dataframe with unit conversion and necessary scaling applied to
+electricity usage and heatflow. Additional columns are
+as follows:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 89%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>q</p></td>
+<td><p>heat flow in kW with scaling (as <cite>float</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>kw_used</p></td>
+<td><p>electricity usage in kW with scaling (as <cite>float</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_with_uncertainty.error_heat_from_ground">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_with_uncertainty.</span></span><span class="sig-name descname"><span class="pre">error_heat_from_ground</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mrl_hr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E_deltaT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_with_uncertainty.error_heat_from_ground" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates error associated with heat transfer from ground.</p>
+<p>Converts heat flow from btu/hr to kW and electricity from W to kW.
+Scales heat flow and electricity consumption values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mrl_hr</strong> (<em>float</em>) – Max record length in hours.</p></li>
+<li><p><strong>E_deltaT</strong> (<em>float</em>) – Absolute uncertainty in temperature change of circulating fluid.</p></li>
+<li><p><strong>e_v</strong> (<em>float</em>) – Flow rate fractional error.</p></li>
+<li><p><strong>data</strong> (<em>pd.Dateframe</em>) – Heatpump operational data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Dataframe with additional columns associated with error in heat
+exchange rates. Additional columns are as follows:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 81%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>e_deltaT</p></td>
+<td><p>fractional uncertainty deltaT (as <cite>float</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>e_q</p></td>
+<td><p>fractional uncertainty heat transfer rate (as <cite>float</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>E_q</p></td>
+<td><p>absolute uncertainty heat transfer rate (as <cite>float</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>tvalue</p></td>
+<td><p>date time (as <cite>datetime64[ns, UTC]</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>timedelta</p></td>
+<td><p>time since last timestep (as <cite>timedelta64[ns]</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>elapsed_hours</p></td>
+<td><p>hours since last timestep (as <cite>float</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>E_Q</p></td>
+<td><p>absolute uncertainity in kWh to/from ground (as <cite>float</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_with_uncertainty.elec_error_one_value">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_with_uncertainty.</span></span><span class="sig-name descname"><span class="pre">elec_error_one_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_with_uncertainty.elec_error_one_value" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates absolute electrical error.</p>
+<p>For datasets that include a single electricity consumption value.
+Calculates absolute electrical error for each timestep in kWh.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>e_e</strong> (<em>float</em>) – Fractional uncertainty of electricity usage.</p></li>
+<li><p><strong>error_data</strong> (<em>pd.Dateframe</em>) – Heatpump operational data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Dataframe with additional column for electricity usage uncertainty.
+Additional column is as follows:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 95%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>E_W</p></td>
+<td><p>absolute electrical uncertainity in kWh (as <cite>float</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_with_uncertainty.heat_calcs_one_elec">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_with_uncertainty.</span></span><span class="sig-name descname"><span class="pre">heat_calcs_one_elec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pump_power</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_with_uncertainty.heat_calcs_one_elec" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates heat flow and electricity usage during heating periods.</p>
+<p>For datasets that include a single electricity consumption value.
+Considers electricity consumption of single sage pump that will not
+contribute useful heat to building.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>error_data</strong> (<em>pd.Dateframe</em>) – Heatpump operational data.</p></li>
+<li><p><strong>pump_power</strong> (<em>float</em>) – Electricity consumption of single sage pump.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Dataframe with additional columns associated with heatflow and
+electricity consumption. Additional columns are as follows:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 78%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>electricity_kWh</p></td>
+<td><p>electricity kWh used in heating mode (as <cite>float</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>hfg</p></td>
+<td><p>heat from ground in kWh (as <cite>float</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>pump_power</p></td>
+<td><p>pump electricity usage in Kw (as <cite>float</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>heat_provided</p></td>
+<td><p>heat provided to building in kWh (as <cite>float</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_with_uncertainty.total_heat_sum_error">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_with_uncertainty.</span></span><span class="sig-name descname"><span class="pre">total_heat_sum_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spf_heat_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_with_uncertainty.total_heat_sum_error" title="Permalink to this definition"></a></dt>
+<dd><p>Total values for heating and overall heating spf.</p>
+<p>Uses heating operational data. Calculate total heat extracted from
+ground and absolute error. Also calculates spf and fractional error.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>spf_heat_data</strong> (<em>pd.Dateframe</em>) – Heatpump operational data during heating.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>total_ground_heat</strong> (<em>float</em>) – Total heat from ground in kWh.</p></li>
+<li><p><strong>total_gh_error</strong> (<em>float</em>) – Absolute error of total heat from ground in kWh.</p></li>
+<li><p><strong>total_heat_spf</strong> (<em>float</em>) – Heating spf.</p></li>
+<li><p><strong>ah_e_spf</strong> (<em>float</em>) – Heating fractional uncertainity of SPF.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.spf_with_uncertainty.monthly_ground_heat">
+<span class="sig-prename descclassname"><span class="pre">analysis.spf_with_uncertainty.</span></span><span class="sig-name descname"><span class="pre">monthly_ground_heat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spf_heat_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percent_max</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.spf_with_uncertainty.monthly_ground_heat" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates monthly heat flow and spf values for plotting.</p>
+<p>Resamples data to monthly values.
+Determines which months have signifigant heating loads to be plotted.
+Calculates monthly spf values and absolute uncertainty for plotting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spf_heat_data</strong> (<em>pd.Dateframe</em>) – Heatpump operational data during heating.</p></li>
+<li><p><strong>percent_max</strong> (<em>float</em>) – Multipled by highest heating month to determine minimum kWh to plot.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Dataframe with additional columns associated with monthly heatflow
+and spf. Additional columns are as follows:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 72%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>year</p></td>
+<td><p>year of each timestep (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>month_and_year</p></td>
+<td><p>year and month of each timestep (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>monthly_heating_spf</p></td>
+<td><p>heating spf value for month (as <cite>float</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>fhe</p></td>
+<td><p>heating fractional uncertainity (as <cite>float</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>fee</p></td>
+<td><p>electric fractional uncertainity (as <cite>float</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>e_spf</p></td>
+<td><p>fractional uncertainity heating SPF (as <cite>float</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>E_spf</p></td>
+<td><p>absolute uncertainity heating SPF (as <cite>float</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="analysis-time-of-day-usage-module">
 <h2>analysis.time_of_day_usage module<a class="headerlink" href="#analysis-time-of-day-usage-module" title="Permalink to this headline"></a></h2>

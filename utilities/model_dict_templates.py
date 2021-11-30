@@ -21,7 +21,21 @@ site = {'Site': {'name': "03824",
                 }
         }
 
-combined = [model, site]
+loop_spec = {'VerticalLoopSpec': {'name': "06018 ground loop spec",
+                                  'description': " ",
+                                  'type': {'name': "Vertical Loop"},
+                                  'ghex_pipe_spec': {'name': "unknown"},
+                                  'antifreeze': {'name': "unknown"},
+                                  'freeze_protection': None,
+                                  'grout_conductivity': None,
+                                  'grout_type': None,
+                                  'formation_conductivity': None,
+                                  'formation_type': None}
+             }
+
+
+combined = [model, site, loop_spec]
+
 combined = {'models': combined}
 
 

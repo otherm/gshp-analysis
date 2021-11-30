@@ -36,4 +36,10 @@ utilities.save\_responses\_as\_csv module
    :undoc-members:
    :show-inheritance:
 
+utilities.get\_measurement\_spec module
+-----------------------------------------
 
+.. automodule:: utilities.get_measurement_spec
+   :members:
+   :undoc-members:
+   :show-inheritance:

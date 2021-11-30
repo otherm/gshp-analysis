@@ -56,8 +56,9 @@ import configuration
 from dataclasses import dataclass
 from dacite import from_dict
 from typing import Optional
+import time
 
-def get_site_info(site_name):
+def get_site_info(site_name, db):
     """
     get site info docstring
 
@@ -132,9 +133,17 @@ def get_site_info(site_name):
         thermal_load: ThermalLoad
         weather_station: WeatherStation
 
-    thermal_load_url = "http://localhost:8000/api/thermal_load/?name=%s" % (site_name)
+    if db == 'localhost':
+        thermal_load_url = "http://localhost:8000/api/thermal_load/?name=%s" % (site_name)
+        thermal_load_response = requests.get(thermal_load_url)
+    elif db == 'otherm':
+        thermal_load_url = "https://otherm.iol.unh.edu/api/thermal_load/?name=%s" % (site_name)
+        thermal_load_response = requests.get(thermal_load_url, auth=(configuration.otherm_creds['user'], configuration.otherm_creds['password']))
+    elif db == 'cgb':
+        thermal_load_url = "https://ctgreenbank.iol.unh.edu/api/thermal_load/?name=%s" % (site_name)
+        thermal_load_response = requests.get(thermal_load_url, auth=(configuration.cgb_creds['user'], configuration.cgb_creds['password']))
 
-    thermal_load_response = requests.get(thermal_load_url)
+    print(thermal_load_url)
 
     site_dict = thermal_load_response.json()[0]
 
@@ -145,7 +154,7 @@ def get_site_info(site_name):
         print('Error with site data:  \n       ', e)
 
 
-def get_equipment_data(site_id, start_date, end_date, timezone):
+def get_equipment_data(site_id, start_date, end_date, timezone, db):
     """
     Uses 'request' method to reads heat pump operating data from otherm influx database and returns a pandas dataframe
     equipment_id is not currently used, but expect it will be added to query, as well as time range.
@@ -187,13 +196,22 @@ def get_equipment_data(site_id, start_date, end_date, timezone):
         site: int
         manufacturer: int
 
-    equip_url = "http://localhost:8000/api/equipment/?site=%s&start_date=%s&end_date=%s" % (site_id, start_date, end_date)
 
-    #response = requests.get(equip_url, auth=(configuration.otherm_creds['user'], configuration.otherm_creds['password']))
+    if db == 'localhost':
+        equip_url = "http://localhost:8000/api/equipment/?site=%s&start_date=%s&end_date=%s" % (site_id, start_date, end_date)
+        equip_response = requests.get(equip_url)
+    elif db == 'otherm':
+        equip_url = "https://otherm.iol.unh.edu/api/equipment/?site=%s&start_date=%s&end_date=%s" % (site_id, start_date, end_date)
+        equip_response = requests.get(equip_url, auth=(configuration.otherm_creds['user'], configuration.otherm_creds['password']))
+    elif db == 'cgb':
+        equip_url = "https://ctgreenbank.iol.unh.edu/api/equipment/?site=%s&start_date=%s&end_date=%s" % (site_id, start_date, end_date)
+        equip_response = requests.get(equip_url, auth=(configuration.cgb_creds['user'], configuration.cgb_creds['password']))
 
-    equip_response = requests.get(equip_url)
+    print (equip_url)
 
     #Limitation:  only gets the first piece of equipmemnt at a site.
+    print('length of equip_response  ', len(equip_response.json()))
+
     hp_data = pd.DataFrame.from_dict(equip_response.json()[0]['heat_pump_metrics'])
     try:
         hp_data.set_index(pd.to_datetime(hp_data['time']), inplace=True)
@@ -315,19 +333,36 @@ def get_weather_data(nws_id,timezone, start_date, end_date):
         .. note::    The index of the *DataFrame* is set to the ``time`` field and localized according the ``site.timezone`` attribute
 
     """
-    weather_url = "https://othermdev.iol.unh.edu/api/weather_station/?nws_id=%s&start_date=%s&end_date=%s" % (nws_id, start_date, end_date)
+    weather_url = "https://otherm.iol.unh.edu/api/weather_station/?nws_id=%s&start_date=%s&end_date=%s" % (nws_id, start_date, end_date)
 
-    wx_response = requests.get(weather_url, auth=(configuration.othermdev_creds['user'], configuration.othermdev_creds['password']))
+    wx_response = ''
+    while wx_response == '':
+        try:
+            wx_response = requests.get(weather_url, auth=(configuration.otherm_cred['user'], configuration.otherm_cred['password']))
+            break
+        except:
+            print("Connection refused by the server..")
+            print("Let me sleep for 5 seconds")
+            print("ZZzzzz...")
+            time.sleep(5)
+            print("Was a nice sleep, now let me continue...")
+            continue
 
-    wx_data = pd.DataFrame.from_dict(wx_response.json()[0]['weather_data'])
+
+
+    #weather_url = "https://otherm.iol.unh.edu/api/weather_station/?nws_id=%s&start_date=%s&end_date=%s" % (nws_id, start_date, end_date)
+
+    #wx_response = requests.get(weather_url, auth=(configuration.otherm['user'], configuration.otherm['password']))
 
     try:
+        wx_data = pd.DataFrame.from_dict(wx_response.json()[0]['weather_data'])
         wx_data.set_index(pd.to_datetime(wx_data['time']), inplace=True)
         wx_data['time_elapsed'] = wx_data.index.to_series().diff().dt.seconds.div(3600, fill_value=0)
         wx_data.tz_convert(timezone)
     except Exception as e:
         print('Error with weather data:  \n       ', e)
         pass
+        return None
     return wx_data
 
 def get_source_specs(site):
@@ -409,30 +444,49 @@ def get_monitoring_system(name):
     """
 
     mon_sys_url = "http://localhost:8000/api/monitoring_system/?name=%s" % (name)
+
+
     response = requests.get(mon_sys_url)
+
+
+
 
     #mon_sys_url = "http://otherm.iol.unh.edu/api/monitoring_system/?name=%s" % (name)
     #response = requests.get(mon_sys_url, auth=(configuration.otherm_creds['user'],
     #                                   configuration.otherm_creds['password']))
 
     mon_sys_json = response.json()[0]
+    response.close()
 
     return mon_sys_json
 
 
 if __name__ == '__main__':
-    site_name = 'GES649'
+    site_name = '01886'
     start_date = '2015-01-01'
     end_date = '2021-01-01'
+    timezone = 'US/Eastern'
+    db = 'otherm'
 
-    site = get_site_info(site_name)
-    equipment, hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone)
+    site = get_site_info(site_name, db)
+    equipment, hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
     equip_monitoring_system = get_equipment_monitoring_system(equipment.id)
     wx_data = get_weather_data(site.weather_station.nws_id, site.timezone, start_date, end_date)
     monitoring_system_dict = get_monitoring_system(equip_monitoring_system.info.name)
     source_spec, otherm_source = get_source_specs(site)
     otherm_source = get_source_specs(site)
 #                equipment_specs
+
+
+#    station_data = pd.read_csv('../temp_files/NWS_stations_2.csv', header=0)
+#    for nws_id in station_data['nws_id']:
+#        print(nws_id)
+
+#        wx_data = get_weather_data(nws_id, timezone, start_date, end_date)
+#        if wx_data is not None:
+#            print(len(wx_data))
+#            outputfile = nws_id +'_data.csv'
+#            wx_data.to_csv('../temp_files/weather_data/' + outputfile)
 
 
 
