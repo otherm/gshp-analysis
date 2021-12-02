@@ -174,6 +174,7 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
                 uuid: str
                 model: str
                 description: Optional[str]
+                no_flowmeter_flowrate: float
                 type: int
                 site: int
                 manufacturer: int
@@ -192,6 +193,7 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
         uuid: str
         model: str
         description: Optional[str]
+        no_flowmeter_flowrate: float
         type: int
         site: int
         manufacturer: int
@@ -284,15 +286,20 @@ def get_equipment_monitoring_system(equip_id):
         monitoring_system_spec: Optional[int]
         info: MonitoringSysInfo
 
-    equipment_monitoring_system_url = "http://localhost:8000/api/equipment_monitoring/?equip_id=%s" % (equip_id)
 
-    #equip_mon_sys_url = "http://otherm.iol.unh.edu/api/monitoring_system/?name=%s" % (name)
-    #response = requests.get(equip_mon_sys_url, auth=(configuration.otherm_creds['user'],
-    #                                   configuration.otherm_creds['password']))
+    if db == 'localhost':
+        equipment_monitoring_system_url = "http://localhost:8000/api/equipment_monitoring/?equip_id=%s" % (equip_id)
+        equip_mon_response = requests.get(equipment_monitoring_system_url)
+    elif db == 'otherm':
+        equipment_monitoring_system_url = "https://otherm.iol.unh.edu/api/equipment_monitoring/?equip_id=%s" % (equip_id)
+        equip_mon_response = requests.get(equipment_monitoring_system_url, auth=(configuration.otherm_creds['user'],
+                                                                             configuration.otherm_creds['password']))
+    elif db == 'cgb':
+        equipment_monitoring_system_url = "https://ctgreenbank.iol.unh.edu/api/equipment_monitoring/?equip_id=%s" % (equip_id)
+        equip_mon_response = requests.get(equipment_monitoring_system_url, auth=(configuration.cgb_creds['user'],
+                                                                              configuration.cgb_creds['password']))
 
-    response = requests.get(equipment_monitoring_system_url)
-
-    equipment_monitoring_system_dict = response.json()[0]
+    equipment_monitoring_system_dict = equip_mon_response.json()[0]
 
     equipment_monitoring_system_dict['info'] = equipment_monitoring_system_dict.pop('monitoring_sys_info')
     equipment_monitoring_system_dict['info']['specs'] = equipment_monitoring_system_dict['info'].pop('monitoring_system_specs')
@@ -335,24 +342,7 @@ def get_weather_data(nws_id,timezone, start_date, end_date):
     """
     weather_url = "https://otherm.iol.unh.edu/api/weather_station/?nws_id=%s&start_date=%s&end_date=%s" % (nws_id, start_date, end_date)
 
-    wx_response = ''
-    while wx_response == '':
-        try:
-            wx_response = requests.get(weather_url, auth=(configuration.otherm_cred['user'], configuration.otherm_cred['password']))
-            break
-        except:
-            print("Connection refused by the server..")
-            print("Let me sleep for 5 seconds")
-            print("ZZzzzz...")
-            time.sleep(5)
-            print("Was a nice sleep, now let me continue...")
-            continue
-
-
-
-    #weather_url = "https://otherm.iol.unh.edu/api/weather_station/?nws_id=%s&start_date=%s&end_date=%s" % (nws_id, start_date, end_date)
-
-    #wx_response = requests.get(weather_url, auth=(configuration.otherm['user'], configuration.otherm['password']))
+    wx_response = requests.get(weather_url, auth=(configuration.otherm_creds['user'], configuration.otherm_creds['password']))
 
     try:
         wx_data = pd.DataFrame.from_dict(wx_response.json()[0]['weather_data'])
@@ -381,13 +371,22 @@ def get_source_specs(site):
         grout_conductivity: float
         antifreeze: str
         pipe_dimension_ratio: str
-        no_flowmeter_flowrate: float
         n_pipes_in_circuit: int
         n_circuits: int
         total_pipe_length: float
 
-    source_spec_url = "http://localhost:8000/api/thermal_source/?site=%s" % site.id
-    source_spec_response = requests.get(source_spec_url)
+    if db == 'localhost':
+        source_spec_url = "http://localhost:8000/api/thermal_source/?site=%s" % site.id
+        source_spec_response = requests.get(source_spec_url)
+    elif db == 'otherm':
+        source_spec_url = "https://otherm.iol.unh.edu/api/thermal_source/?site=%s" % site.id
+        source_spec_response = requests.get(source_spec_url, auth=(configuration.otherm_creds['user'],
+                                                                             configuration.otherm_creds['password']))
+    elif db == 'cgb':
+        source_spec_url = "https://ctgreenbank.iol.unh.edu/api/thermal_source/?site=%s" % site.id
+        source_spec_response = requests.get(source_spec_url, auth=(configuration.cgb_creds['user'],
+                                                                              configuration.cgb_creds['password']))
+
     otherm_spec_dict = source_spec_response.json()[0]
 
     source_spec_dict = {}
@@ -399,7 +398,6 @@ def get_source_specs(site):
     source_spec_dict.update({'antifreeze': antifreeze['name']})
     ghex_specs = source_spec_dict.pop('ghex_specs')
     source_spec_dict.update({'pipe_dimension_ratio': ghex_specs['dimension_ratio'],
-                             'no_flowmeter_flowrate': ghex_specs['no_flowmeter_flowrate'],
                              'n_pipes_in_circuit': ghex_specs['n_pipes_in_circuit'],
                              'n_circuits': ghex_specs['n_circuits'],
                              'total_pipe_length': ghex_specs['total_pipe_length']
@@ -408,9 +406,8 @@ def get_source_specs(site):
     source_spec_dict['source_type'] = source_spec_dict.pop('name')
 
     source_spec = from_dict(data_class=SourceSpec, data=source_spec_dict)
-    return source_spec, otherm_spec_dict
 
-    return otherm_spec_dict
+    return source_spec, otherm_spec_dict
 
 def get_mfr_data(parameters):
 
@@ -443,30 +440,32 @@ def get_monitoring_system(name):
 
     """
 
-    mon_sys_url = "http://localhost:8000/api/monitoring_system/?name=%s" % (name)
+    if db == 'localhost':
+        mon_sys_url = "http://localhost:8000/api/monitoring_system/?name=%s" % (name)
+        mon_sys_response = requests.get(mon_sys_url)
+    elif db == 'otherm':
+        mon_sys_url = "https://otherm.iol.unh.edu/api/monitoring_system/?name=%s" % (name)
+        mon_sys_response = requests.get(mon_sys_url, auth=(configuration.otherm_creds['user'],
+                                                                             configuration.otherm_creds['password']))
+    elif db == 'cgb':
+        mon_sys_url = "https://ctgreenbank.iol.unh.edu/api/monitoring_system/?name=%s" % (name)
+        mon_sys_response = requests.get(mon_sys_url, auth=(configuration.cgb_creds['user'],
+                                                                              configuration.cgb_creds['password']))
 
-
-    response = requests.get(mon_sys_url)
-
-
-
-
-    #mon_sys_url = "http://otherm.iol.unh.edu/api/monitoring_system/?name=%s" % (name)
-    #response = requests.get(mon_sys_url, auth=(configuration.otherm_creds['user'],
-    #                                   configuration.otherm_creds['password']))
-
-    mon_sys_json = response.json()[0]
-    response.close()
+    mon_sys_json = mon_sys_response.json()[0]
+    mon_sys_response.close()
 
     return mon_sys_json
 
 
 if __name__ == '__main__':
-    site_name = '01886'
+    #site_name = '01886'
+    site_name = 'GES649'
     start_date = '2015-01-01'
     end_date = '2021-01-01'
     timezone = 'US/Eastern'
     db = 'otherm'
+    db = 'localhost'
 
     site = get_site_info(site_name, db)
     equipment, hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
@@ -474,8 +473,6 @@ if __name__ == '__main__':
     wx_data = get_weather_data(site.weather_station.nws_id, site.timezone, start_date, end_date)
     monitoring_system_dict = get_monitoring_system(equip_monitoring_system.info.name)
     source_spec, otherm_source = get_source_specs(site)
-    otherm_source = get_source_specs(site)
-#                equipment_specs
 
 
 #    station_data = pd.read_csv('../temp_files/NWS_stations_2.csv', header=0)
