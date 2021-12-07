@@ -193,7 +193,8 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
         uuid: str
         model: str
         description: Optional[str]
-        no_flowmeter_flowrate: float
+        #ToDo:  uncomment when live site is updated to include nff in equipment model serializer
+        #no_flowmeter_flowrate: float
         type: int
         site: int
         manufacturer: int
@@ -356,7 +357,46 @@ def get_weather_data(nws_id,timezone, start_date, end_date):
     return wx_data
 
 def get_source_specs(site):
+    """
+    Retrieves the source specifications.  Currently limited to vertical source.
 
+    :param str site:  site name
+    :return:
+
+        Dataclass object with source specifications ::
+
+            @dataclass
+            class SourceSpec:
+                site: str
+                site_id: int
+                source_name: str
+                source_type: str
+                description: str
+                freeze_protection: Optional[float]
+                grout_type: Optional[str]
+                formation_conductivity: Optional[float]
+                formation_type: Optional[str]
+                grout_conductivity: Optional[float]
+                antifreeze: Optional[str]
+                pipe_dimension_ratio: Optional[str]
+                n_pipes_in_circuit: Optional[int]
+                n_circuits: Optional[int]
+                total_pipe_length: Optional[float]
+
+
+    To access data elements, use the dot syntax.  For example, the *list* containing the monitoring system specifications
+    can be accessed by
+
+    >>> monitoring_system.info.specs
+    `[{'measurement_spec': {'name': 'HPP VA W 8% EP', 'description': 'Heat pump power, volt-amps, electrical panel', ...`
+
+    The monitoring system specifications is a list of measurements performed by the monitoring system, each measurement
+    has its own set of specifications.  See oTherm documentation for more details.
+
+    The list can be search for individual measurements specifications with ``utilities.get_measurement_specs``
+
+    """
+    # currently limited to vertical loop source specs
     @dataclass
     class SourceSpec:
         site: str
@@ -364,16 +404,16 @@ def get_source_specs(site):
         source_name: str
         source_type: str
         description: str
-        freeze_protection: float
-        grout_type: str
-        formation_conductivity :float
-        formation_type: str
-        grout_conductivity: float
-        antifreeze: str
-        pipe_dimension_ratio: str
-        n_pipes_in_circuit: int
-        n_circuits: int
-        total_pipe_length: float
+        freeze_protection: Optional[float]
+        grout_type: Optional[str]
+        formation_conductivity: Optional[float]
+        formation_type: Optional[str]
+        grout_conductivity: Optional[float]
+        antifreeze: Optional[str]
+        pipe_dimension_ratio: Optional[str]
+        n_pipes_in_circuit: Optional[int]
+        n_circuits: Optional[int]
+        total_pipe_length: Optional[float]
 
     if db == 'localhost':
         source_spec_url = "http://localhost:8000/api/thermal_source/?site=%s" % site.id
@@ -459,13 +499,13 @@ def get_monitoring_system(name):
 
 
 if __name__ == '__main__':
-    #site_name = '01886'
-    site_name = 'GES649'
+    site_name = '01886'
+    #site_name = 'GES649'
     start_date = '2015-01-01'
     end_date = '2021-01-01'
     timezone = 'US/Eastern'
     db = 'otherm'
-    db = 'localhost'
+    #db = 'localhost'
 
     site = get_site_info(site_name, db)
     equipment, hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
