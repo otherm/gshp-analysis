@@ -30,7 +30,18 @@ analysis.hp\_mfr\_plots module
 
 analysis.kwh\_per\_sf module
 ----------------------------
+One particularly helpful analysis that can be accomplished with very simple monitoring equipment is the energy usage as a function of conditioned area and outdoor air temperature.   One application of this analysis offers an opportunity to compare the efficiency of different technologies, such as air-source and ground-source heat pumps over a wide range of outdoor weather conditions (e.g., Ueno and Loomis, 2015).
 
+.. automodule:: analysis.kwh_per_sf
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Example output:
+
+.. image:: ./html/images/kwh_per_sf_v_oat.png
+   :width: 400
+   :alt: Example plot of time of energy use intensity as a function of outdoor air temperature
 
 
 analysis.load\_factor module

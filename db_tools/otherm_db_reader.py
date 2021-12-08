@@ -358,7 +358,7 @@ def get_weather_data(nws_id,timezone, start_date, end_date):
 
 def get_source_specs(site):
     """
-    Retrieves the source specifications.  Currently limited to vertical source.
+    Retrieves the source specifications.
 
     :param str site:  site name
     :return:
@@ -384,16 +384,11 @@ def get_source_specs(site):
                 total_pipe_length: Optional[float]
 
 
-    To access data elements, use the dot syntax.  For example, the *list* containing the monitoring system specifications
-    can be accessed by
+    To access data elements, use the dot syntax.
 
-    >>> monitoring_system.info.specs
-    `[{'measurement_spec': {'name': 'HPP VA W 8% EP', 'description': 'Heat pump power, volt-amps, electrical panel', ...`
+    .. note::    While the oTherm data model supports multiple types of sources, this db_reader tool only supports
+                 the vertical loop spec at present.
 
-    The monitoring system specifications is a list of measurements performed by the monitoring system, each measurement
-    has its own set of specifications.  See oTherm documentation for more details.
-
-    The list can be search for individual measurements specifications with ``utilities.get_measurement_specs``
 
     """
     # currently limited to vertical loop source specs

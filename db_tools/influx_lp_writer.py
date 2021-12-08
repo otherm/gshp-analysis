@@ -94,9 +94,9 @@ def write_files(db_name, uuid, df, column_mapping, chunk_size, slug):
 
 if __name__ == '__main__':
     db_name = 'otherm-data'
-    install_id = '1649'
-    hp_uuid = '5406f27f-5b03-4435-b705-fbdd3e814696'
-    output_file_slug = '01886'
+    install_id = '1674'
+    hp_uuid = 'd392422f-5040-4ce4-a807-74723a38bf9f'
+    output_file_slug = '06018'
     start = datetime.datetime(2016, 1, 1)
     stop = datetime.datetime(2016, 12, 31)
     msp_columns = 'ewt_1, lwt_1, compressor_1, created, q_1_device, auxiliary_1, heat_flow_1, outdoor_temperature'
