@@ -1,11 +1,8 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-Created on Sat Mar  3 18:17:51 2018
-
-@author: M Davis
-
-calculatoin and plotting of kwh per SF as function of OAT
+This module creates a scatterplot of energy use intensity as a function of average daily
+outdoor air temperature.
 
 """
 
