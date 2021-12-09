@@ -1,16 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 
-@author: Matt Davis
-
-9.2.2018
-Aggregate statistics for kW on an hourly, time-of-day basis
-Currently calculates mean and 90th quantile for each hour and
-creates matplotlib plot
-
-Set up for a single year but should be extendable to multiple years
-using methods similar to ewt_aggregate_stats.py
-"""
+This module calculates the aggregate statistics for kW on an hourly, time-of-day basis
+Currently calculates mean and 90th quantile for each hour and creates matplotlib plot.  It is currently
+set up for a single year but should be extendable to multiple years. """
 
 import pandas as pd
 import numpy as np
