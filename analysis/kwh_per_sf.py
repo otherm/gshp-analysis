@@ -65,9 +65,6 @@ def kwh_vs_oat(site_names, start_date, end_date, symbol_colors, db):
     return fig_name
 
 
-
-
-
 if __name__ == '__main__':
     site_names = ['01886', '03824', '03561', '06018']
     #site_names = ['GES649']
