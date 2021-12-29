@@ -5,4 +5,3 @@ seaborn~=0.11.2
 psycopg2~=2.8.6
 requests~=2.25.1
 dacite~=1.6.0
-dataclasses~=0.8
