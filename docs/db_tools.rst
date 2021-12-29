@@ -27,4 +27,11 @@ db\_tools.otherm\_db\_reader module
    :undoc-members:
    :show-inheritance:
 
+db\_tools.csv\_to\_yaml module
+-------------------------------------------
+
+.. automodule:: db_tools.csv_to_yaml
+   :members:
+   :undoc-members:
+   :show-inheritance:
 

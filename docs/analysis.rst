@@ -9,9 +9,9 @@ The analysis packages provided provide some examples of the potential uses of oT
 Modules
 -------
 
-analysis.daily\_summaries module
+analysis.load\_summary module
 --------------------------------
-.. automodule:: analysis.daily_summaries
+.. automodule:: analysis.load_summary
    :members:
    :undoc-members:
    :show-inheritance:
