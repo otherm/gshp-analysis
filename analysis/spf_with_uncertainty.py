@@ -8,7 +8,7 @@ Created on Thu Oct  7 12:12:38 2021
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import datetime
+from datetime import date
 from db_tools import otherm_db_reader
 
 def lag_temps(initial_data):
@@ -35,10 +35,10 @@ def lag_temps(initial_data):
     """
 
     # lag temp measurements by 1 datapoint for on pipe measurements
-    initial_data['ewt_1'] = initial_data['ewt_1'].shift(-1)
-    initial_data['lwt_1'] = initial_data['lwt_1'].shift(-1)
+    initial_data['source_supplytemp'] = initial_data['source_supplytemp'].shift(-1)
+    initial_data['source_returntemp'] = initial_data['source_returntemp'].shift(-1)
     data = initial_data[:-1].copy()
-    data['DeltaT'] = data['lwt_1'] - data['ewt_1']
+    data['DeltaT'] = data['source_returntemp'] - data['source_supplytemp']
     return data
 
 
@@ -72,10 +72,10 @@ def to_kilowatts(data, derate, power_fac):
     """
 
     # btu/hr to kw
-    data['q'] = derate*(0.29307107*data['heat_flow_1'])/1000
+    data['q'] = derate*(0.29307107*data['heat_flow_rate'])/1000
     data['q'].fillna(0.0, inplace=True)
     # w to kw
-    data['kw_used'] = power_fac * data['compressor_1']/1000
+    data['kw_used'] = power_fac * data['heatpump_power']/1000
     return data
 
 
@@ -311,7 +311,7 @@ def monthly_ground_heat(spf_heat_data, percent_max):
                                                        'heat_provided': np.sum,
                                                        'E_Q': np.sum,
                                                        'E_w': np.sum,
-                                                       'ewt_1':
+                                                       'source_supplytemp':
                                                            np.mean})
     # month and year column
     monthly_heating['year'] = monthly_heating.index.year
@@ -351,16 +351,17 @@ def monthly_ground_heat(spf_heat_data, percent_max):
     return monthly_heating
 
 if __name__ == '__main__':
-    site_name = 'GES649'
-    start = '2015-01-01'
-    end = '2016-01-01'
+    site_name = '01886'
+    start = '2016-01-01'
+    end = '2016-12-31'
+    db = 'otherm'
     # sites analyzed in report
     # installation_id = '1674'
     # installation_id = '1649'
     # installation_id = '45'
 
-    site = otherm_db_reader.get_site_info(site_name)
-    equipment, initial_data = otherm_db_reader.get_equipment_data(site.id, start, end, site.timezone)
+    site = otherm_db_reader.get_site_info(site_name, db)
+    equipment, initial_data = otherm_db_reader.get_equipment_data(site.id, start, end, site.timezone, db)
 
 
     '''
@@ -438,4 +439,8 @@ if __name__ == '__main__':
     plt.legend(loc='upper right')
     plt.ylabel('Monthly SPF')
     plt.title('Monthly Heating Seasonal Performance Factors (SPF)')
-    plt.show()
+    plt.tight_layout()
+    fig_name = '../temp_files/spf_plots_{}_{}.png'.format(site.name, str(date.today().strftime("%m-%d-%y")))
+    print(fig_name)
+    plt.savefig(fig_name)
+    plt.close()
