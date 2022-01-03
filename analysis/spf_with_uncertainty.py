@@ -12,10 +12,9 @@ from datetime import date
 from db_tools import otherm_db_reader
 
 def lag_temps(initial_data):
-    """Lag temperature measurements by one value.
-
-    Necessary for on-pipe measurements.
-    Allows raw data to line up with precalculated heat flow/electricity values.
+    """Lag temperature measurements by one value.   Necessary for on-pipe measurements.
+    Assumes that operating data is at minute-resolution and thermal response of temperature sensors is
+    approximately one minute.
 
     Parameters
     ----------

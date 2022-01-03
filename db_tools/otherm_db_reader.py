@@ -223,15 +223,12 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
     except Exception as e:
         print('Error with heat pump data: \n     ', e)
 
-
     equipment_dict = equip_response.json()[0]
     equipment_dict.pop('weather_station')
 
     equipment = from_dict(data_class=Equipment, data=equipment_dict)
 
     return equipment, hp_data
-
-
 
 
 def get_equipment_monitoring_system(equip_id):
