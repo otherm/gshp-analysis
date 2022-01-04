@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Oct  7 12:12:38 2021
-
-@author: rtc50
+@author: Ryan Chase, University of New Hampshire
 """
 
 import numpy as np
@@ -354,10 +352,6 @@ if __name__ == '__main__':
     start = '2016-01-01'
     end = '2016-12-31'
     db = 'otherm'
-    # sites analyzed in report
-    # installation_id = '1674'
-    # installation_id = '1649'
-    # installation_id = '45'
 
     site = otherm_db_reader.get_site_info(site_name, db)
     equipment, initial_data = otherm_db_reader.get_equipment_data(site.id, start, end, site.timezone, db)

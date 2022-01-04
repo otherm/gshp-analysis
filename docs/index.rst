@@ -18,7 +18,6 @@ oTherm GSHP Documentation
    :caption: Contents:
    
    otherm_project
-   code
    modules
    otherm_field_names
    credits
