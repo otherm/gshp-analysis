@@ -25,7 +25,16 @@ analysis.load\_summary module
 
 analysis.ewt\_violins module
 ----------------------------
+.. automodule:: analysis.ewt_violins
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
+Example output:
+
+.. image:: ./html/images/ewt_violin_plots.png
+   :width: 400
+   :alt: Example violin plots that show histograms of the entering water temperature under heating and cooling modes.
 
 analysis.geoexchange\_proxies module
 ------------------------------------

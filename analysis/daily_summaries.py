@@ -24,6 +24,7 @@ Daily metrics include, each integrated for one day:
 import pandas as pd
 import numpy as np
 from db_tools import otherm_db_reader
+from datetime import date
 
 
 def create_daily_summaries(data, heatpump_threshold_watts):
@@ -118,10 +119,9 @@ def create_daily_summaries(data, heatpump_threshold_watts):
     return ds
 
 if __name__ == '__main__':
-    site_name = '01886'
-    #site_name = 'GES649'
-    start_date = '2015-01-01'
-    end_date = '2021-01-01'
+    site_name = '03824'
+    start_date = '2016-01-01'
+    end_date = '2016-12-31'
     timezone = 'US/Eastern'
     db = 'otherm'
     #db = 'localhost'
@@ -131,3 +131,5 @@ if __name__ == '__main__':
 
     dailysummary = create_daily_summaries(hp_data, heatpump_threshold_watts=500)
 
+    output_file = '../temp_files/daily_summary_output_{}_{}.csv'.format(db, str(date.today().strftime("%m-%d-%y")))
+    dailysummary.to_csv(output_file)

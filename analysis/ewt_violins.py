@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jun 16 17:04:50 2018
+Creates histograms of the heat pump entering water temperature averaged on hourly intervals using the Seaborn library.
+When multiple site names are provided, histograms are plotted along the x axis and labeled with the site name.
 
-@author: ges
+When multiple sites are plotted, the *seaborn.violinplot* parameters are set to prodcue histograms that are equal width
+with the area of each mode scaled to the relative number of hours in heating or cooling.
 """
+
 import seaborn as sns
-import admin_tools.db_reader as db_reader
-import datetime
+from datetime import date
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from utilities import misc_functions as misc_functions
+from db_tools import otherm_db_reader
 
 C_to_F = misc_functions.C_to_F
 
@@ -19,62 +22,87 @@ C_to_F = misc_functions.C_to_F
 def determine_mode(row):
     """
     Args:
-        row:  a row in a pandas DataFrame
+        row :  a row in a pandas DataFrame
 
     Returns:
-        Two new columns in the DataFrame, one that identifies when heat pump is heating
-        the other when heat pump is cooling
+        new column in the DataFrame, that identifies when heat pump is heating or cooling
     """
-    if row['heat_flow_1'] > 0:
+    if row['heat_flow_rate'] > 0:
         return 'Heating'
     else:
         return 'Cooling'
 
 
 
-def ewt_violins(installation_id):
-    for installation_id in include:
-        print('working on.blah ..', installation_id)
-        data = db_reader.get_fr_as_dataframe(installation_id, start, stop, columns)
+def ewt_violins(site_names, start_date, end_date, timezone, db):
+    """
+    Parameters
+    ----------
+        site_names : list
+            A list of site names to include in analyis.  Each site will have it's own violin plot
+
+        start_date : str
+            Start date of analysis in format 'YYYY-MM-DD'
+
+        end_date : str
+            End date of analysis in format 'YYYY-MM-DD'
+
+        timezone : str
+            Timezone of installation
+
+        db : str
+            oTherm database to use for analysis
+
+    Returns
+    -------
+        image file
+            The image is written to a file in the ../temp_files directory
+    """
+
+
+    composite = pd.DataFrame()
+    palette = {'Heating': 'darkorange', 'Cooling': 'dodgerblue'}
+
+    for site_name in site_names:
+        site = otherm_db_reader.get_site_info(site_name, db)
+        print('working on ...', site.name)
+        equipment, data = otherm_db_reader.get_equipment_data(site.id, start_date, end_date, timezone, db)
 
         # resample to 1-hour averages
         dataHourly = data.resample('3600S').mean()
 
         # eliminate NaNs from DataFrame and limit rows to when heat pump is 'on' >500 Watts
-        dataHourly = dataHourly[np.isfinite(dataHourly['heat_flow_1'])]
-        dataHourly = dataHourly.query('compressor_1 > 500.')
+        dataHourly = dataHourly[np.isfinite(dataHourly['heat_flow_rate'])]
+        dataHourly = dataHourly.query('heatpump_power > 500')
 
         # 'high' is used to filter outliers (2*95th percentile), some of which may be erroneous data
-        high = 2*dataHourly['compressor_1'].quantile(0.95)
-        dataHourly = dataHourly[dataHourly['compressor_1'] < high]
+        high = 2*dataHourly['heatpump_power'].quantile(0.95)
+        dataHourly = dataHourly[dataHourly['heatpump_power'] < high]
 
         # add two more columns for heating and cooling
         dataHourly['Mode'] = dataHourly.apply(determine_mode, axis=1)
-        dataHourly['EWT F'] = dataHourly['ewt_1'].apply(C_to_F)
-        dataHourly['install'] = labels[installation_id]  #installs[installation_id]['label']
+        dataHourly['EWT F'] = dataHourly['source_supplytemp'].apply(C_to_F)
+
+        dataHourly['install'] = site.name
         composite = pd.concat([composite, dataHourly])
 
+    composite.to_csv('../temp_files/ds_debug.csv')
     print('generating plot, please stand by')
-    ax = sns.violinplot(x='install', y='EWT F', data=composite,
+    ax = sns.violinplot(x='install', y='EWT F', data=composite, scale='count', scale_hue=True,
                         hue='Mode', palette=palette, split=True)
     ax.set_xlabel('Site')
     ax.set_ylabel('EWT [$^\circ$F]')
-
-    plt.show()
+    fig_name = '../temp_files/ewt_violin_plots_{}_{}.png'.format(db, str(date.today().strftime("%m-%d-%y")))
+    print(fig_name)
+    plt.savefig(fig_name)
+    plt.close()
 
 if __name__ == '__main__':
-    installation_id = 'GES649'
-    start_date = '2015-01-01'
-    end_date = '2016-01-01'
+    site_names = ['01886', '03561', '03824', '06018']
+    start_date = '2016-01-01'
+    end_date = '2016-12-31'
+    timezone = 'US/Eastern'
+    db = 'otherm'
+    #db = 'localhost'
 
-    start = datetime.datetime(2016, 1, 1)
-    stop = datetime.datetime(2016, 12, 30)
-
-    # TODO:  update this into a method within an oTherm analysis class
-    columns = 'ewt_1, lwt_1, r_1_on, compressor_1, heat_flow_1, created'
-    include = ['1660', '45', '1649', '1674']
-
-    composite = pd.DataFrame()
-
-    palette = {'Heating': 'darkorange', 'Cooling': 'dodgerblue'}
-    labels = {'45': 'bcb7', '1649': 'f006', '1660': '6ee0', '1674': '97b7'}
+    ewt_violins(site_names, start_date, end_date, timezone, db)
