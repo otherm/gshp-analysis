@@ -57,6 +57,8 @@ from dataclasses import dataclass
 from dacite import from_dict
 from typing import Optional
 import time
+import pprint
+
 
 def get_site_info(site_name, db):
     """
@@ -139,13 +141,20 @@ def get_site_info(site_name, db):
     elif db == 'otherm':
         thermal_load_url = "https://otherm.iol.unh.edu/api/thermal_load/?name=%s" % (site_name)
         thermal_load_response = requests.get(thermal_load_url, auth=(configuration.otherm_creds['user'], configuration.otherm_creds['password']))
+    elif db == 'othermdev':
+        thermal_load_url = "https://othermdev.iol.unh.edu/api/thermal_load/?name=%s" % (site_name)
+        thermal_load_response = requests.get(thermal_load_url, auth=(
+        configuration.othermdev_creds['user'], configuration.othermdev_creds['password']))
     elif db == 'cgb':
         thermal_load_url = "https://ctgreenbank.iol.unh.edu/api/thermal_load/?name=%s" % (site_name)
         thermal_load_response = requests.get(thermal_load_url, auth=(configuration.cgb_creds['user'], configuration.cgb_creds['password']))
 
     print(thermal_load_url)
 
+
     site_dict = thermal_load_response.json()[0]
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(site_dict)
 
     try:
         site = from_dict(data_class=Site, data=site_dict)
@@ -496,7 +505,7 @@ if __name__ == '__main__':
     start_date = '2015-01-01'
     end_date = '2021-01-01'
     timezone = 'US/Eastern'
-    db = 'otherm'
+    db = 'othermdev'
     #db = 'localhost'
 
     site = get_site_info(site_name, db)
