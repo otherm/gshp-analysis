@@ -68,7 +68,10 @@ Because adoption of GSHP systems will often replace fossil-fuel fired systems an
    Load Factor = \frac{kWh_{used \: in \: period}}{{kW_{peak} \cdot (hours \: in \: period)} }
 
 
-
+.. automodule:: analysis.load_factor
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 analysis.spf\_with\_uncertainty module
 --------------------------------------
@@ -134,6 +137,11 @@ While this description of uncertainty analysis focuses on SPF calculations, as t
 measurements, uncertainty analysis should also be performed when calculating and reporting other key performance
 indicators.
 
+Example output:
+
+.. image:: ./html/images/spf_plots.png
+   :width: 400
+   :alt: Example seasonal performance factor (SPF) with uncertainty for heating mode
 
 .. automodule:: analysis.spf_with_uncertainty
    :members:
