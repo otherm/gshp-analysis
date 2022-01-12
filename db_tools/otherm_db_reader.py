@@ -137,10 +137,10 @@ def get_site_info(site_name, db):
 
 
     if db == 'localhost':
-        thermal_load_url = "https://localhost:8000/api/thermal_load/?site=%s" % (site_name)
+        thermal_load_url = "https://localhost:8000/api/thermal_load/?name=%s" % (site_name)
         thermal_load_response = requests.get(thermal_load_url)
     else:
-        thermal_load_url = "https://%s/api/thermal_load/?site=%s" % (configuration.db_info[db]['baseurl'], site_name)
+        thermal_load_url = "https://%s/api/thermal_load/?name=%s" % (configuration.db_info[db]['baseurl'], site_name)
         thermal_load_response = requests.get(thermal_load_url, auth=configuration.db_info[db]['auth'])
 
     print(thermal_load_url)
@@ -218,6 +218,7 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
 
     hp_data = pd.DataFrame.from_dict(equip_response.json()[0]['heat_pump_metrics'])
     try:
+
         hp_data.set_index(pd.to_datetime(hp_data['time']), inplace=True)
         hp_data['time_elapsed'] = hp_data.index.to_series().diff().dt.seconds.div(3600, fill_value=0)
         hp_data.tz_convert(timezone)
