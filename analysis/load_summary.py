@@ -1,11 +1,11 @@
 
 
 import pandas as pd
-import admin_tools.db_reader as db_reader
 import numpy as np
 import matplotlib.pyplot as plt
-import logging
 from db_tools import otherm_db_reader
+from analysis import daily_summaries
+
 
 # TODO align data columns with oTherm data columns
 
@@ -33,10 +33,10 @@ def load_summary_graph(site, ds):
 
     for i in range(len(geo)):
         if geo[i] > 0:
-            geo_heating.append(geo[i])
+            geo_heating.append(geo[i]/24)
             outdoor_temp_heating.append(outdoor_temp[i])
         if geo[i] < 0:
-            geo_cooling.append(-geo[i])
+            geo_cooling.append(-geo[i]/24)
             outdoor_temp_cooling.append(outdoor_temp[i])
 
 
@@ -65,7 +65,7 @@ def load_summary_graph(site, ds):
     geo_peak = [geo_peak_heat, 0, 0, geo_peak_cool]
 
     plt.plot(dps, geo_peak, lw=2, c='gray', ls='--', label='GeoExchange Capacity')
-    plt.ylim(0, max(max(geo), geo_peak_heat))
+    plt.ylim(0, max(max(geo/1000), geo_peak_heat))
     plt.xlim(min(min(outdoor_temp), design_temperature_heat),
              max(outdoor_temp), design_temperature_cool)
 
@@ -76,16 +76,17 @@ def load_summary_graph(site, ds):
 
 
 if __name__ == "__main__":
-    site_name = 'GES649'
+    site_name = '01886'
     start = '2015-01-01'
-    end = '2016-01-01'
+    end = '2016-12-31'
+    db = 'otherm'
 
-    site = otherm_db_reader.get_site_info(site_name)
-    equipment, hp_data = otherm_db_reader.get_equipment_data(site.id, start, end, site.timezone)
+    site = otherm_db_reader.get_site_info(site_name, db)
+    equipment, hp_data = otherm_db_reader.get_equipment_data(site.id, start, end, site.timezone, db)
 
-    kwargs = {'heatpump_threshold': 500}
-    #TODO:  call to api for daily summaries
-    ds = daily_summary(hp_data, site, **kwargs)
+    heatpump_threshold_watts = 500
+
+    ds = daily_summaries.create_daily_summaries(hp_data, heatpump_threshold_watts)
 
     load_summary_graph(site, ds)
 
