@@ -8,7 +8,7 @@ import datetime
 import numpy as np
 import psycopg2
 import pandas as pd
-from otherm_db_reader import get_equipment_data, get_site_info
+from .otherm_db_reader import get_equipment_data, get_site_info
 
 
 def get_data_for_influx(installation_id, start, end, msp_columns):

@@ -79,6 +79,48 @@ def get_site_info(site_name, db):
             thermal_load: ThermalLoad
             weather_station: WeatherStation
 
+    To access data elements, use the dot syntax.  For example, the Weather Station ID, is accessed by
+
+    >>> site.weather_station
+    'KPSM'
+
+    """
+
+
+    @dataclass
+    class Site:
+        id: int
+        name: str
+        city: str
+        state: str
+        timezone: str
+        description: str
+        application: str
+        thermal_load: str
+        weather_station_nws_id: str
+
+
+    if db == 'localhost':
+        site_url = "https://localhost:8000/api/site/?name=%s" % (site_name)
+        site_response = requests.get(site_url)
+    else:
+        site_url = "https://%s/api/site/?name=%s" % (configuration.db_info[db]['baseurl'], site_name)
+        site_response = requests.get(site_url, auth=configuration.db_info[db]['auth'])
+
+    site_dict = site_response.json()[0]
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(site_dict)
+
+    try:
+        site = from_dict(data_class=Site, data=site_dict)
+        return site
+    except Exception as e:
+        print('Error with site data:  \n       ', e)
+
+
+def get_thermal_load(site_name, db):
+    """
+
         @dataclass
         class ThermalLoad:
             uuid: str
@@ -90,17 +132,7 @@ def get_site_info(site_name, db):
             heating_design_oat: float
             cooling_design_oat: float
 
-        @dataclass
-        class WeatherStation:
-            description: Optional[str]
-            nws_id: str
-            lat: float
-            lon: float
-
     To access data elements, use the dot syntax.  For example, the Weather Station ID, is accessed by
-
-    >>> site.weather_station.nws_id
-    'KPSM'
 
     """
 
@@ -118,49 +150,89 @@ def get_site_info(site_name, db):
         cooling_design_oat: float
     """sphinx-ThermalLoad-end"""
 
-    @dataclass
-    class WeatherStation:
-        description: Optional[str]
-        nws_id: str
-        lat: float
-        lon: float
 
     @dataclass
-    class Site:
+    class SiteLoad:
         id: int
         name: str
         city: str
         state: str
-        timezone: str
         thermal_load: ThermalLoad
-        weather_station: WeatherStation
-
 
     if db == 'localhost':
-        thermal_load_url = "https://localhost:8000/api/thermal_load/?name=%s" % (site_name)
+        thermal_load_url = "https://localhost:8000/api/thermal_load/?id=%s" % (site_name)
         thermal_load_response = requests.get(thermal_load_url)
     else:
-        thermal_load_url = "https://%s/api/thermal_load/?name=%s" % (configuration.db_info[db]['baseurl'], site_name)
+        thermal_load_url = "https://%s/api/thermal_load/?id=%s" % (configuration.db_info[db]['baseurl'], site_name)
         thermal_load_response = requests.get(thermal_load_url, auth=configuration.db_info[db]['auth'])
 
     print(thermal_load_url)
 
-    site_dict = thermal_load_response.json()[0]
+    thermal_load_dict = thermal_load_response.json()[0]
     pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(site_dict)
+    pp.pprint(thermal_load_dict)
 
     try:
-        site = from_dict(data_class=Site, data=site_dict)
-        return site
+        thermal_load = from_dict(data_class=SiteLoad, data=thermal_load_dict)
+        return thermal_load
     except Exception as e:
-        print('Error with site data:  \n       ', e)
+        print('Error with thermal_load data:  \n       ', e)
+
+
+
+def get_equipment(site_id, db):
+    """
+    Uses 'request' method to read equipment table for a specific site
+
+    :param int site_id:  The site_id in the PostgreSQL database.  Can be obtained from *site.id*
+    :return: Equipment dataclass contains equipment information in the following fields::
+
+            @dataclass
+            class Equipment:
+                id: int
+                uuid: str
+                model: str
+                description: Optional[str]
+                no_flowmeter_flowrate: float
+                type: int
+                site: int
+                manufacturer: int
+
+    """
+
+    @dataclass
+    class Equipment:
+        id: int
+        uuid: str
+        model: str
+        description: Optional[str]
+        no_flowmeter_flowrate: float
+        type: int
+        site: int
+        manufacturer: int
+
+
+    if db == 'localhost':
+        equip_url = "https://localhost:8000/api/equipment/?site=%s&start_date=%s&end_date=%s" % (site_id)
+        equip_response = requests.get(equip_url)
+    else:
+        equip_url = "https://%s/api/equipment/?site=%s" % (configuration.db_info[db]['baseurl'], site_id)
+        equip_response = requests.get(equip_url, auth=configuration.db_info[db]['auth'])
+
+    print(equip_url)
+
+    #Limitation:  only gets the first piece of equipmemnt at a site.
+
+    equipment_dict = equip_response.json()[0]
+
+    equipment = from_dict(data_class=Equipment, data=equipment_dict)
+
+    return equipment
 
 
 def get_equipment_data(site_id, start_date, end_date, timezone, db):
     """
-    Uses 'request' method to reads heat pump operating data from otherm influx database and returns a pandas dataframe
-    equipment_id is not currently used, but expect it will be added to query, as well as time range.
-
+    Uses 'request' method to reads heat pump operating data from otherm influx database and returns a pandas dataframe.
     The data DataFrame returned includes all records for the equipment at a site.  At present, the script is limited
     to a single piece of equipment at a site.
 
@@ -189,32 +261,16 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
 
     """
 
-    @dataclass
-    class Equipment:
-        id: int
-        uuid: str
-        model: str
-        description: Optional[str]
-        #ToDo:  uncomment when live site is updated to include nff in equipment model serializer
-        #no_flowmeter_flowrate: float
-        type: int
-        site: int
-        manufacturer: int
-
-
     if db == 'localhost':
-        equip_url = "https://localhost:8000/api/equipment/?site=%s&start_date=%s&end_date=%s" % (site_id, start_date,
+        equip_url = "https://localhost:8000/api/equipment_data/?site=%s&start_date=%s&end_date=%s" % (site_id, start_date,
                                                                                                  end_date)
         equip_response = requests.get(equip_url)
     else:
-        equip_url = "https://%s/api/equipment/?site=%s&start_date=%s&end_date=%s" % (configuration.db_info[db]['baseurl'],
+        equip_url = "https://%s/api/equipment_data/?site=%s&start_date=%s&end_date=%s" % (configuration.db_info[db]['baseurl'],
                                                                          site_id, start_date, end_date)
         equip_response = requests.get(equip_url, auth=configuration.db_info[db]['auth'])
 
-    print(equip_url)
-
     #Limitation:  only gets the first piece of equipmemnt at a site.
-    print('length of equip_response  ', len(equip_response.json()))
 
     hp_data = pd.DataFrame.from_dict(equip_response.json()[0]['heat_pump_metrics'])
     try:
@@ -225,12 +281,7 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
     except Exception as e:
         print('Error with heat pump data: \n     ', e)
 
-    equipment_dict = equip_response.json()[0]
-    equipment_dict.pop('weather_station')
-
-    equipment = from_dict(data_class=Equipment, data=equipment_dict)
-
-    return equipment, hp_data
+    return hp_data
 
 
 def get_equipment_monitoring_system(equip_id):
@@ -487,7 +538,9 @@ if __name__ == '__main__':
     print(site.name)
     print(site.id)
 
-    equipment, hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
+    equipment = get_equipment(site.id, db)
+    hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
+    thermal_load = get_thermal_load(site.id, db)
     equip_monitoring_system = get_equipment_monitoring_system(equipment.id)
 
     #wx_data = get_weather_data(site.weather_station.nws_id, site.timezone, start_date, end_date)
