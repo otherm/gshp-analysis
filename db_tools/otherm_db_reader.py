@@ -388,7 +388,7 @@ def get_weather_data(nws_id,timezone, start_date, end_date):
         .. note::    The index of the *DataFrame* is set to the ``time`` field and localized according the ``site.timezone`` attribute
 
     """
-    weather_url = "https://%s/api/weather_station/?nws_id=%s&start_date=%s&end_date=%s" % (configuration.db_info['baseurl'],
+    weather_url = "https://%s/api/weather_station/?nws_id=%s&start_date=%s&end_date=%s" % (configuration.db_info[db]['baseurl'],
                                                                                            nws_id, start_date, end_date)
 
     wx_response = requests.get(weather_url, auth=configuration.db_info[db]['auth'])
@@ -526,12 +526,11 @@ def get_monitoring_system(name):
 
 if __name__ == '__main__':
     site_name = '03824'
-    #site_name = 'GES649'
     start_date = '2016-01-01'
-    end_date = '2016-01-05'
+    end_date = '2021-01-05'
     timezone = 'US/Eastern'
     db = 'otherm'
-    db = 'othermdev'
+    #db = 'othermdev'
     #db = 'localhost'
 
     site = get_site_info(site_name, db)
@@ -543,6 +542,8 @@ if __name__ == '__main__':
     thermal_load = get_thermal_load(site.id, db)
     equip_monitoring_system = get_equipment_monitoring_system(equipment.id)
 
+    nws_id = site.weather_station_nws_id
+    wx_data = get_weather_data(nws_id, timezone, start_date, end_date)
     #wx_data = get_weather_data(site.weather_station.nws_id, site.timezone, start_date, end_date)
     #monitoring_system_dict = get_monitoring_system(equip_monitoring_system.info.name)
     #source_spec, otherm_source = get_source_specs(site)
