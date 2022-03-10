@@ -105,11 +105,9 @@ def get_site_info(site_name, db):
         site_response = requests.get(site_url)
     else:
         site_url = "https://%s/api/site/?name=%s" % (configuration.db_info[db]['baseurl'], site_name)
-        site_response = requests.get(site_url, auth=configuration.db_info[db]['auth'])
+        site_response = requests.get(site_url, headers=configuration.db_info[db]['header'])
 
     site_dict = site_response.json()[0]
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(site_dict)
 
     try:
         site = from_dict(data_class=Site, data=site_dict)
@@ -164,7 +162,7 @@ def get_thermal_load(site_name, db):
         thermal_load_response = requests.get(thermal_load_url)
     else:
         thermal_load_url = "https://%s/api/thermal_load/?id=%s" % (configuration.db_info[db]['baseurl'], site_name)
-        thermal_load_response = requests.get(thermal_load_url, auth=configuration.db_info[db]['auth'])
+        thermal_load_response = requests.get(thermal_load_url, headers=configuration.db_info[db]['header'])
 
     print(thermal_load_url)
 
@@ -217,7 +215,7 @@ def get_equipment(site_id, db):
         equip_response = requests.get(equip_url)
     else:
         equip_url = "https://%s/api/equipment/?site=%s" % (configuration.db_info[db]['baseurl'], site_id)
-        equip_response = requests.get(equip_url, auth=configuration.db_info[db]['auth'])
+        equip_response = requests.get(equip_url, headers=configuration.db_info[db]['header'])
 
     print(equip_url)
 
@@ -268,7 +266,7 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
     else:
         equip_url = "https://%s/api/equipment_data/?site=%s&start_date=%s&end_date=%s" % (configuration.db_info[db]['baseurl'],
                                                                          site_id, start_date, end_date)
-        equip_response = requests.get(equip_url, auth=configuration.db_info[db]['auth'])
+        equip_response = requests.get(equip_url, headers=configuration.db_info[db]['header'])
 
     #Limitation:  only gets the first piece of equipmemnt at a site.
 
@@ -342,10 +340,7 @@ def get_equipment_monitoring_system(equip_id):
         equip_mon_response = requests.get(equipment_monitoring_system_url)
     else:
         equipment_monitoring_system_url = "http://%s/api/equipment_monitoring/?equip_id=%s" %(configuration.db_info[db]['baseurl'], equip_id)
-        equip_mon_response = requests.get(equipment_monitoring_system_url, auth=configuration.db_info[db]['auth'])
-
-    equipment_monitoring_system_url = "http://%s/api/equipment_monitoring/?equip_id=%s" %(configuration.db_info[db]['baseurl'], equip_id)
-    equip_mon_response = requests.get(equipment_monitoring_system_url, auth=configuration.db_info[db]['auth'])
+        equip_mon_response = requests.get(equipment_monitoring_system_url, headers=configuration.db_info[db]['header'])
 
     equipment_monitoring_system_dict = equip_mon_response.json()[0]
 
@@ -391,7 +386,7 @@ def get_weather_data(nws_id,timezone, start_date, end_date):
     weather_url = "https://%s/api/weather_station/?nws_id=%s&start_date=%s&end_date=%s" % (configuration.db_info[db]['baseurl'],
                                                                                            nws_id, start_date, end_date)
 
-    wx_response = requests.get(weather_url, auth=configuration.db_info[db]['auth'])
+    wx_response = requests.get(weather_url, headers=configuration.db_info[db]['header'])
 
     try:
         wx_data = pd.DataFrame.from_dict(wx_response.json()[0]['weather_data'])
@@ -459,8 +454,8 @@ def get_source_specs(site):
         total_pipe_length: Optional[float]
 
 
-    source_spec_url = "http://%s/api/thermal_source/?site=%s" % (configuration.db_info['baseurl'] , site.id)
-    source_spec_response = requests.get(source_spec_url, auth=configuration.db_info[db]['auth'])
+    source_spec_url = "http://%s/api/thermal_source/?site=%s" % (configuration.db_info[db]['baseurl'] , site.id)
+    source_spec_response = requests.get(source_spec_url, headers=configuration.db_info[db]['header'])
 
     otherm_spec_dict = source_spec_response.json()[0]
 
@@ -515,8 +510,8 @@ def get_monitoring_system(name):
 
     """
 
-    mon_sys_url = "https://%s/api/monitoring_system/?name=%s" % (configuration.db_info['baseurl'], name)
-    mon_sys_response = requests.get(mon_sys_url, auth=configuration.db_info[db]['auth'])
+    mon_sys_url = "https://%s/api/monitoring_system/?name=%s" % (configuration.db_info[db]['baseurl'], name)
+    mon_sys_response = requests.get(mon_sys_url, headers=configuration.db_info[db]['header'])
 
     mon_sys_json = mon_sys_response.json()[0]
     mon_sys_response.close()
@@ -534,8 +529,6 @@ if __name__ == '__main__':
     #db = 'localhost'
 
     site = get_site_info(site_name, db)
-    print(site.name)
-    print(site.id)
 
     equipment = get_equipment(site.id, db)
     hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
@@ -544,10 +537,11 @@ if __name__ == '__main__':
 
     nws_id = site.weather_station_nws_id
     wx_data = get_weather_data(nws_id, timezone, start_date, end_date)
-    #wx_data = get_weather_data(site.weather_station.nws_id, site.timezone, start_date, end_date)
-    #monitoring_system_dict = get_monitoring_system(equip_monitoring_system.info.name)
-    #source_spec, otherm_source = get_source_specs(site)
+    wx_data = get_weather_data(site.weather_station_nws_id, site.timezone, start_date, end_date)
+    monitoring_system_dict = get_monitoring_system(equip_monitoring_system.info.name)
+    source_spec, otherm_source = get_source_specs(site)
 
+# --- writing weather station data to csv files ---------------------------
 
 #    station_data = pd.read_csv('../temp_files/NWS_stations_2.csv', header=0)
 #    for nws_id in station_data['nws_id']:
