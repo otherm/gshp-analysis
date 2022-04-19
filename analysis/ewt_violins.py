@@ -34,7 +34,7 @@ def determine_mode(row):
 
 
 
-def ewt_violins(site_names, start_date, end_date, timezone, db):
+def ewt_violins(site_names, start_date, end_date, db):
     """
     Parameters
     ----------
@@ -65,11 +65,13 @@ def ewt_violins(site_names, start_date, end_date, timezone, db):
 
     for site_name in site_names:
         site = otherm_db_reader.get_site_info(site_name, db)
-        print('working on ...', site.name)
-        equipment, data = otherm_db_reader.get_equipment_data(site.id, start_date, end_date, timezone, db)
-
+        print('working on ...', site.name, site.id)
+        equipment = otherm_db_reader.get_equipment(site.id, db)
+        print(equipment)
+        db_data = otherm_db_reader.get_equipment_data(site.id, start_date, end_date, site.timezone, db)
+        hp_data = db_data[db_data['source_supplytemp'] > -100]
         # resample to 1-hour averages
-        dataHourly = data.resample('3600S').mean()
+        dataHourly = hp_data.resample('3600S').mean()
 
         # eliminate NaNs from DataFrame and limit rows to when heat pump is 'on' >500 Watts
         dataHourly = dataHourly[np.isfinite(dataHourly['heat_flow_rate'])]
@@ -92,17 +94,23 @@ def ewt_violins(site_names, start_date, end_date, timezone, db):
                         hue='Mode', palette=palette, split=True)
     ax.set_xlabel('Site')
     ax.set_ylabel('EWT [$^\circ$F]')
+    ax.tick_params(axis='x', rotation=60)
+
     fig_name = '../temp_files/ewt_violin_plots_{}_{}.png'.format(db, str(date.today().strftime("%m-%d-%y")))
     print(fig_name)
     plt.savefig(fig_name)
     plt.close()
 
 if __name__ == '__main__':
-    site_names = ['01886', '03561', '03824', '06018']
+    site_names = ['110459', '110720', '110722', '111011']
+    site_names = ['110912', '110459', '110720', '110722', '110855', '110912', '111011', '111382',
+                  '111469', '111468', '111520', '111383', '111548', '111071', '111956']
+    #site_names = ['111548', '111071', '111956']
     start_date = '2016-01-01'
-    end_date = '2016-12-31'
+    end_date = '2022-04-20'
     timezone = 'US/Eastern'
-    db = 'otherm'
+    db = 'otherm_cgb'
     #db = 'localhost'
 
-    ewt_violins(site_names, start_date, end_date, timezone, db)
+    ewt_violins(site_names, start_date, end_date, db)
+

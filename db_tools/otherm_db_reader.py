@@ -149,13 +149,13 @@ def get_thermal_load(site_name, db):
     """sphinx-ThermalLoad-end"""
 
 
-    @dataclass
-    class SiteLoad:
-        id: int
-        name: str
-        city: str
-        state: str
-        thermal_load: ThermalLoad
+    #@dataclass
+    #class SiteLoad:
+    #    id: int
+    #    name: str
+    #    city: str
+    #    state: str
+    #    thermal_load: ThermalLoad
 
     if db == 'localhost':
         thermal_load_url = "https://localhost:8000/api/thermal_load/?id=%s" % (site_name)
@@ -168,10 +168,10 @@ def get_thermal_load(site_name, db):
 
     thermal_load_dict = thermal_load_response.json()[0]
     pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(thermal_load_dict)
+    pp.pprint(thermal_load_dict['thermal_load'])
 
     try:
-        thermal_load = from_dict(data_class=SiteLoad, data=thermal_load_dict)
+        thermal_load = from_dict(data_class=ThermalLoad, data=thermal_load_dict['thermal_load'])
         return thermal_load
     except Exception as e:
         print('Error with thermal_load data:  \n       ', e)
@@ -204,7 +204,7 @@ def get_equipment(site_id, db):
         uuid: str
         model: str
         description: Optional[str]
-        no_flowmeter_flowrate: float
+        no_flowmeter_flowrate: Optional[float]
         type: int
         site: int
         manufacturer: int
@@ -222,7 +222,7 @@ def get_equipment(site_id, db):
     #Limitation:  only gets the first piece of equipmemnt at a site.
 
     equipment_dict = equip_response.json()[0]
-
+    print(equipment_dict)
     equipment = from_dict(data_class=Equipment, data=equipment_dict)
 
     return equipment
@@ -266,11 +266,14 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
     else:
         equip_url = "https://%s/api/equipment_data/?site=%s&start_date=%s&end_date=%s" % (configuration.db_info[db]['baseurl'],
                                                                          site_id, start_date, end_date)
+        print(equip_url)
         equip_response = requests.get(equip_url, headers=configuration.db_info[db]['header'])
 
+    print(site_id, start_date, end_date, db, configuration.db_info[db]['header'])
     #Limitation:  only gets the first piece of equipmemnt at a site.
-
+    print(equip_response)
     hp_data = pd.DataFrame.from_dict(equip_response.json()[0]['heat_pump_metrics'])
+
     try:
 
         hp_data.set_index(pd.to_datetime(hp_data['time']), inplace=True)
@@ -278,6 +281,10 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
         hp_data.tz_convert(timezone)
     except Exception as e:
         print('Error with heat pump data: \n     ', e)
+
+    # need to filter for when heat pump is on, otherwise NaN
+    hp_data['heat_flow_rate'] = 900*hp_data['sourcefluid_flowrate']*(hp_data['source_supplytemp'] -
+                                                                     hp_data['source_returntemp'])
 
     return hp_data
 
@@ -520,26 +527,27 @@ def get_monitoring_system(name):
 
 
 if __name__ == '__main__':
-    site_name = '03824'
+    site_name = '110720'
     start_date = '2016-01-01'
-    end_date = '2021-01-05'
+    end_date = '2022-04-20'
     timezone = 'US/Eastern'
-    db = 'otherm'
+    db = 'otherm_cgb'
     #db = 'othermdev'
     #db = 'localhost'
 
     site = get_site_info(site_name, db)
 
     equipment = get_equipment(site.id, db)
-    hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
+    print(equipment)
+    #hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
     thermal_load = get_thermal_load(site.id, db)
-    equip_monitoring_system = get_equipment_monitoring_system(equipment.id)
+    #equip_monitoring_system = get_equipment_monitoring_system(equipment.id)
 
-    nws_id = site.weather_station_nws_id
-    wx_data = get_weather_data(nws_id, timezone, start_date, end_date)
-    wx_data = get_weather_data(site.weather_station_nws_id, site.timezone, start_date, end_date)
-    monitoring_system_dict = get_monitoring_system(equip_monitoring_system.info.name)
-    source_spec, otherm_source = get_source_specs(site)
+    #nws_id = site.weather_station_nws_id
+    #wx_data = get_weather_data(nws_id, timezone, start_date, end_date)
+    #wx_data = get_weather_data(site.weather_station_nws_id, site.timezone, start_date, end_date)
+    #monitoring_system_dict = get_monitoring_system(equip_monitoring_system.info.name)
+    #source_spec, otherm_source = get_source_specs(site)
 
 # --- writing weather station data to csv files ---------------------------
 
