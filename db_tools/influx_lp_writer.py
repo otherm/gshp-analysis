@@ -10,6 +10,7 @@ import psycopg2
 import pandas as pd
 from itertools import repeat
 from datetime import datetime
+import os
 
 def get_data_for_influx(installation_id, start, end, msp_columns, data_source):
     """
@@ -153,27 +154,39 @@ if __name__ == '__main__':
 
     chunk_size = 8000
 
-    for install in installs:
-        start = datetime.strptime(installs[install]['start'], '%Y-%m-%d')
-        for i in range(len(installs[install]['hp_id'])):
-            hp_uuid = installs[install]['hp_id'][i]
-            j = i+1
-            msp_columns = 'ewt_%d, lwt_%d, compressor_%d, created, q_%d_device, auxiliary_%d, outdoor_temperature' % tuple(repeat(j, 5))
+    if data_source =='ges':
+        for install in installs:
+            start = datetime.strptime(installs[install]['start'], '%Y-%m-%d')
+            for i in range(len(installs[install]['hp_id'])):
+                hp_uuid = installs[install]['hp_id'][i]
+                j = i+1
+                msp_columns = 'ewt_%d, lwt_%d, compressor_%d, created, q_%d_device, auxiliary_%d, outdoor_temperature' % tuple(repeat(j, 5))
 
-            column_mapping = {"auxiliary_%d" % j: "heatpump_aux",
-                              "compressor_%d" % j: "heatpump_power",
-                              "lwt_%d" % j: "source_returntemp",
-                              "ewt_%d" % j: "source_supplytemp",
-                              "q_%d_device" % j: "sourcefluid_flowrate",
-                              "outdoor_temperature": "outdoor_temperature",
-                              "heat_flow_%d" % j: "heat_flow_rate"}
-
-
-            print('Working on .db_to_influx...   ', install, 'heat pump ', j)
-
-            data = get_data_for_influx(install, start, stop, msp_columns, data_source)
-
-            write_files(db_name, hp_uuid, data, column_mapping, chunk_size, j)
+                column_mapping = {"auxiliary_%d" % j: "heatpump_aux",
+                                  "compressor_%d" % j: "heatpump_power",
+                                  "lwt_%d" % j: "source_returntemp",
+                                  "ewt_%d" % j: "source_supplytemp",
+                                  "q_%d_device" % j: "sourcefluid_flowrate",
+                                  "outdoor_temperature": "outdoor_temperature",
+                                  "heat_flow_%d" % j: "heat_flow_rate"}
 
 
+                print('Working on .db_to_influx...   ', install, 'heat pump ', j)
+
+                data = get_data_for_influx(install, start, stop, msp_columns, data_source)
+
+                write_files(db_name, hp_uuid, data, column_mapping, chunk_size, j)
+
+    #elif data_source == 'wf':
+    #    continue
+        '''
+        data_folder = 'C:\\Users\\jmd1\\PycharmProjects\\otherm\\gshp-analysis\\temp_files\\wf_data\\'
+        for file in os.listdir(data_folder):
+            filename = os.fsdecode(file)
+            if filename.lower().endswith(".csv"):
+                pd.read_csv(filename)
+
+            else:
+                continue
+        '''
 

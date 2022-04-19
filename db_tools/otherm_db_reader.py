@@ -537,14 +537,14 @@ if __name__ == '__main__':
 
     site = get_site_info(site_name, db)
 
-    equipment = get_equipment(site.id, db)
-    print(equipment)
+    #equipment = get_equipment(site.id, db)
+    #print(equipment)
     #hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
-    thermal_load = get_thermal_load(site.id, db)
+    #thermal_load = get_thermal_load(site.id, db)
     #equip_monitoring_system = get_equipment_monitoring_system(equipment.id)
 
-    #nws_id = site.weather_station_nws_id
-    #wx_data = get_weather_data(nws_id, timezone, start_date, end_date)
+    nws_id = site.weather_station_nws_id
+    wx_data = get_weather_data(nws_id, timezone, start_date, end_date)
     #wx_data = get_weather_data(site.weather_station_nws_id, site.timezone, start_date, end_date)
     #monitoring_system_dict = get_monitoring_system(equip_monitoring_system.info.name)
     #source_spec, otherm_source = get_source_specs(site)
