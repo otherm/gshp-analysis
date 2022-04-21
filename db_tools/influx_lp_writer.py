@@ -11,13 +11,15 @@ import pandas as pd
 from itertools import repeat
 from datetime import datetime
 import os
+from db_tools import fetch_weather_data
+
 
 def get_data_for_influx(installation_id, start, end, msp_columns, data_source):
     """
     Retrieves data from a PostgreSQL database.
 
     :param int installation_id:  site identifier in target database
-    :param date start: start date (e.g. 2018-1-1)
+    :param date start: start date (e.g. 2018-01-0)
     :param date end: end date (e.g. 2018-12-31)
     :param str msp_columns: list of columns for the SQL query (see below)
 
@@ -61,7 +63,7 @@ def get_ges_data_for_influx(installation_id, start, end, msp_columns):
     Retrieves data from a PostgreSQL database.
 
     :param int installation_id:  site identifier in target database
-    :param date start: start date (e.g. 2018-1-1)
+    :param date start: start date (e.g. 2018-01-01)
     :param date end: end date (e.g. 2018-12-31)
     :param str msp_columns: list of columns for the SQL query (see below)
 
@@ -96,7 +98,7 @@ def get_ges_data_for_influx(installation_id, start, end, msp_columns):
     db_read.close()
     return data
 
-def write_files(db_name, uuid, df, column_mapping, chunk_size, j):
+def write_files(db_name, tag, uuid, df, column_mapping, chunk_size, j):
     """ Takes heat pump operating data as pandas dataframe and writes to datafile
     using influx line protocol.
 
@@ -126,7 +128,7 @@ def write_files(db_name, uuid, df, column_mapping, chunk_size, j):
     df_split = np.array_split(df, chunks)
     print (len(df_split))
     for i in range(len(df_split)):
-        lp_file_name = ['C:/Llano/oTherm_CTGB_chunks/'+ db_name, install, str(j), ('chunk_%d.txt' % i )]
+        lp_file_name = ['C:\\Llano\\oTherm_CTGB_chunks\\'+ db_name, tag, str(j), ('chunk_%d.txt' % i)]
         lp_file_for_chunk = open("_".join(lp_file_name), 'w')
         for index, row in df_split[i].iterrows():
             measures = []
@@ -134,27 +136,41 @@ def write_files(db_name, uuid, df, column_mapping, chunk_size, j):
                 if column != 'created':
                     measures.append("=".join([column, str(row[column])]))
                 data_elements = ','.join(measures)
-                timestamp = str(row.created.timestamp()).split('.')[0]
+                if 'created' in columns:
+                    timestamp = str(row.created.timestamp()).split('.')[0]
+                else:
+                    timestamp = str(datetime.timestamp(index)).split('.')[0]
             lp_line = " ".join([line_reference, data_elements, timestamp, '\n'])
             lp_file_for_chunk.write(lp_line)
         lp_file_for_chunk.flush()
         lp_file_for_chunk.close()
     return
 
+def get_symphony_data(datafile):
+    ds_data = pd.read_csv(datafile, parse_dates=True, index_col=0)
+    ds_data.index = pd.to_datetime(ds_data.index, utc=True)
+    ds_data['enteringwatertemp'] = (ds_data['enteringwatertemp'] - 32.)*(5./9.)
+    ds_data['leavingwatertemp'] = (ds_data['leavingwatertemp'] - 32.)*(5./9.)
+    ds_data.fillna(-999, axis=1, inplace=True)
+    return ds_data
+
 
 if __name__ == '__main__':
     import ctgb_ges_installs
+    import ctgb_wf_installs
+
     installs = ctgb_ges_installs.installs
 
-    data_source = 'ges'
-    db_name = 'otherm-data'
+    symphony = ctgb_wf_installs.installs
 
-    #start = datetime.datetime(2016, 1, 1)
-    stop = datetime(2022, 4, 1)
+    data_source = 'wf'
+    db_name = 'otherm-data'
 
     chunk_size = 8000
 
     if data_source =='ges':
+        #start = datetime.datetime(2016, 1, 1)
+        stop = datetime(2022, 4, 1)
         for install in installs:
             start = datetime.strptime(installs[install]['start'], '%Y-%m-%d')
             for i in range(len(installs[install]['hp_id'])):
@@ -175,18 +191,39 @@ if __name__ == '__main__':
 
                 data = get_data_for_influx(install, start, stop, msp_columns, data_source)
 
-                write_files(db_name, hp_uuid, data, column_mapping, chunk_size, j)
+                write_files(db_name, install, hp_uuid, data, column_mapping, chunk_size, j)
 
-    #elif data_source == 'wf':
-    #    continue
-        '''
-        data_folder = 'C:\\Users\\jmd1\\PycharmProjects\\otherm\\gshp-analysis\\temp_files\\wf_data\\'
+    elif data_source == 'wf':
+        column_mapping = {'enteringwatertemp': "source_supplytemp",
+                          'leavingwatertemp': "source_returntemp",
+                          'compressorpower': "heatpump_power",
+                          'waterflowrate': "sourcefluid_flowrate",
+                          'auxpower': "heatpump_aux",
+                          'looppumppower': "sourcefluid_pump_power"}
+
+        data_folder = 'C:\\Users\\mattd\\OneDrive - USNH\\Research\\oTherm\\CTGB\\HP Data\\wf_data\\'
+        #data_folder = '..\\temp_files\\'
+        #for file in ['E8EB1BCAB8E7-x.csv']:
         for file in os.listdir(data_folder):
-            filename = os.fsdecode(file)
-            if filename.lower().endswith(".csv"):
-                pd.read_csv(filename)
-
+            print('working on  ', file)
+            datafile = data_folder + os.fsdecode(file)
+            sys_id, end = file.split('-')
+            mo = end.split('.')[0]
+            print(sys_id)
+            hp_uuid = symphony[sys_id]['hp_id']
+            tag = sys_id[6:] + '-' + mo
+            if datafile.lower().endswith(".csv"):
+                data = get_symphony_data(datafile)
             else:
                 continue
-        '''
 
+            wx_data = fetch_weather_data.get_hourly_temps(symphony[sys_id]['zip_code'],
+                                                          datetime.date(data.index[0]),
+                                                          datetime.date(data.index[-1]))
+
+            wx_data.index = pd.to_datetime(wx_data.index, utc=True)
+            oat_minute = wx_data.resample('60S').backfill()
+            symphony_data = data.join(oat_minute, how='left')
+            symphony_data.fillna(-999, axis=1, inplace=True)
+
+            write_files(db_name, tag, hp_uuid, symphony_data, column_mapping, chunk_size, j=0)

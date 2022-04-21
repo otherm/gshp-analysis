@@ -15,7 +15,7 @@ import time
 C_to_F = misc_functions.C_to_F
 
 
-def kwh_vs_oat(site_names, start_date, end_date, db):
+def kwh_per_mmbtu(site_names, start_date, end_date, db):
     """
 
     Parameters
@@ -51,16 +51,17 @@ def kwh_vs_oat(site_names, start_date, end_date, db):
                 else:
                     db_data['totalunitpower'] = db_data['heatpump_power']
                 hp_data = db_data[db_data['outdoor_temperature'] > -100]
-                area = thermal_load.conditioned_area
+                heating = hp_data[hp_data['heat_flow_rate']>1000]
 
-                kWh_perSF = (hp_data['totalunitpower'] * hp_data['time_elapsed']).resample('D').sum() / (1000 * area)
-                OAT_F = (hp_data['outdoor_temperature'] * (9 / 5) + 32).resample('D').mean()
-                plt.scatter(OAT_F, kWh_perSF, marker='o', s=2, alpha=0.75, label=site.name) #c=symbol_colors[name]
+                kWh_heating = (heating['totalunitpower'] * heating['time_elapsed']).sum()/1e3
+                mmbtu = (heating['heat_flow_rate']*heating['time_elapsed']).sum()/1e6
+                print(site.name, kWh_heating, mmbtu, )
         except Exception as e:
             print('Error reading operating data pump data: \n     ', e)
 
         time.sleep(30)
 
+    '''
     plt.ylabel('kWh/SF per day')
     plt.title('Heat Pump kWh/Square Feet vs. Outdoor Air Temperature')
     plt.xlabel('Average Daily Outdoor Air Temperature [$^\circ F$]')
@@ -69,17 +70,18 @@ def kwh_vs_oat(site_names, start_date, end_date, db):
     print(fig_name)
     plt.savefig(fig_name)
     return fig_name
-
+    '''
+    return
 
 if __name__ == '__main__':
     site_names = ['110722', '110720', '110459', '111011'] #, '03824', '03561', '06018']
     site_names = ['110459', '110722', '110855', '111011', '111382', '111596', '111469',
                   '111468', '111520', '111383', '111548', '111071', '111956', '111693']
-    #site_names = ['111383']
+    site_names = ['111693']
     start_date = '2016-01-01'
     end_date = '2022-04-10'
     #symbol_colors = {'110720': 'b'} #, '03824': 'r', '03561': 'g', '06018': 'c'}
     db = 'otherm_cgb'
     #db = 'localhost'
 
-    kwh_vs_oat(site_names, start_date, end_date, db)
+    kwh_per_mmbtu(site_names, start_date, end_date, db)

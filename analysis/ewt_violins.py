@@ -15,6 +15,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utilities import misc_functions as misc_functions
 from db_tools import otherm_db_reader
+import time
 
 C_to_F = misc_functions.C_to_F
 
@@ -67,7 +68,7 @@ def ewt_violins(site_names, start_date, end_date, db):
         site = otherm_db_reader.get_site_info(site_name, db)
         print('working on ...', site.name, site.id)
         equipment = otherm_db_reader.get_equipment(site.id, db)
-        print(equipment)
+        #print(equipment)
         db_data = otherm_db_reader.get_equipment_data(site.id, start_date, end_date, site.timezone, db)
         hp_data = db_data[db_data['source_supplytemp'] > -100]
         # resample to 1-hour averages
@@ -87,6 +88,7 @@ def ewt_violins(site_names, start_date, end_date, db):
 
         dataHourly['install'] = site.name
         composite = pd.concat([composite, dataHourly])
+        time.sleep(10)
 
     composite.to_csv('../temp_files/ds_debug.csv')
     print('generating plot, please stand by')
@@ -103,9 +105,10 @@ def ewt_violins(site_names, start_date, end_date, db):
 
 if __name__ == '__main__':
     site_names = ['110459', '110720', '110722', '111011']
-    site_names = ['110912', '110459', '110720', '110722', '110855', '110912', '111011', '111382',
-                  '111469', '111468', '111520', '111383', '111548', '111071', '111956']
-    #site_names = ['111548', '111071', '111956']
+
+    site_names = ['110918', '110459', '110722', '110855', '111011', '111382', '111469',
+                  '111468', '111520', '111383', '111548', '111071', '111956',
+                  '110720']
     start_date = '2016-01-01'
     end_date = '2022-04-20'
     timezone = 'US/Eastern'

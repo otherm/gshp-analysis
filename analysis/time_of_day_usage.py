@@ -64,12 +64,14 @@ def hourly_daily_stats(site, hp_data):
 
 
 if __name__ == "__main__":
-    site_name = 'GES649'
+    site_name = '110459'
     start = '2015-01-01'
-    end = '2016-12-31'
+    end = '2022-04-01'
+    db = 'otherm_cgb'
 
-    site = otherm_db_reader.get_site_info(site_name)
+    site = otherm_db_reader.get_site_info(site_name, db)
 
-    equipment, hp_data = otherm_db_reader.get_equipment_data(site.id, start, end, site.timezone)
+    equipment = otherm_db_reader.get_equipment(site.id, db)
+    hp_data = otherm_db_reader.get_equipment_data(site.id, start, end, site.timezone, db)
 
     stats = hourly_daily_stats(site, hp_data)

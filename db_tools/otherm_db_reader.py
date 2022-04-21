@@ -164,11 +164,11 @@ def get_thermal_load(site_name, db):
         thermal_load_url = "https://%s/api/thermal_load/?id=%s" % (configuration.db_info[db]['baseurl'], site_name)
         thermal_load_response = requests.get(thermal_load_url, headers=configuration.db_info[db]['header'])
 
-    print(thermal_load_url)
+    #print(thermal_load_url)
 
     thermal_load_dict = thermal_load_response.json()[0]
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(thermal_load_dict['thermal_load'])
+    #pp = pprint.PrettyPrinter(indent=4)
+    #pp.pprint(thermal_load_dict['thermal_load'])
 
     try:
         thermal_load = from_dict(data_class=ThermalLoad, data=thermal_load_dict['thermal_load'])
@@ -222,7 +222,7 @@ def get_equipment(site_id, db):
     #Limitation:  only gets the first piece of equipmemnt at a site.
 
     equipment_dict = equip_response.json()[0]
-    print(equipment_dict)
+    #print(equipment_dict)
     equipment = from_dict(data_class=Equipment, data=equipment_dict)
 
     return equipment
@@ -268,25 +268,29 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
                                                                          site_id, start_date, end_date)
         print(equip_url)
         equip_response = requests.get(equip_url, headers=configuration.db_info[db]['header'])
-
+    print(equip_response)
     print(site_id, start_date, end_date, db, configuration.db_info[db]['header'])
     #Limitation:  only gets the first piece of equipmemnt at a site.
-    print(equip_response)
-    hp_data = pd.DataFrame.from_dict(equip_response.json()[0]['heat_pump_metrics'])
 
     try:
-
+        hp_data = pd.DataFrame.from_dict(equip_response.json()[0]['heat_pump_metrics'])
         hp_data.set_index(pd.to_datetime(hp_data['time']), inplace=True)
         hp_data['time_elapsed'] = hp_data.index.to_series().diff().dt.seconds.div(3600, fill_value=0)
         hp_data.tz_convert(timezone)
+        hp_data['heat_flow_rate'] = 900*hp_data['sourcefluid_flowrate']*(hp_data['source_supplytemp'] -
+                                                                         hp_data['source_returntemp'])
+
+
+
     except Exception as e:
         print('Error with heat pump data: \n     ', e)
-
+        return
     # need to filter for when heat pump is on, otherwise NaN
-    hp_data['heat_flow_rate'] = 900*hp_data['sourcefluid_flowrate']*(hp_data['source_supplytemp'] -
-                                                                     hp_data['source_returntemp'])
 
     return hp_data
+
+
+
 
 
 def get_equipment_monitoring_system(equip_id):
@@ -527,7 +531,7 @@ def get_monitoring_system(name):
 
 
 if __name__ == '__main__':
-    site_name = '110720'
+    site_name = '111693'
     start_date = '2016-01-01'
     end_date = '2022-04-20'
     timezone = 'US/Eastern'
@@ -537,14 +541,14 @@ if __name__ == '__main__':
 
     site = get_site_info(site_name, db)
 
-    #equipment = get_equipment(site.id, db)
+    equipment = get_equipment(site.id, db)
     #print(equipment)
-    #hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
+    hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
     #thermal_load = get_thermal_load(site.id, db)
     #equip_monitoring_system = get_equipment_monitoring_system(equipment.id)
 
-    nws_id = site.weather_station_nws_id
-    wx_data = get_weather_data(nws_id, timezone, start_date, end_date)
+    #nws_id = site.weather_station_nws_id
+    #wx_data = get_weather_data(nws_id, timezone, start_date, end_date)
     #wx_data = get_weather_data(site.weather_station_nws_id, site.timezone, start_date, end_date)
     #monitoring_system_dict = get_monitoring_system(equip_monitoring_system.info.name)
     #source_spec, otherm_source = get_source_specs(site)

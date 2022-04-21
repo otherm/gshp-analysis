@@ -119,17 +119,18 @@ def create_daily_summaries(data, heatpump_threshold_watts):
     return ds
 
 if __name__ == '__main__':
-    site_name = '03824'
+    site_name = '110722'
     start_date = '2016-01-01'
-    end_date = '2016-12-31'
+    end_date = '2022-04-01'
     timezone = 'US/Eastern'
-    db = 'otherm'
+    db = 'otherm_cgb'
     #db = 'localhost'
 
     site = otherm_db_reader.get_site_info(site_name, db)
-    equipment, hp_data = otherm_db_reader.get_equipment_data(site.id, start_date, end_date, site.timezone, db)
+    equipment = otherm_db_reader.get_equipment(site.id, db)
+    hp_data = otherm_db_reader.get_equipment_data(site.id, start_date, end_date, site.timezone, db)
 
     dailysummary = create_daily_summaries(hp_data, heatpump_threshold_watts=500)
 
-    output_file = '../temp_files/daily_summary_output_{}_{}.csv'.format(db, str(date.today().strftime("%m-%d-%y")))
+    output_file = '../temp_files/daily_summary_{}_{}_{}.csv'.format(site_name, db, str(date.today().strftime("%m-%d-%y")))
     dailysummary.to_csv(output_file)
