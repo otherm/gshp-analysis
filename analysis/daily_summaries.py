@@ -121,7 +121,7 @@ def create_daily_summaries(data, heatpump_threshold_watts):
 if __name__ == '__main__':
     site_name = '110722'
     start_date = '2016-01-01'
-    end_date = '2022-04-01'
+    end_date = '2022-08-01'
     timezone = 'US/Eastern'
     db = 'otherm_cgb'
     #db = 'localhost'

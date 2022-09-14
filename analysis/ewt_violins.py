@@ -70,6 +70,7 @@ def ewt_violins(site_names, start_date, end_date, db):
         equipment = otherm_db_reader.get_equipment(site.id, db)
         #print(equipment)
         db_data = otherm_db_reader.get_equipment_data(site.id, start_date, end_date, site.timezone, db)
+        print('len db_data', len(db_data))
         hp_data = db_data[db_data['source_supplytemp'] > -100]
         # resample to 1-hour averages
         dataHourly = hp_data.resample('3600S').mean()
@@ -88,7 +89,7 @@ def ewt_violins(site_names, start_date, end_date, db):
 
         dataHourly['install'] = site.name
         composite = pd.concat([composite, dataHourly])
-        time.sleep(10)
+        time.sleep(5)
 
     composite.to_csv('../temp_files/ds_debug.csv')
     print('generating plot, please stand by')
@@ -106,14 +107,19 @@ def ewt_violins(site_names, start_date, end_date, db):
 if __name__ == '__main__':
     site_names = ['110459', '110720', '110722', '111011']
 
-    site_names = ['110918', '110459', '110722', '110855', '111011', '111382', '111469',
+    site_names = ['110722', '110459', '110918', '110855', '111011', '111382', '111469',
                   '111468', '111520', '111383', '111548', '111071', '111956',
-                  '110720']
-    start_date = '2016-01-01'
-    end_date = '2022-04-20'
+                  '110720', '111693', '111731', '111995']
+
+    site_names_2 = ['110918', '110912', '110459', '110722', '110855', '111011', '111071', '111520',
+                  '111548', '111383', '111382', '111468', '111469', '111956', '111693', '111995',
+                  '110720', '111731']
+
+    start_date = '2021-06-30'
+    end_date = '2022-07-01'
     timezone = 'US/Eastern'
     db = 'otherm_cgb'
     #db = 'localhost'
 
-    ewt_violins(site_names, start_date, end_date, db)
+    ewt_violins(site_names_2, start_date, end_date, db)
 

@@ -59,27 +59,32 @@ def kwh_vs_oat(site_names, start_date, end_date, db):
         except Exception as e:
             print('Error reading operating data pump data: \n     ', e)
 
-        time.sleep(30)
+        time.sleep(10)
 
     plt.ylabel('kWh/SF per day')
     plt.title('Heat Pump kWh/Square Feet vs. Outdoor Air Temperature')
     plt.xlabel('Average Daily Outdoor Air Temperature [$^\circ F$]')
     plt.legend()
-    fig_name = '../temp_files/kwh_per_sf_{}.png'.format(str(date.today().strftime("%m-%d-%y")))
+    fig_name = '../temp_files/kwh_per_sf_{}_2.png'.format(str(date.today().strftime("%m-%d-%y")))
     print(fig_name)
     plt.savefig(fig_name)
     return fig_name
 
 
 if __name__ == '__main__':
-    site_names = ['110722', '110720', '110459', '111011'] #, '03824', '03561', '06018']
-    site_names = ['110459', '110722', '110855', '111011', '111382', '111596', '111469',
-                  '111468', '111520', '111383', '111548', '111071', '111956', '111693']
-    #site_names = ['111383']
-    start_date = '2016-01-01'
-    end_date = '2022-04-10'
+
+    #updated 09-13-22 with WF and GES sits with a single heat pump
+    site_names = ['110459', '110722', '110855', '111011', '111071', '111520', '111548',
+                  '111383', '111382', '111468', '111469', '111956', '111693', '111995']
+
+    site_names_1 = ['110459', '110722', '110855', '111011', '111071', '111596', '111520', '111548']
+
+    site_names_2 = ['111383', '111382', '111468', '111469', '111956',  '111693', '111995']
+
+    start_date = '2021-07-01'
+    end_date = '2022-06-30'
     #symbol_colors = {'110720': 'b'} #, '03824': 'r', '03561': 'g', '06018': 'c'}
     db = 'otherm_cgb'
     #db = 'localhost'
 
-    kwh_vs_oat(site_names, start_date, end_date, db)
+    kwh_vs_oat(site_names_2, start_date, end_date, db)

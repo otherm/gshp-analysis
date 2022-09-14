@@ -118,7 +118,7 @@ def get_site_info(site_name, db):
 
 def get_thermal_load(site_name, db):
     """
-
+    Dataclass object with equipment specifications ::
         @dataclass
         class ThermalLoad:
             uuid: str
@@ -129,6 +129,7 @@ def get_thermal_load(site_name, db):
             cooling_design_load: float
             heating_design_oat: float
             cooling_design_oat: float
+
 
     To access data elements, use the dot syntax.  For example, the Weather Station ID, is accessed by
 
@@ -183,7 +184,7 @@ def get_equipment(site_id, db):
     Uses 'request' method to read equipment table for a specific site
 
     :param int site_id:  The site_id in the PostgreSQL database.  Can be obtained from *site.id*
-    :return: Equipment dataclass contains equipment information in the following fields::
+    :return: Equipment dataclass contains equipment information in the following fields ::
 
             @dataclass
             class Equipment:
@@ -258,7 +259,7 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
         .. note:: The index of the *DataFrame* is set to the ``time`` field and localized according the ``site.timezone`` attribute
 
     """
-
+    print('making a new request')
     if db == 'localhost':
         equip_url = "https://localhost:8000/api/equipment_data/?site=%s&start_date=%s&end_date=%s" % (site_id, start_date,
                                                                                                  end_date)
@@ -286,7 +287,7 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
         print('Error with heat pump data: \n     ', e)
         return
     # need to filter for when heat pump is on, otherwise NaN
-
+    equip_response.close()
     return hp_data
 
 
@@ -531,9 +532,9 @@ def get_monitoring_system(name):
 
 
 if __name__ == '__main__':
-    site_name = '111693'
-    start_date = '2016-01-01'
-    end_date = '2022-04-20'
+    site_name = '110912'
+    start_date = '2022-06-19'
+    end_date = '2022-06-20'
     timezone = 'US/Eastern'
     db = 'otherm_cgb'
     #db = 'othermdev'
@@ -541,9 +542,13 @@ if __name__ == '__main__':
 
     site = get_site_info(site_name, db)
 
+    equip_url = "https://%s/api/equipment_data/?site=%s&start_date=%s&end_date=%s" % (
+    configuration.db_info[db]['baseurl'], site.id, start_date, end_date)
+    print(equip_url)
+    equip_response = requests.get(equip_url, headers=configuration.db_info[db]['header'])
     equipment = get_equipment(site.id, db)
     #print(equipment)
-    hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
+    #hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
     #thermal_load = get_thermal_load(site.id, db)
     #equip_monitoring_system = get_equipment_monitoring_system(equipment.id)
 
