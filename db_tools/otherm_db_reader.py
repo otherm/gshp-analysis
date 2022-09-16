@@ -116,7 +116,7 @@ def get_site_info(site_name, db):
         print('Error with site data:  \n       ', e)
 
 
-def get_thermal_load(site_name, db):
+def get_thermal_load(site, db):
     """
     Dataclass object with equipment specifications ::
         @dataclass
@@ -159,13 +159,11 @@ def get_thermal_load(site_name, db):
     #    thermal_load: ThermalLoad
 
     if db == 'localhost':
-        thermal_load_url = "https://localhost:8000/api/thermal_load/?id=%s" % (site_name)
+        thermal_load_url = "https://localhost:8000/api/thermal_load/?name=%s" % (site.name)
         thermal_load_response = requests.get(thermal_load_url)
     else:
-        thermal_load_url = "https://%s/api/thermal_load/?id=%s" % (configuration.db_info[db]['baseurl'], site_name)
+        thermal_load_url = "https://%s/api/thermal_load/?name=%s" % (configuration.db_info[db]['baseurl'], site.name)
         thermal_load_response = requests.get(thermal_load_url, headers=configuration.db_info[db]['header'])
-
-    #print(thermal_load_url)
 
     thermal_load_dict = thermal_load_response.json()[0]
     #pp = pprint.PrettyPrinter(indent=4)

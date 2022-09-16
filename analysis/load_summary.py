@@ -11,7 +11,7 @@ from analysis import daily_summaries
 
 palette = {'Heating': 'darkorange', 'Cooling': 'dodgerblue'}
 
-def load_summary_graph(site, ds):
+def load_summary_graph(site, thermal_load, ds):
     """
 
     Parameters
@@ -51,10 +51,10 @@ def load_summary_graph(site, ds):
     degree_day_base_temperature = 65.
     balance_cool = 65.
     balance_heat = 65.
-    geo_peak_heat = site.thermal_load.heating_design_load
-    geo_peak_cool = site.thermal_load.cooling_design_load
-    design_temperature_cool = site.thermal_load.cooling_design_oat
-    design_temperature_heat = site.thermal_load.heating_design_oat
+    geo_peak_heat = thermal_load.heating_design_load
+    geo_peak_cool = thermal_load.cooling_design_load
+    design_temperature_cool = thermal_load.cooling_design_oat
+    design_temperature_heat = thermal_load.heating_design_oat
 
 
     dps = [design_temperature_heat,
@@ -76,17 +76,19 @@ def load_summary_graph(site, ds):
 
 
 if __name__ == "__main__":
-    site_name = '01886'
-    start = '2015-01-01'
-    end = '2016-12-31'
-    db = 'otherm'
+    site_name = '111956'
+    start = '2022-01-14'
+    end = '2022-01-15'
+    db = 'otherm_cgb'
 
     site = otherm_db_reader.get_site_info(site_name, db)
-    equipment, hp_data = otherm_db_reader.get_equipment_data(site.id, start, end, site.timezone, db)
+    equipment = otherm_db_reader.get_equipment(site.id, db)
+    hp_data = otherm_db_reader.get_equipment_data(site.id, start, end, site.timezone, db)
+    thermal_load = otherm_db_reader.get_thermal_load(site, db)
 
     heatpump_threshold_watts = 500
 
     ds = daily_summaries.create_daily_summaries(hp_data, heatpump_threshold_watts)
 
-    load_summary_graph(site, ds)
+    load_summary_graph(site, thermal_load, ds)
 
