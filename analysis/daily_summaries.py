@@ -85,10 +85,14 @@ def create_daily_summaries(data, heatpump_threshold_watts):
         data['btus_exchanged'] = np.where((data['time_elapsed'] < 0.083) & (data['heatpump_on']),
                                           data['heat_flow_rate']*data['time_elapsed'], 0)
 
-    data['btu_heating'] = np.where((data['heatpump_on'] & data['btus_exchanged'] > 0),
+    data['btus_exchanged_heating'] = np.where((data['btus_exchanged'] > 0), data['btus_exchanged'], 0)
+
+    data['btus_exchanged_cooling'] = np.where((data['btus_exchanged'] < 0), data['btus_exchanged'], 0)
+
+    data['btu_heating'] = np.where((data['heatpump_on'] & (data['btus_exchanged'] > 0)),
                                    3412.14 * data['heatpump_compressor_kwh'], 0)
 
-    data['btu_cooling'] = np.where((data['heatpump_on'] & data['btus_exchanged'] < 0),
+    data['btu_cooling'] = np.where((data['heatpump_on'] & (data['btus_exchanged'] < 0)),
                                    3412.14 * data['heatpump_compressor_kwh'], 0)
 
     # Initialize data frame for computing and storing daily values
@@ -103,7 +107,11 @@ def create_daily_summaries(data, heatpump_threshold_watts):
 
     ds['cooling_degree_days'] = data['cooling_degrees'].resample('D').sum()
     ds['heating_degree_days'] = data['heating_degrees'].resample('D').sum()
+
     ds['mbtus_exchanged'] = data['btus_exchanged'].resample('D').sum()/1000
+
+    ds['mbtus_exchanged_heating'] = data['btus_exchanged_heating'].resample('D').sum()/1000
+    ds['mbtus_exchanged_cooling'] = data['btus_exchanged_cooling'].resample('D').sum()/1000
 
     ds['mbtus_heat'] = data['btu_heating'].resample('D').sum()/1000
     ds['mbtus_cool'] = data['btu_cooling'].resample('D').sum()/1000
@@ -119,9 +127,9 @@ def create_daily_summaries(data, heatpump_threshold_watts):
     return ds
 
 if __name__ == '__main__':
-    site_name = '110722'
-    start_date = '2016-01-01'
-    end_date = '2022-08-01'
+    site_name = '110855'
+    start_date = '2021-07-01'
+    end_date = '2022-07-15'
     timezone = 'US/Eastern'
     db = 'otherm_cgb'
     #db = 'localhost'
