@@ -273,23 +273,21 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
 
     try:
         hp_data = pd.DataFrame.from_dict(equip_response.json()[0]['heat_pump_metrics'])
-        hp_data.set_index(pd.to_datetime(hp_data['time']), inplace=True)
-        hp_data['time_elapsed'] = hp_data.index.to_series().diff().dt.seconds.div(3600, fill_value=0)
-        hp_data.tz_convert(timezone)
-        hp_data['heat_flow_rate'] = 900*hp_data['sourcefluid_flowrate']*(hp_data['source_supplytemp'] -
-                                                                         hp_data['source_returntemp'])
-
-
 
     except Exception as e:
         print('Error with heat pump data: \n     ', e)
         return
-    # need to filter for when heat pump is on, otherwise NaN
+
+    # TODO apply time shift is applied for on-pipe temps
+
     equip_response.close()
+    hp_data['time'] = pd.to_datetime(hp_data['time'])
+    hp_data = hp_data.set_index('time')
+    hp_data['time_elapsed'] = hp_data.index.to_series().diff().dt.seconds.div(3600, fill_value=0)
+    hp_data.index = hp_data.index.tz_convert(tz=timezone)
+    hp_data['heat_flow_rate'] = 900 * hp_data['sourcefluid_flowrate'] * (hp_data['source_supplytemp'] -
+                                                                         hp_data['source_returntemp'])
     return hp_data
-
-
-
 
 
 def get_equipment_monitoring_system(equip_id):
@@ -546,7 +544,7 @@ if __name__ == '__main__':
     equip_response = requests.get(equip_url, headers=configuration.db_info[db]['header'])
     equipment = get_equipment(site.id, db)
     #print(equipment)
-    #hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
+    hp_data = get_equipment_data(site.id, start_date, end_date, site.timezone, db)
     #thermal_load = get_thermal_load(site.id, db)
     #equip_monitoring_system = get_equipment_monitoring_system(equipment.id)
 
