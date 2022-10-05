@@ -39,7 +39,7 @@ def kwh_vs_oat(site_names, start_date, end_date, db):
 
     for name in site_names:
         site = otherm_db_reader.get_site_info(name, db)
-        thermal_load = otherm_db_reader.get_thermal_load(site_name=site.id, db=db)
+        thermal_load = otherm_db_reader.get_thermal_load(site, db=db)
         #equipment, hp_data = otherm_db_reader.get_equipment_data(site.id, start_date, end_date, site.timezone, db)
         equipment = otherm_db_reader.get_equipment(site.id, db)
         print('working on ...', site.name)
@@ -81,10 +81,15 @@ if __name__ == '__main__':
 
     site_names_2 = ['111383', '111382', '111468', '111469', '111956',  '111693', '111995']
 
+    site_names_2 = ['110459']
+
+    sites = ['110459', '110722', '110855', '111011', '111071',
+                  '111382', '111383', '111520', '111693', '111468', '111956']
+
     start_date = '2021-07-01'
     end_date = '2022-06-30'
     #symbol_colors = {'110720': 'b'} #, '03824': 'r', '03561': 'g', '06018': 'c'}
     db = 'otherm_cgb'
     #db = 'localhost'
 
-    kwh_vs_oat(site_names_2, start_date, end_date, db)
+    kwh_vs_oat(sites, start_date, end_date, db)

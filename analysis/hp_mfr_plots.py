@@ -359,14 +359,15 @@ def plots_and_stats(site, equipment, data):
 
 
 if __name__ == '__main__':
-    site_name = '01886'
-    start_date = '2016-01-01'
-    end_date = '2016-12-31'
+    site_name = '111520'
+    start = '2021-07-01'
+    end = '2022-06-30'
     timezone = 'US/Eastern'
-    db = 'otherm'
+    db = 'otherm_cgb'
     #db = 'localhost'
 
     site = otherm_db_reader.get_site_info(site_name, db)
-    equipment, hp_data = otherm_db_reader.get_equipment_data(site.id, start_date, end_date, site.timezone, db)
+    equipment = otherm_db_reader.get_equipment(site.id, db)
+    hp_data = otherm_db_reader.get_equipment_data(site.id, start, end, site.timezone, db)
     print(hp_data.columns)
     plots_and_stats(site, equipment, hp_data)

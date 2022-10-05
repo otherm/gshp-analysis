@@ -129,16 +129,26 @@ def create_daily_summaries(data, heatpump_threshold_watts):
 if __name__ == '__main__':
     site_name = '110855'
     start_date = '2021-07-01'
-    end_date = '2022-07-15'
+    end_date = '2022-06-30'
     timezone = 'US/Eastern'
     db = 'otherm_cgb'
     #db = 'localhost'
 
-    site = otherm_db_reader.get_site_info(site_name, db)
-    equipment = otherm_db_reader.get_equipment(site.id, db)
-    hp_data = otherm_db_reader.get_equipment_data(site.id, start_date, end_date, site.timezone, db)
+    sites = ['110459', '110722', '110855', '111011', '111071',
+                  '111382', '111383', '111520', '111693', '111468', '111956']
 
-    dailysummary = create_daily_summaries(hp_data, heatpump_threshold_watts=500)
+    for site_name in sites:
+        site = otherm_db_reader.get_site_info(site_name, db)
+        equipment = otherm_db_reader.get_equipment(site.id, db)
+        hp_data = otherm_db_reader.get_equipment_data(site.id, start_date, end_date, site.timezone, db)
 
-    output_file = '../temp_files/daily_summary_{}_{}_{}.csv'.format(site_name, db, str(date.today().strftime("%m-%d-%y")))
-    dailysummary.to_csv(output_file)
+        ds = create_daily_summaries(hp_data, heatpump_threshold_watts=500)
+
+        output_file = '../temp_files/daily_summary_{}_{}_{}.csv'.format(site_name, db, str(date.today().strftime("%m-%d-%y")))
+        ds.to_csv(output_file)
+        #print(site_name, ds.runtime.sum(), ds.heatpump_kwh.sum(), ds.auxiliary_kwh.sum(),
+        #      ds.mbtus_exchanged_heating.sum(), ds.mbtus_heat.sum(), ds.n_records.sum(), ds.ewt_min.min())
+
+        print(site_name, ds.ewt_max.max())
+
+

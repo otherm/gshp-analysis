@@ -64,9 +64,9 @@ def hourly_daily_stats(site, hp_data):
 
 
 if __name__ == "__main__":
-    site_name = '110459'
-    start = '2015-01-01'
-    end = '2022-04-01'
+    site_name = '111071'
+    start = '2021-09-01'
+    end = '2022-08-30'
     db = 'otherm_cgb'
 
     site = otherm_db_reader.get_site_info(site_name, db)

@@ -13,9 +13,9 @@ import matplotlib.pyplot as plt
 
 
 if __name__ == "__main__":
-    site_name = '111956'
-    start = '2021-10-01'
-    end = '2022-04-01'
+    site_name = '111693'
+    start = '2022-01-14'
+    end = '2022-01-17'
     db = 'otherm_cgb'
 
     site = otherm_db_reader.get_site_info(site_name, db)
@@ -45,10 +45,10 @@ if __name__ == "__main__":
     hp_data_daily = hp_data.resample('1D').mean()
 
 
-    #hp_data.plot(kind='line', y=['kw_hp','kw_aux','outdoor_temperature_F'],
-    #                secondary_y='outdoor_temperature_F',
-    #                xlabel='Time', ylabel='Power [kW]',
-    #                title='Site NGEN ID  {}'.format(str(site.name)))
+    hp_data.plot(kind='line', y=['kw_hp','kw_aux','outdoor_temperature_F'],
+                    secondary_y='outdoor_temperature_F',
+                    xlabel='Time', ylabel='Power [kW]',
+                    title='Site NGEN ID  {}'.format(str(site.name)))
 
     #plt.ylim([0, 60])
 
@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     #plt.ylim([0, 60])
 
-    plt.scatter(hp_data_daily['outdoor_temperature_F'], hp_data_daily['MBtuH'])
+    #plt.scatter(hp_data_daily['outdoor_temperature_F'], hp_data_daily['MBtuH'])
 
     fig_name = '../temp_files/explorer_plot_{}.png'.format(str(site.name))
     print(fig_name)

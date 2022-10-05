@@ -84,7 +84,7 @@ def load_summary_graph(site, thermal_load, ds):
 
 
 if __name__ == "__main__":
-    site_name = '111956'
+    site_name = '111520'
     start = '2021-07-01'
     end = '2022-06-30'
     db = 'otherm_cgb'
