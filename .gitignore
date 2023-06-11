@@ -125,3 +125,7 @@ venv.bak/
 
 #temp files for local use
 /temp_files
+/db_tools/ctgb_ges_installs.py
+/db_tools/ctgb_wf_installs.py
+/db_tools/ctgb_de_installs.py
+

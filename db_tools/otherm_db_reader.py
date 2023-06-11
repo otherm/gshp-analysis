@@ -216,7 +216,7 @@ def get_equipment(site_id, db):
         equip_url = "https://%s/api/equipment/?site=%s" % (configuration.db_info[db]['baseurl'], site_id)
         equip_response = requests.get(equip_url, headers=configuration.db_info[db]['header'])
 
-    print(equip_url)
+    #print(equip_url)
 
     #Limitation:  only gets the first piece of equipmemnt at a site.
 
@@ -257,7 +257,7 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
         .. note:: The index of the *DataFrame* is set to the ``time`` field and localized according the ``site.timezone`` attribute
 
     """
-    print('making a new request')
+    #print('making a new request')
     if db == 'localhost':
         equip_url = "https://localhost:8000/api/equipment_data/?site=%s&start_date=%s&end_date=%s" % (site_id, start_date,
                                                                                                  end_date)
@@ -265,10 +265,10 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
     else:
         equip_url = "https://%s/api/equipment_data/?site=%s&start_date=%s&end_date=%s" % (configuration.db_info[db]['baseurl'],
                                                                          site_id, start_date, end_date)
-        print(equip_url)
+        #print(equip_url)
         equip_response = requests.get(equip_url, headers=configuration.db_info[db]['header'])
-    print(equip_response)
-    print(site_id, start_date, end_date, db, configuration.db_info[db]['header'])
+    #print(equip_response)
+    #print(site_id, start_date, end_date, db, configuration.db_info[db]['header'])
     #Limitation:  only gets the first piece of equipmemnt at a site.
 
     try:
@@ -540,7 +540,7 @@ if __name__ == '__main__':
 
     equip_url = "https://%s/api/equipment_data/?site=%s&start_date=%s&end_date=%s" % (
     configuration.db_info[db]['baseurl'], site.id, start_date, end_date)
-    print(equip_url)
+    #print(equip_url)
     equip_response = requests.get(equip_url, headers=configuration.db_info[db]['header'])
     equipment = get_equipment(site.id, db)
     #print(equipment)

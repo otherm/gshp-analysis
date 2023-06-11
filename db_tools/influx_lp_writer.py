@@ -46,7 +46,7 @@ def get_ges_data_for_influx(installation_id, start, end, msp_columns, data_sourc
         sql = """SELECT %s from results_flattenedresponse WHERE installation_id = %s
         and created BETWEEN TIMESTAMPTZ '%s' AND TIMESTAMPTZ '%s'""" % parameters
     elif data_source == 'ges':
-        ges_db = configuration.GES
+        ges_db = configuration.GES_local
         db_read = psycopg2.connect(**ges_db)
         sql = """SELECT %s FROM results_wattresponse w INNER JOIN results_flattenedresponse fr ON w.response_id = fr.id
         WHERE fr.installation_id = %s AND created BETWEEN TIMESTAMPTZ '%s' AND TIMESTAMPTZ
@@ -180,14 +180,14 @@ if __name__ == '__main__':
     wf_installs = ctgb_wf_installs.installs
     de_installs = ctgb_de_installs.installs
 
-    data_source = 'de'
+    data_source = 'wf'
     db_name = 'otherm-data'
 
     chunk_size = 8000
 
     if data_source =='ges':
-        start = datetime(2022, 4, 2)
-        stop = datetime(2022, 8, 31)
+        start = datetime(2022, 9, 1)
+        stop = datetime(2023, 5, 1)
         for install in ges_installs:
             #start = datetime.strptime(ges_installs[install]['start'], '%Y-%m-%d')
             for i in range(len(ges_installs[install]['hp_id'])):
@@ -218,7 +218,7 @@ if __name__ == '__main__':
                           'auxpower': "heatpump_aux",
                           'looppumppower': "sourcefluid_pump_power"}
 
-        data_folder = 'C:\\Users\\mattd\\OneDrive - USNH\\Research\\oTherm\\CTGB\\HP Data\\wf_data\\'
+        data_folder = 'C:\\Users\\mattd\\OneDrive - USNH\\Research\\oTherm\\CTGB\\HP Data\\wf_data\\2022Q3Q4\\'
         #data_folder = '..\\temp_files\\'
         #for file in ['E8EB1BCAB8E7-2022-06.csv']:
         for file in os.listdir(data_folder):
@@ -273,10 +273,26 @@ if __name__ == '__main__':
 
                 #tag = sys_id[6:] + '-' + mo
 
-                if ngen == '111619':
+                if ngen == '111760':
                     data = get_enertech_data(datafile)
-                    resampled = data.resample('60S').backfill()
+
                     print('in if block')
 
-
-
+                #df = df[(df.index > '2022-6-28') & (df.index <= '2022-6-30')]
+                #df.plot(secondary_y='[System Power][W][107]')
+                data = data[(data.index > '2022-7-2') & (data.index <= '2022-7-4')]
+                df = data.resample('60S').ffill()
+                colset1 = ['[System Current][A][106]', '[Entering Water][ºF][103]',
+                           '[Supply Air][ºF][101]']
+                data[colset1[0]].plot()
+                data[colset1[1]].plot(label=colset1[1])
+                data[colset1[2]].plot(label=colset1[2])
+                #data.plot(secondary_y='[System Power][W][107]')
+                plt.legend()
+                plt.title('NGEN 111760  2022-07-02 to 2022-07-04')
+                plt.show()
+                plt.scatter(df['[System Current][A][106]'], df['[Supply Air][ºF][101]'], s=4)
+                plt.xlabel('[System Current][A][106] (ffill 1-min)')
+                plt.ylabel('[Supply Air][ºF][101] (ffill 1-min)')
+                plt.title('NGEN 111760  2022-07-02 to 2022-07-04')
+                plt.show()

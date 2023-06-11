@@ -87,9 +87,9 @@ if __name__ == '__main__':
                   '111382', '111383', '111520', '111693', '111468', '111956']
 
     start_date = '2021-07-01'
-    end_date = '2022-06-30'
+    end_date = '2023-03-01'
     #symbol_colors = {'110720': 'b'} #, '03824': 'r', '03561': 'g', '06018': 'c'}
     db = 'otherm_cgb'
     #db = 'localhost'
 
-    kwh_vs_oat(sites, start_date, end_date, db)
+    kwh_vs_oat(site_names, start_date, end_date, db)

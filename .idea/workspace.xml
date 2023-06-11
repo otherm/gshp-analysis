@@ -19,22 +19,58 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7249c26-4ec7-4cfb-973b-40573935120a" name="Default Changelist" comment="">
+    <list default="true" id="a7249c26-4ec7-4cfb-973b-40573935120a" name="Default Changelist" comment="updates to db_reader for updated APIs">
+      <change afterPath="$PROJECT_DIR$/utilities/cost_savings_heatmap.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/conf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/.buildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/old" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis/data_explore.py" beforeDir="false" afterPath="$PROJECT_DIR$/analysis/data_explore.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis/ewt_violins.py" beforeDir="false" afterPath="$PROJECT_DIR$/analysis/ewt_violins.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis/kwh_per_sf.py" beforeDir="false" afterPath="$PROJECT_DIR$/analysis/kwh_per_sf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_tools/influx_lp_writer.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_tools/influx_lp_writer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_tools/otherm_db_reader.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_tools/otherm_db_reader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/.doctrees/analysis.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/.doctrees/analysis.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/.doctrees/code.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/.doctrees/code.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/.doctrees/credits.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/.doctrees/credits.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/.doctrees/db_tools.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/.doctrees/db_tools.doctree" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/html/.doctrees/environment.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/.doctrees/environment.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/.doctrees/index.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/.doctrees/index.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/.doctrees/modules.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/.doctrees/modules.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/.doctrees/otherm_field_names.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/.doctrees/otherm_field_names.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/.doctrees/otherm_project.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/.doctrees/otherm_project.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/.doctrees/utilities.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/.doctrees/utilities.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/_sources/analysis.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/_sources/analysis.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/_sources/credits.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/_sources/credits.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/_sources/db_tools.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/_sources/db_tools.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/_sources/index.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/_sources/index.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/_sources/modules.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/_sources/modules.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/_sources/otherm_project.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/_sources/otherm_project.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/_static/jquery-3.5.1.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/_static/jquery-3.5.1.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/_static/underscore-1.13.1.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/_static/underscore-1.13.1.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/analysis.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/analysis.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/code.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/code.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/credits.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/credits.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/db_tools.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/db_tools.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/html/genindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/genindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/modules.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/modules.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/html/objects.inv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/objects.inv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/otherm_project.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/otherm_project.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/html/py-modindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/py-modindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/html/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/search.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/html/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/searchindex.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/make.bat" beforeDir="false" afterPath="$PROJECT_DIR$/docs/make.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/modules.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/modules.rst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -48,7 +84,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/docs" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/db_tools" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -56,9 +92,140 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mattd\PycharmProjects\gshp-analysis\db_tools" />
+      <recent name="C:\Users\mattd\PycharmProjects\gshp-analysis\docs\html\images" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\mattd\PycharmProjects\gshp-analysis\temp_files\de_temp_data" />
+      <recent name="C:\Users\mattd\PycharmProjects\gshp-analysis\db_tools" />
+      <recent name="C:\Users\mattd\PycharmProjects\gshp-analysis\utilities" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.data_explore">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="gshp-analysis" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="data_explore" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="gshp-analysis" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/analysis" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/analysis/data_explore.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ewt_violins" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="gshp-analysis" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/analysis" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/analysis/ewt_violins.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="influx_lp_writer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="gshp-analysis" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/db_tools" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/db_tools/influx_lp_writer.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="kwh_per_sf" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="gshp-analysis" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/analysis" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/analysis/kwh_per_sf.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="time_of_day_usage" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="gshp-analysis" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/analysis" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/analysis/time_of_day_usage.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="docs" factoryName="Sphinx task">
       <module name="gshp-analysis" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -93,6 +260,15 @@
       <option name="docutils_open_in_browser" value="false" />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.data_explore" />
+        <item itemvalue="Python.data_explore" />
+        <item itemvalue="Python.kwh_per_sf" />
+        <item itemvalue="Python.ewt_violins" />
+        <item itemvalue="Python.data_explore" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -105,6 +281,68 @@
       <option name="presentableId" value="Default" />
       <updated>1633697156853</updated>
       <workItem from="1633697158223" duration="7789000" />
+      <workItem from="1641318327435" duration="7888000" />
+      <workItem from="1641399073650" duration="2243000" />
+      <workItem from="1641555000206" duration="7443000" />
+      <workItem from="1641742754197" duration="620000" />
+      <workItem from="1641832313627" duration="600000" />
+      <workItem from="1641911351134" duration="12135000" />
+      <workItem from="1641956128151" duration="619000" />
+      <workItem from="1641991043199" duration="3152000" />
+      <workItem from="1642087175806" duration="3227000" />
+      <workItem from="1645821132985" duration="1404000" />
+      <workItem from="1646078189168" duration="195000" />
+      <workItem from="1647098380434" duration="348000" />
+      <workItem from="1648637415027" duration="764000" />
+      <workItem from="1650106231180" duration="1550000" />
+      <workItem from="1650143232913" duration="4969000" />
+      <workItem from="1650316463444" duration="6032000" />
+      <workItem from="1650362039886" duration="9287000" />
+      <workItem from="1650394214684" duration="767000" />
+      <workItem from="1650406806573" duration="8434000" />
+      <workItem from="1650448992363" duration="22059000" />
+      <workItem from="1654783414345" duration="5311000" />
+      <workItem from="1658918195777" duration="1254000" />
+      <workItem from="1661538639800" duration="4456000" />
+      <workItem from="1661606233461" duration="6868000" />
+      <workItem from="1663003021980" duration="9863000" />
+      <workItem from="1663097824990" duration="12433000" />
+      <workItem from="1663155326971" duration="3419000" />
+      <workItem from="1663326011531" duration="9947000" />
+      <workItem from="1663704047177" duration="5210000" />
+      <workItem from="1663764113345" duration="5960000" />
+      <workItem from="1663834237786" duration="12973000" />
+      <workItem from="1663850635791" duration="81000" />
+      <workItem from="1663926960506" duration="5831000" />
+      <workItem from="1664924501544" duration="1330000" />
+      <workItem from="1664969613469" duration="1435000" />
+      <workItem from="1665150248235" duration="126000" />
+      <workItem from="1665770430186" duration="128000" />
+      <workItem from="1665770791640" duration="901000" />
+      <workItem from="1666030193494" duration="522000" />
+      <workItem from="1666312211796" duration="616000" />
+      <workItem from="1666523186362" duration="5245000" />
+      <workItem from="1666626347616" duration="6701000" />
+      <workItem from="1666687520169" duration="9065000" />
+      <workItem from="1666728068165" duration="237000" />
+      <workItem from="1666784350778" duration="2321000" />
+      <workItem from="1666804358109" duration="1389000" />
+      <workItem from="1666870724587" duration="195000" />
+      <workItem from="1666887844840" duration="1110000" />
+      <workItem from="1667245391535" duration="2532000" />
+      <workItem from="1680214778258" duration="2247000" />
+      <workItem from="1680351225840" duration="6637000" />
+      <workItem from="1680432708347" duration="3514000" />
+      <workItem from="1680523798466" duration="637000" />
+      <workItem from="1680640549403" duration="966000" />
+      <workItem from="1680809880308" duration="772000" />
+      <workItem from="1680825486429" duration="1494000" />
+      <workItem from="1680866711255" duration="1196000" />
+      <workItem from="1680958719402" duration="617000" />
+      <workItem from="1681558524718" duration="612000" />
+      <workItem from="1681560414301" duration="921000" />
+      <workItem from="1686149202142" duration="1402000" />
+      <workItem from="1686487325852" duration="9063000" />
     </task>
     <task id="LOCAL-00001" summary="initial read-the-docs commit - under development">
       <created>1633699615548</created>
@@ -134,7 +372,84 @@
       <option name="project" value="LOCAL" />
       <updated>1633704033875</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="updated documentation">
+      <created>1641322809388</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1641322809388</updated>
+    </task>
+    <task id="LOCAL-00006" summary="moved api urls to configuration file, also changes to load_factor and load_summary">
+      <created>1641832475442</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1641832475442</updated>
+    </task>
+    <task id="LOCAL-00007" summary="updates to db_tools and documentation">
+      <created>1641955583907</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1641955583907</updated>
+    </task>
+    <task id="LOCAL-00008" summary="updates to db_reader for updated APIs">
+      <created>1642090223507</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1642090223507</updated>
+    </task>
+    <task id="LOCAL-00009" summary="updates related to pilot">
+      <created>1650394355834</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1650394355835</updated>
+    </task>
+    <task id="LOCAL-00010" summary="pilot project updates">
+      <created>1650504369700</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1650504369701</updated>
+    </task>
+    <task id="LOCAL-00011" summary="works in progress">
+      <created>1663165929396</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1663165929397</updated>
+    </task>
+    <task id="LOCAL-00012" summary="updated thermal load">
+      <created>1663335444998</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1663335444998</updated>
+    </task>
+    <task id="LOCAL-00013" summary="updated daily summary and load profiles, added a simple time series plotting script for">
+      <created>1663850286826</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1663850286826</updated>
+    </task>
+    <task id="LOCAL-00014" summary="fixed time zone conversion">
+      <created>1663850695180</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1663850695180</updated>
+    </task>
+    <task id="LOCAL-00015" summary="variety of changes">
+      <created>1664976955132</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1664976955132</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,48 +465,67 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial read-the-docs commit" />
     <MESSAGE value="initial read-the-docs commit - under development" />
     <MESSAGE value="under development" />
-    <option name="LAST_COMMIT_MESSAGE" value="under development" />
+    <MESSAGE value="updated documentation" />
+    <MESSAGE value="moved api urls to configuration file, also changes to load_factor and load_summary" />
+    <MESSAGE value="updates to db_tools and documentation" />
+    <MESSAGE value="updates to db_reader for updated APIs" />
+    <MESSAGE value="updates related to pilot" />
+    <MESSAGE value="pilot project updates" />
+    <MESSAGE value="works in progress" />
+    <MESSAGE value="updated thermal load" />
+    <MESSAGE value="updated daily summary and load profiles, added a simple time series plotting script for" />
+    <MESSAGE value="fixed time zone conversion" />
+    <MESSAGE value="variety of changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="variety of changes" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="414" y="235" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1633697842943">
+    <state x="104" y="112" width="1573" height="960" key="DiffContextDialog" timestamp="1666701818150">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state x="414" y="235" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.449.1280.693/0.0.1920.1160/-1920.-213.1920.1040@0.0.1920.1160" timestamp="1633697842943" />
-    <state x="740" y="335" key="FileChooserDialogImpl" timestamp="1633697841066">
+    <state x="104" y="112" width="1573" height="960" key="DiffContextDialog/1920.449.1280.693/0.0.1920.1160/-1080.-212.1080.1880@0.0.1920.1160" timestamp="1666701818150" />
+    <state x="795" y="328" key="FileChooserDialogImpl" timestamp="1664925281914">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state x="740" y="335" key="FileChooserDialogImpl/1920.449.1280.693/0.0.1920.1160/-1920.-213.1920.1040@0.0.1920.1160" timestamp="1633697841066" />
-    <state width="1877" height="321" key="GridCell.Tab.0.bottom" timestamp="1633705565912">
+    <state x="795" y="328" key="FileChooserDialogImpl/1920.449.1280.693/0.0.1920.1160/-1080.-212.1080.1880@0.0.1920.1160" timestamp="1664925281914" />
+    <state width="1713" height="202" key="GridCell.Tab.0.bottom" timestamp="1661550634210">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state width="1877" height="321" key="GridCell.Tab.0.bottom/1920.449.1280.693/0.0.1920.1160/-1920.-213.1920.1040@0.0.1920.1160" timestamp="1633705565912" />
-    <state width="1877" height="321" key="GridCell.Tab.0.center" timestamp="1633705565912">
+    <state width="1713" height="202" key="GridCell.Tab.0.bottom/1920.449.1280.693/0.0.1920.1160/-1080.-212.1080.1880@0.0.1920.1160" timestamp="1661550634210" />
+    <state width="1713" height="202" key="GridCell.Tab.0.center" timestamp="1661550634210">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state width="1877" height="321" key="GridCell.Tab.0.center/1920.449.1280.693/0.0.1920.1160/-1920.-213.1920.1040@0.0.1920.1160" timestamp="1633705565912" />
-    <state width="1877" height="321" key="GridCell.Tab.0.left" timestamp="1633705565912">
+    <state width="1713" height="202" key="GridCell.Tab.0.center/1920.449.1280.693/0.0.1920.1160/-1080.-212.1080.1880@0.0.1920.1160" timestamp="1661550634210" />
+    <state width="1713" height="202" key="GridCell.Tab.0.left" timestamp="1661550634210">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state width="1877" height="321" key="GridCell.Tab.0.left/1920.449.1280.693/0.0.1920.1160/-1920.-213.1920.1040@0.0.1920.1160" timestamp="1633705565912" />
-    <state width="1877" height="321" key="GridCell.Tab.0.right" timestamp="1633705565912">
+    <state width="1713" height="202" key="GridCell.Tab.0.left/1920.449.1280.693/0.0.1920.1160/-1080.-212.1080.1880@0.0.1920.1160" timestamp="1661550634210" />
+    <state width="1713" height="202" key="GridCell.Tab.0.right" timestamp="1661550634210">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state width="1877" height="321" key="GridCell.Tab.0.right/1920.449.1280.693/0.0.1920.1160/-1920.-213.1920.1040@0.0.1920.1160" timestamp="1633705565912" />
-    <state x="461" y="225" key="SettingsEditor" timestamp="1633704581969">
+    <state width="1713" height="202" key="GridCell.Tab.0.right/1920.449.1280.693/0.0.1920.1160/-1080.-212.1080.1880@0.0.1920.1160" timestamp="1661550634210" />
+    <state x="516" y="231" key="SettingsEditor" timestamp="1665771078442">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state x="461" y="225" key="SettingsEditor/1920.449.1280.693/0.0.1920.1160/-1920.-213.1920.1040@0.0.1920.1160" timestamp="1633704581969" />
-    <state x="552" y="300" key="Vcs.Push.Dialog.v2" timestamp="1633704037881">
+    <state x="516" y="231" key="SettingsEditor/1920.449.1280.693/0.0.1920.1160/-1080.-212.1080.1880@0.0.1920.1160" timestamp="1665771078442" />
+    <state x="482" y="312" key="Vcs.Push.Dialog.v2" timestamp="1665771090499">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state x="552" y="300" key="Vcs.Push.Dialog.v2/1920.449.1280.693/0.0.1920.1160/-1920.-213.1920.1040@0.0.1920.1160" timestamp="1633704037881" />
+    <state x="482" y="312" key="Vcs.Push.Dialog.v2/1920.449.1280.693/0.0.1920.1160/-1080.-212.1080.1880@0.0.1920.1160" timestamp="1665771090499" />
+    <state width="591" height="340" key="XDebugger.FullValuePopup" timestamp="1666525070700">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="591" height="340" key="XDebugger.FullValuePopup/0.0.1280.680@0.0.1280.680" timestamp="1666525070700" />
+    <state width="886" height="580" key="XDebugger.FullValuePopup/1920.449.1280.693/0.0.1920.1160/-1080.-212.1080.1880@0.0.1920.1160" timestamp="1663844201142" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/gshp_analysis$sphinx_task.coverage" NAME="sphinx task Coverage Results" MODIFIED="1633705737857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/gshp_analysis$sphinx_task.coverage" NAME="sphinx task Coverage Results" MODIFIED="1654785734973" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/gshp_analysis$ctgb_ges_installs.coverage" NAME="ctgb_ges_installs Coverage Results" MODIFIED="1661549249867" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/db_tools" />
+    <SUITE FILE_PATH="coverage/gshp_analysis$configuration.coverage" NAME="configuration Coverage Results" MODIFIED="1648637488184" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

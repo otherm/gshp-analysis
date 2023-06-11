@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="analysis package" href="analysis.html" />
-    <link rel="prev" title="Code Overview" href="code.html" /> 
+    <link rel="prev" title="oTherm Project" href="otherm_project.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,16 +40,11 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="otherm_project.html">oTherm Project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">Code Overview</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Modules</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#analysis">analysis</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="analysis.html">analysis package</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="#utilities">utilities</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="utilities.html">utilities package</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#db-tools">db_tools</a><ul>
@@ -92,36 +87,33 @@
 </section>
 <section id="analysis">
 <h1>analysis<a class="headerlink" href="#analysis" title="Permalink to this headline"></a></h1>
-<p>Analysis of GSHP operating data from an oTherm instance.</p>
+<p>This set of analysis modules uses the oTherm APIs to access oTherm data. See the API Documentation &lt;<a class="reference external" href="https://otherm.org/api_documentation">https://otherm.org/api_documentation</a>&gt;
+for more details. The more complex oTherm data is organized into dataclasses that use that are ready for analysis.  For example,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="nd">@dataclass</span>
+    <span class="k">class</span> <span class="nc">ThermalLoad</span><span class="p">:</span>
+        <span class="n">uuid</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+        <span class="n">conditioned_area</span><span class="p">:</span> <span class="nb">float</span>
+        <span class="n">heating_design_load</span><span class="p">:</span> <span class="nb">float</span>
+        <span class="n">cooling_design_load</span><span class="p">:</span> <span class="nb">float</span>
+        <span class="n">heating_design_oat</span><span class="p">:</span> <span class="nb">float</span>
+        <span class="n">cooling_design_oat</span><span class="p">:</span> <span class="nb">float</span>
+</pre></div>
+</div>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">analysis package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="analysis.html#modules">Modules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="analysis.html#module-analysis.daily_summaries">analysis.daily_summaries module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="analysis.html#analysis-ewt-violins-module">analysis.ewt_violins module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html#module-analysis.load_summary">analysis.load_summary module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html#module-analysis.ewt_violins">analysis.ewt_violins module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="analysis.html#analysis-geoexchange-proxies-module">analysis.geoexchange_proxies module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="analysis.html#analysis-hp-mfr-plots-module">analysis.hp_mfr_plots module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="analysis.html#analysis-kwh-per-sf-module">analysis.kwh_per_sf module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="analysis.html#analysis-load-factor-module">analysis.load_factor module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="analysis.html#analysis-spf-with-uncertainty-module">analysis.spf_with_uncertainty module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="analysis.html#analysis-time-of-day-usage-module">analysis.time_of_day_usage module</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
-<section id="utilities">
-<h1>utilities<a class="headerlink" href="#utilities" title="Permalink to this headline"></a></h1>
-<p>Processing functions that support analysis functions.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="utilities.html">utilities package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="utilities.html#modules">Modules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utilities.html#module-utilities.df_plots">utilities.df_plots module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utilities.html#module-utilities.df_processing">utilities.df_processing module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utilities.html#module-utilities.misc_functions">utilities.misc_functions module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utilities.html#module-utilities.save_responses_as_csv">utilities.save_responses_as_csv module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utilities.html#module-utilities.get_measurement_spec">utilities.get_measurement_spec module</a></li>
 </ul>
 </li>
 </ul>
@@ -134,8 +126,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="db_tools.html">db_tools package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="db_tools.html#modules">Modules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="db_tools.html#module-db_tools.influx_lp_writer">db_tools.influx_lp_writer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_tools.html#db-tools-influx-lp-writer-module">db_tools.influx_lp_writer module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="db_tools.html#module-db_tools.otherm_db_reader">db_tools.otherm_db_reader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_tools.html#module-db_tools.csv_to_yaml">db_tools.csv_to_yaml module</a></li>
 </ul>
 </li>
 </ul>
@@ -146,7 +139,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="code.html" class="btn btn-neutral float-left" title="Code Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="otherm_project.html" class="btn btn-neutral float-left" title="oTherm Project" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="analysis.html" class="btn btn-neutral float-right" title="analysis package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

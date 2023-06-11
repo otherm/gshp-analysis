@@ -37,10 +37,8 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="otherm_project.html">oTherm Project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">Code Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#analysis">analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html#utilities">utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#db-tools">db_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="otherm_field_names.html">oTherm Database Fields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="credits.html">Credits and Disclaimers</a></li>
@@ -80,12 +78,13 @@
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
+ | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
- | <a href="#W"><strong>W</strong></a>
  
 </div>
 <h2 id="A">A</h2>
@@ -99,14 +98,42 @@
 </li>
       </ul></li>
       <li>
+    analysis.ewt_violins
+
+      <ul>
+        <li><a href="analysis.html#module-analysis.ewt_violins">module</a>
+</li>
+      </ul></li>
+      <li>
+    analysis.kwh_per_sf
+
+      <ul>
+        <li><a href="analysis.html#module-analysis.kwh_per_sf">module</a>
+</li>
+      </ul></li>
+      <li>
+    analysis.load_factor
+
+      <ul>
+        <li><a href="analysis.html#module-analysis.load_factor">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    analysis.load_summary
+
+      <ul>
+        <li><a href="analysis.html#module-analysis.load_summary">module</a>
+</li>
+      </ul></li>
+      <li>
     analysis.spf_with_uncertainty
 
       <ul>
         <li><a href="analysis.html#module-analysis.spf_with_uncertainty">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     analysis.time_of_day_usage
 
@@ -123,22 +150,22 @@
       <li><a href="utilities.html#utilities.misc_functions.C_to_F">C_to_F() (in module utilities.misc_functions)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="analysis.html#analysis.daily_summaries.create_daily_summaries">create_daily_summaries() (in module analysis.daily_summaries)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="analysis.html#analysis.daily_summaries.daily_summary">daily_summary() (in module analysis.daily_summaries)</a>
-</li>
       <li>
-    db_tools.influx_lp_writer
+    db_tools.csv_to_yaml
 
       <ul>
-        <li><a href="db_tools.html#module-db_tools.influx_lp_writer">module</a>
+        <li><a href="db_tools.html#module-db_tools.csv_to_yaml">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     db_tools.otherm_db_reader
 
@@ -146,21 +173,29 @@
         <li><a href="db_tools.html#module-db_tools.otherm_db_reader">module</a>
 </li>
       </ul></li>
-      <li><a href="utilities.html#utilities.df_processing.determine_mode">determine_mode() (in module utilities.df_processing)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="analysis.html#analysis.ewt_violins.determine_mode">determine_mode() (in module analysis.ewt_violins)</a>
+
+      <ul>
+        <li><a href="utilities.html#utilities.df_processing.determine_mode">(in module utilities.df_processing)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="analysis.html#analysis.spf_with_uncertainty.elec_error_one_value">elec_error_one_value() (in module analysis.spf_with_uncertainty)</a>
+      <li><a href="analysis.html#analysis.spf_with_uncertainty.elec_error_single_elec_measurement">elec_error_single_elec_measurement() (in module analysis.spf_with_uncertainty)</a>
+</li>
+      <li><a href="analysis.html#analysis.spf_with_uncertainty.error_heat_from_ground">error_heat_from_ground() (in module analysis.spf_with_uncertainty)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="analysis.html#analysis.spf_with_uncertainty.error_heat_from_ground">error_heat_from_ground() (in module analysis.spf_with_uncertainty)</a>
-</li>
       <li><a href="utilities.html#utilities.df_plots.ewt_violin">ewt_violin() (in module utilities.df_plots)</a>
+</li>
+      <li><a href="analysis.html#analysis.ewt_violins.ewt_violins">ewt_violins() (in module analysis.ewt_violins)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -180,7 +215,9 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="db_tools.html#db_tools.influx_lp_writer.get_data_for_influx">get_data_for_influx() (in module db_tools.influx_lp_writer)</a>
+      <li><a href="analysis.html#analysis.load_factor.generate_csv">generate_csv() (in module analysis.load_factor)</a>
+</li>
+      <li><a href="db_tools.html#db_tools.otherm_db_reader.get_equipment">get_equipment() (in module db_tools.otherm_db_reader)</a>
 </li>
       <li><a href="db_tools.html#db_tools.otherm_db_reader.get_equipment_data">get_equipment_data() (in module db_tools.otherm_db_reader)</a>
 </li>
@@ -196,6 +233,8 @@
 </li>
       <li><a href="db_tools.html#db_tools.otherm_db_reader.get_source_specs">get_source_specs() (in module db_tools.otherm_db_reader)</a>
 </li>
+      <li><a href="db_tools.html#db_tools.otherm_db_reader.get_thermal_load">get_thermal_load() (in module db_tools.otherm_db_reader)</a>
+</li>
       <li><a href="db_tools.html#db_tools.otherm_db_reader.get_weather_data">get_weather_data() (in module db_tools.otherm_db_reader)</a>
 </li>
       <li><a href="utilities.html#utilities.save_responses_as_csv.get_wr_as_dataframe">get_wr_as_dataframe() (in module utilities.save_responses_as_csv)</a>
@@ -206,11 +245,19 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="analysis.html#analysis.spf_with_uncertainty.heat_calcs_one_elec">heat_calcs_one_elec() (in module analysis.spf_with_uncertainty)</a>
+      <li><a href="analysis.html#analysis.spf_with_uncertainty.heat_calcs_single_elec_measurement">heat_calcs_single_elec_measurement() (in module analysis.spf_with_uncertainty)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="analysis.html#analysis.time_of_day_usage.hourly_daily_stats">hourly_daily_stats() (in module analysis.time_of_day_usage)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="analysis.html#analysis.kwh_per_sf.kwh_vs_oat">kwh_vs_oat() (in module analysis.kwh_per_sf)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -225,6 +272,10 @@
 </li>
       </ul></li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="analysis.html#analysis.load_summary.load_summary_graph">load_summary_graph() (in module analysis.load_summary)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="M">M</h2>
@@ -236,11 +287,19 @@
       <ul>
         <li><a href="analysis.html#module-analysis.daily_summaries">analysis.daily_summaries</a>
 </li>
+        <li><a href="analysis.html#module-analysis.ewt_violins">analysis.ewt_violins</a>
+</li>
+        <li><a href="analysis.html#module-analysis.kwh_per_sf">analysis.kwh_per_sf</a>
+</li>
+        <li><a href="analysis.html#module-analysis.load_factor">analysis.load_factor</a>
+</li>
+        <li><a href="analysis.html#module-analysis.load_summary">analysis.load_summary</a>
+</li>
         <li><a href="analysis.html#module-analysis.spf_with_uncertainty">analysis.spf_with_uncertainty</a>
 </li>
         <li><a href="analysis.html#module-analysis.time_of_day_usage">analysis.time_of_day_usage</a>
 </li>
-        <li><a href="db_tools.html#module-db_tools.influx_lp_writer">db_tools.influx_lp_writer</a>
+        <li><a href="db_tools.html#module-db_tools.csv_to_yaml">db_tools.csv_to_yaml</a>
 </li>
         <li><a href="db_tools.html#module-db_tools.otherm_db_reader">db_tools.otherm_db_reader</a>
 </li>
@@ -258,6 +317,14 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="analysis.html#analysis.spf_with_uncertainty.monthly_ground_heat">monthly_ground_heat() (in module analysis.spf_with_uncertainty)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="db_tools.html#db_tools.csv_to_yaml.output_yaml">output_yaml() (in module db_tools.csv_to_yaml)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -322,14 +389,6 @@
         <li><a href="utilities.html#module-utilities.save_responses_as_csv">module</a>
 </li>
       </ul></li>
-  </ul></td>
-</tr></table>
-
-<h2 id="W">W</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="db_tools.html#db_tools.influx_lp_writer.write_files">write_files() (in module db_tools.influx_lp_writer)</a>
-</li>
   </ul></td>
 </tr></table>
 

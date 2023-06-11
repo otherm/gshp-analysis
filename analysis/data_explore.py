@@ -13,16 +13,24 @@ import matplotlib.pyplot as plt
 
 
 if __name__ == "__main__":
-    site_name = '111693'
-    start = '2022-01-14'
-    end = '2022-01-17'
+    site_name = '111011'
+    start = '2022-03-14'
+    end = '2023-03-01'
     db = 'otherm_cgb'
 
-    site = otherm_db_reader.get_site_info(site_name, db)
+    site_names = ['110459', '110720', '110722', '110855', '110912', '110918', '111011', '111071', '111382', '111383',
+                  '111468', '111469', '111516', '111520', '111548', '111596', '111619', '111685', '111693', '111731',
+                  '111734', '111759', '111760', '111858', '111956', '111995']
 
-    equipment = otherm_db_reader.get_equipment(site.id, db)
-    hp_data = otherm_db_reader.get_equipment_data(site.id, start, end, site.timezone, db)
+    site_names = ['111011']
 
+    for site_name in site_names:
+        site = otherm_db_reader.get_site_info(site_name, db)
+        equipment = otherm_db_reader.get_equipment(site.id, db)
+        hp_data = otherm_db_reader.get_equipment_data(site.id, start, end, site.timezone, db)
+        print(site_name, hp_data.index[-1])
+
+    '''
     hp_data['kw_hp'] = hp_data['heatpump_power'][~np.isnan(hp_data['heatpump_power'])] / 1000.
     hp_data['kw_aux'] = hp_data['heatpump_aux'][~np.isnan(hp_data['heatpump_aux'])] / 1000.
 
@@ -66,4 +74,31 @@ if __name__ == "__main__":
     plt.show()
     plt.savefig(fig_name)
 
+    x = ['heatpump_power', 'source_supplytemp',
+         'source_returntemp']
+    y = ['heatpump_power', 'source_supplytemp',
+         'source_returntemp']
 
+    x_label = ['System Current', 'EWT',
+               'LWT']
+    y_label = ['System Current', 'EWT',
+               'LWT']
+
+    ngen = site_name
+    data = hp_data
+
+    fig, axs = plt.subplots(3, 3)
+    for i in range(3):
+        for j in range(3):
+            axs[i, j].scatter(data[x[i]], data[y[j]], s=2)
+            axs[i, j].set(xlabel=x_label[i])
+            axs[i, j].set(ylabel=y_label[j])
+
+    # Hide x labels and tick labels for top plots and y ticks for right plots.
+    # for ax in axs.flat:
+    #    ax.label_outer()
+
+    plt.suptitle("NGEN %s  %s to %s " % (ngen, data.index[0].strftime("%m-%d-%Y"), data.index[-1].strftime("%m-%d-%Y")))
+
+    plt.show()
+    '''

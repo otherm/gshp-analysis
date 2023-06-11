@@ -1,5 +1,5 @@
 Modules
-========
+=======
 The modules support the back-end interactions with an oTherm instance.   They are provided as examples only.
 
 .. toctree::
@@ -8,7 +8,7 @@ The modules support the back-end interactions with an oTherm instance.   They ar
 
 analysis
 ========
-This set of analysis modules uses the oTherm APIs to access oTherm data. See the `API Documentation <https://otherm.org/api_documentation>
+This set of analysis modules uses the oTherm APIs to access oTherm data. See the API Documentation <https://otherm.org/api_documentation>
 for more details. The more complex oTherm data is organized into dataclasses that use that are ready for analysis.  For example,
 
 .. literalinclude:: ../db_tools/otherm_db_reader.py

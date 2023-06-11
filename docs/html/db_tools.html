@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="oTherm Database Fields" href="otherm_field_names.html" />
-    <link rel="prev" title="utilities package" href="utilities.html" /> 
+    <link rel="prev" title="analysis package" href="analysis.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,15 +40,14 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="otherm_project.html">oTherm Project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">Code Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#analysis">analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html#utilities">utilities</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html#db-tools">db_tools</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">db_tools package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#modules">Modules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-db_tools.influx_lp_writer">db_tools.influx_lp_writer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-tools-influx-lp-writer-module">db_tools.influx_lp_writer module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-db_tools.otherm_db_reader">db_tools.otherm_db_reader module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-db_tools.csv_to_yaml">db_tools.csv_to_yaml module</a></li>
 </ul>
 </li>
 </ul>
@@ -90,65 +89,8 @@
 can be uploaded to the oTherm database, and the second is a set of functions that use API requests to retrieve
 and store data into local <em>pandas.DataFrame</em> and <em>dataclass</em> objects.</p>
 </section>
-<section id="module-db_tools.influx_lp_writer">
-<span id="db-tools-influx-lp-writer-module"></span><h2>db_tools.influx_lp_writer module<a class="headerlink" href="#module-db_tools.influx_lp_writer" title="Permalink to this headline"></a></h2>
-<p>Reads data from PostgreSQL database, maps onto oTherm data fields,
-and outputs .dat file using the influx line protocol</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="db_tools.influx_lp_writer.get_data_for_influx">
-<span class="sig-prename descclassname"><span class="pre">db_tools.influx_lp_writer.</span></span><span class="sig-name descname"><span class="pre">get_data_for_influx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">installation_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msp_columns</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.influx_lp_writer.get_data_for_influx" title="Permalink to this definition"></a></dt>
-<dd><p>Retrieves data from a PostgreSQL database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>installation_id</strong> (<em>int</em>) – site identifier in target database</p></li>
-<li><p><strong>start</strong> (<em>date</em>) – start date (e.g. 2018-1-1)</p></li>
-<li><p><strong>end</strong> (<em>date</em>) – end date (e.g. 2018-12-31)</p></li>
-<li><p><strong>msp_columns</strong> (<em>str</em>) – list of columns for the SQL query (see below)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>pandas.DataFrame</em>  containing data records for the columns in <code class="docutils literal notranslate"><span class="pre">msp_columns</span></code>.</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>msp_columns for SQL query are a single <em>str</em> representing a comma separated list,
-such as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;ewt, lwt, compressor, created, flow_rate, auxiliary, outdoor_temperature&#39;</span>
-</pre></div>
-</div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For the purposes of writing the line-protocol files, the DataFrame does <strong>not</strong> have a DatetimeIndex</p>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="db_tools.influx_lp_writer.write_files">
-<span class="sig-prename descclassname"><span class="pre">db_tools.influx_lp_writer.</span></span><span class="sig-name descname"><span class="pre">write_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uuid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_mapping</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.influx_lp_writer.write_files" title="Permalink to this definition"></a></dt>
-<dd><p>Takes heat pump operating data as pandas dataframe and writes to datafile
-using influx line protocol.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>db_name</strong> (<em>str</em>) – Name of the influx database, default is ‘otherm-data’</p></li>
-<li><p><strong>uuid</strong> (<em>str</em>) – oTherm uuid of the thermal equipment, this is that influx db tag</p></li>
-<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Monitoring system data</p></li>
-<li><p><strong>column_mapping</strong> (<em>dict</em>) – Mapping of monitoring system column names to standardized oTherm column names</p></li>
-<li><p><strong>chunk_size</strong> (<em>int</em>) – Number of lines in each chunk file, recommended value is 8000</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Function produces a set of line-protocol text files</p>
-</dd>
-</dl>
-<p>The influx db line protocol consists of three <em>space delimited</em> elements: (1) a comma delimited pair of     the database name and the measurement tag, (2) a comma delimited list of fields and values (no spaces), and (3)     a timestamp in epoch time.  For example, with spaces shown with <cite>|_|</cite>:</p>
-<p><code class="docutils literal notranslate"><span class="pre">otherm-data,equipment=59468786-1ab3-4203-82d9-78f480ce0600|_|</span>&#160;&#160;&#160; <span class="pre">source_supplytemp=6.88,source_returntemp=4.59,heatpump_power=2100.0|_|1454768864</span></code></p>
-<p>There is one line for each record.</p>
-</dd></dl>
-
+<section id="db-tools-influx-lp-writer-module">
+<h2>db_tools.influx_lp_writer module<a class="headerlink" href="#db-tools-influx-lp-writer-module" title="Permalink to this headline"></a></h2>
 </section>
 <section id="module-db_tools.otherm_db_reader">
 <span id="db-tools-otherm-db-reader-module"></span><h2>db_tools.otherm_db_reader module<a class="headerlink" href="#module-db_tools.otherm_db_reader" title="Permalink to this headline"></a></h2>
@@ -202,7 +144,7 @@ modules.  For example</p>
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_site_info">
-<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_site_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_site_info" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_site_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_site_info" title="Permalink to this definition"></a></dt>
 <dd><p>get site info docstring</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -219,42 +161,73 @@ modules.  For example</p>
     <span class="n">timezone</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">thermal_load</span><span class="p">:</span> <span class="n">ThermalLoad</span>
     <span class="n">weather_station</span><span class="p">:</span> <span class="n">WeatherStation</span>
-
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ThermalLoad</span><span class="p">:</span>
-    <span class="n">uuid</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">conditioned_area</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">heating_design_load</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">cooling_design_load</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">heating_design_oat</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">cooling_design_oat</span><span class="p">:</span> <span class="nb">float</span>
-
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">WeatherStation</span><span class="p">:</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">nws_id</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">lat</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">lon</span><span class="p">:</span> <span class="nb">float</span>
 </pre></div>
 </div>
 </p>
 </dd>
 </dl>
 <p>To access data elements, use the dot syntax.  For example, the Weather Station ID, is accessed by</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">site</span><span class="o">.</span><span class="n">weather_station</span><span class="o">.</span><span class="n">nws_id</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">site</span><span class="o">.</span><span class="n">weather_station</span>
 <span class="go">&#39;KPSM&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_thermal_load">
+<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_thermal_load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_thermal_load" title="Permalink to this definition"></a></dt>
+<dd><dl>
+<dt>Dataclass object with equipment specifications ::</dt><dd><p>&#64;dataclass
+class ThermalLoad:</p>
+<blockquote>
+<div><p>uuid: str
+name: str
+description: Optional[str]
+conditioned_area: float
+heating_design_load: float
+cooling_design_load: float
+heating_design_oat: float
+cooling_design_oat: float</p>
+</div></blockquote>
+</dd>
+</dl>
+<p>To access data elements, use the dot syntax.  For example, the Weather Station ID, is accessed by</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_equipment">
+<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_equipment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_equipment" title="Permalink to this definition"></a></dt>
+<dd><p>Uses ‘request’ method to read equipment table for a specific site</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>site_id</strong> (<em>int</em>) – The site_id in the PostgreSQL database.  Can be obtained from <em>site.id</em></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Equipment dataclass contains equipment information in the following fields</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>class Equipment:</dt><dd><p>id: int
+uuid: str
+model: str
+description: Optional[str]
+no_flowmeter_flowrate: float
+type: int
+site: int
+manufacturer: int</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_equipment_data">
-<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_equipment_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_equipment_data" title="Permalink to this definition"></a></dt>
-<dd><p>Uses ‘request’ method to reads heat pump operating data from otherm influx database and returns a pandas dataframe
-equipment_id is not currently used, but expect it will be added to query, as well as time range.</p>
-<p>The data DataFrame returned includes all records for the equipment at a site.  At present, the script is limited
+<span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_equipment_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_equipment_data" title="Permalink to this definition"></a></dt>
+<dd><p>Uses ‘request’ method to reads heat pump operating data from otherm influx database and returns a pandas dataframe.
+The data DataFrame returned includes all records for the equipment at a site.  At present, the script is limited
 to a single piece of equipment at a site.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -273,6 +246,7 @@ to a single piece of equipment at a site.</p>
     <span class="n">uuid</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">no_flowmeter_flowrate</span><span class="p">:</span> <span class="nb">float</span>
     <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">site</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">manufacturer</span><span class="p">:</span> <span class="nb">int</span>
@@ -364,7 +338,42 @@ has its own set of specifications.  See oTherm documentation for more details.</
 <dl class="py function">
 <dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_source_specs">
 <span class="sig-prename descclassname"><span class="pre">db_tools.otherm_db_reader.</span></span><span class="sig-name descname"><span class="pre">get_source_specs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.otherm_db_reader.get_source_specs" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves the source specifications.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>site</strong> (<em>str</em>) – site name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Dataclass object with source specifications</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">SourceSpec</span><span class="p">:</span>
+    <span class="n">site</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">site_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">source_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">source_type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">freeze_protection</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">grout_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">formation_conductivity</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">formation_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">grout_conductivity</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">antifreeze</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">pipe_dimension_ratio</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">n_pipes_in_circuit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">n_circuits</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">total_pipe_length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+<p>To access data elements, use the dot syntax.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While the oTherm data model supports multiple types of sources, this db_reader tool only supports
+the vertical loop spec at present.</p>
+</div>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="db_tools.otherm_db_reader.get_mfr_data">
@@ -392,13 +401,21 @@ system, as specified in the oTherm database</p>
 </dd></dl>
 
 </section>
+<section id="module-db_tools.csv_to_yaml">
+<span id="db-tools-csv-to-yaml-module"></span><h2>db_tools.csv_to_yaml module<a class="headerlink" href="#module-db_tools.csv_to_yaml" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="db_tools.csv_to_yaml.output_yaml">
+<span class="sig-prename descclassname"><span class="pre">db_tools.csv_to_yaml.</span></span><span class="sig-name descname"><span class="pre">output_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">equipment_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">site_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thermal_load_model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_tools.csv_to_yaml.output_yaml" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="utilities.html" class="btn btn-neutral float-left" title="utilities package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="analysis.html" class="btn btn-neutral float-left" title="analysis package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="otherm_field_names.html" class="btn btn-neutral float-right" title="oTherm Database Fields" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
