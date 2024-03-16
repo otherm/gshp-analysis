@@ -265,7 +265,7 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
     else:
         equip_url = "https://%s/api/equipment_data/?site=%s&start_date=%s&end_date=%s" % (configuration.db_info[db]['baseurl'],
                                                                          site_id, start_date, end_date)
-        #print(equip_url)
+        print(equip_url)
         equip_response = requests.get(equip_url, headers=configuration.db_info[db]['header'])
     #print(equip_response)
     #print(site_id, start_date, end_date, db, configuration.db_info[db]['header'])
@@ -281,7 +281,12 @@ def get_equipment_data(site_id, start_date, end_date, timezone, db):
     # TODO apply time shift is applied for on-pipe temps
 
     equip_response.close()
-    hp_data['time'] = pd.to_datetime(hp_data['time'])
+    try:
+        hp_data['time'] = pd.to_datetime(hp_data['time'])
+    except Exception as e:
+        print('Error coverting time index to datetime for:    ', site_id, e, '\n')
+        return
+
     hp_data = hp_data.set_index('time')
     hp_data['time_elapsed'] = hp_data.index.to_series().diff().dt.seconds.div(3600, fill_value=0)
     hp_data.index = hp_data.index.tz_convert(tz=timezone)
@@ -528,9 +533,9 @@ def get_monitoring_system(name):
 
 
 if __name__ == '__main__':
-    site_name = '110912'
-    start_date = '2022-06-19'
-    end_date = '2022-06-20'
+    site_name = '110459'
+    start_date = '2022-06-01'
+    end_date = '2023-12-31'
     timezone = 'US/Eastern'
     db = 'otherm_cgb'
     #db = 'othermdev'

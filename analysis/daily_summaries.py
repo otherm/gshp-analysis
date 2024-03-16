@@ -128,14 +128,17 @@ def create_daily_summaries(data, heatpump_threshold_watts):
 
 if __name__ == '__main__':
     site_name = '110855'
-    start_date = '2021-07-01'
-    end_date = '2022-06-30'
+    start_date = '2021-12-31'
+    end_date = '2023-01-01'
     timezone = 'US/Eastern'
     db = 'otherm_cgb'
     #db = 'localhost'
 
     sites = ['110459', '110722', '110855', '111011', '111071',
                   '111382', '111383', '111520', '111693', '111468', '111956']
+
+    CY21_sites = ['110459', '110720', '110722', '110855', '110912', '110918', '111011', '111071', '111382', '111383',
+                  '111468', '111469', '111520', '111548']
 
     for site_name in sites:
         site = otherm_db_reader.get_site_info(site_name, db)
@@ -144,8 +147,8 @@ if __name__ == '__main__':
 
         ds = create_daily_summaries(hp_data, heatpump_threshold_watts=500)
 
-        output_file = '../temp_files/daily_summary_{}_{}_{}.csv'.format(site_name, db, str(date.today().strftime("%m-%d-%y")))
-        ds.to_csv(output_file)
+        output_file = 'C://Users//mattd//OneDrive - USNH//Research//oTherm//CTGB//Analysis//daily_summary_{}_{}_{}.csv'.format(site_name, db, 'CY22')
+        ds.to_csv(output_file) #, mode='a', header=False)
         #print(site_name, ds.runtime.sum(), ds.heatpump_kwh.sum(), ds.auxiliary_kwh.sum(),
         #      ds.mbtus_exchanged_heating.sum(), ds.mbtus_heat.sum(), ds.n_records.sum(), ds.ewt_min.min())
 

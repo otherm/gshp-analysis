@@ -14,23 +14,29 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     site_name = '111011'
-    start = '2022-03-14'
-    end = '2023-03-01'
+    start = '2023-08-20'
+    end = '2023-08-22'
     db = 'otherm_cgb'
 
     site_names = ['110459', '110720', '110722', '110855', '110912', '110918', '111011', '111071', '111382', '111383',
                   '111468', '111469', '111516', '111520', '111548', '111596', '111619', '111685', '111693', '111731',
                   '111734', '111759', '111760', '111858', '111956', '111995']
 
-    site_names = ['111011']
+    site_names = ['111516', '111520', '111548', '111596', '111619', '111685', '111693', '111731',
+                  '111734', '111759', '111760', '111858', '111956', '111995']
+    site_names = ['110722']
 
     for site_name in site_names:
         site = otherm_db_reader.get_site_info(site_name, db)
         equipment = otherm_db_reader.get_equipment(site.id, db)
         hp_data = otherm_db_reader.get_equipment_data(site.id, start, end, site.timezone, db)
-        print(site_name, hp_data.index[-1])
 
-    '''
+        try:
+            print(site_name, hp_data.index[-1])
+        except Exception as e:
+            print('Error reading operating data pump data: \n     ', e)
+
+
     hp_data['kw_hp'] = hp_data['heatpump_power'][~np.isnan(hp_data['heatpump_power'])] / 1000.
     hp_data['kw_aux'] = hp_data['heatpump_aux'][~np.isnan(hp_data['heatpump_aux'])] / 1000.
 
@@ -44,7 +50,7 @@ if __name__ == "__main__":
 
     # filter dataframe to exclude NaNs and heat pump is on, calculate heating only
     hp_data = hp_data[np.isfinite(hp_data['heat_flow_rate'])]
-    hp_data = hp_data.query('heatpump_power > 500')
+    #hp_data = hp_data.query('heatpump_power > 500')
     hp_data['MBtuH'] = (3.412*(hp_data['kw_hp'] + hp_data['kw_aux']) +
                        (hp_data['heat_flow_rate'])/1000)
 
@@ -68,7 +74,7 @@ if __name__ == "__main__":
     #plt.ylim([0, 60])
 
     #plt.scatter(hp_data_daily['outdoor_temperature_F'], hp_data_daily['MBtuH'])
-
+    '''
     fig_name = '../temp_files/explorer_plot_{}.png'.format(str(site.name))
     print(fig_name)
     plt.show()
@@ -99,6 +105,5 @@ if __name__ == "__main__":
     #    ax.label_outer()
 
     plt.suptitle("NGEN %s  %s to %s " % (ngen, data.index[0].strftime("%m-%d-%Y"), data.index[-1].strftime("%m-%d-%Y")))
-
-    plt.show()
     '''
+    plt.show()

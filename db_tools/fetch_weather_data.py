@@ -39,7 +39,7 @@ def get_hourly_temps(zip_code, start, end):
 
 if __name__ == '__main__':
 
-    zip_code = '01886'
-    start = date(2022, 4, 18)
-    end = date(2022, 4, 19)
+    zip_code = '06010'
+    start = date(2023, 8, 19)
+    end = date(2023, 8, 20)
     oat = get_hourly_temps(zip_code, start, end)

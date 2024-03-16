@@ -46,7 +46,7 @@ def get_ges_data_for_influx(installation_id, start, end, msp_columns, data_sourc
         sql = """SELECT %s from results_flattenedresponse WHERE installation_id = %s
         and created BETWEEN TIMESTAMPTZ '%s' AND TIMESTAMPTZ '%s'""" % parameters
     elif data_source == 'ges':
-        ges_db = configuration.GES_local
+        ges_db = configuration.ges_ge_read
         db_read = psycopg2.connect(**ges_db)
         sql = """SELECT %s FROM results_wattresponse w INNER JOIN results_flattenedresponse fr ON w.response_id = fr.id
         WHERE fr.installation_id = %s AND created BETWEEN TIMESTAMPTZ '%s' AND TIMESTAMPTZ
@@ -130,7 +130,7 @@ def write_files(db_name, tag, uuid, df, column_mapping, chunk_size, j):
     df_split = np.array_split(df, chunks)
     print(len(df_split))
     for i in range(len(df_split)):
-        lp_file_name = ['C:\\Llano\\oTherm_CTGB_chunks\\'+ db_name, tag, str(j), ('chunk_%d.txt' % i)]
+        lp_file_name = ['D:\\oTherm_CTGB_chunks\\'+ db_name, tag, str(j), ('chunk_%d.txt' % i)]
         lp_file_for_chunk = open("_".join(lp_file_name), 'w')
         for index, row in df_split[i].iterrows():
             measures = []
@@ -157,8 +157,8 @@ def get_symphony_data(datafile):
     return ds_data
 
 def get_enertech_data(datafile):
-    et_data = pd.read_csv(datafile, parse_dates=True, index_col=0)
-    # forward fill
+    et_data = pd.read_excel(datafile, parse_dates=True, index_col=0, sheet_name=None)
+    #et_data = pd.concat(pd.read_excel(datafile, parse_dates=True, index_col=0, sheet_name=None),ignore_index=True)
     # temperature unit conversion
     return et_data
 
@@ -180,35 +180,55 @@ if __name__ == '__main__':
     wf_installs = ctgb_wf_installs.installs
     de_installs = ctgb_de_installs.installs
 
-    data_source = 'wf'
+    data_source = 'de'
     db_name = 'otherm-data'
 
     chunk_size = 8000
 
     if data_source =='ges':
-        start = datetime(2022, 9, 1)
-        stop = datetime(2023, 5, 1)
+        start = datetime(2023, 8, 19)
+        stop = datetime(2023, 8, 20)
         for install in ges_installs:
             #start = datetime.strptime(ges_installs[install]['start'], '%Y-%m-%d')
             for i in range(len(ges_installs[install]['hp_id'])):
                 hp_uuid = ges_installs[install]['hp_id'][i]
                 j = i+1
                 msp_columns = 'ewt_%d, lwt_%d, compressor_%d, created, q_%d_device, auxiliary_%d, outdoor_temperature' % tuple(repeat(j, 5))
+                msp_columns = 'ewt_%d, lwt_%d, compressor_%d, created, q_%d_device, auxiliary_%d' % tuple(repeat(j, 5))
+
+                #               column_mapping = {"auxiliary_%d" % j: "heatpump_aux",
+ #                                 "compressor_%d" % j: "heatpump_power",
+ #                                 "lwt_%d" % j: "source_returntemp",
+ #                                 "ewt_%d" % j: "source_supplytemp",
+ #                                 "q_%d_device" % j: "sourcefluid_flowrate",
+ #                                 "outdoor_temperature": "outdoor_temperature",
+ #                                 "heat_flow_%d" % j: "heat_flow_rate"}
 
                 column_mapping = {"auxiliary_%d" % j: "heatpump_aux",
                                   "compressor_%d" % j: "heatpump_power",
                                   "lwt_%d" % j: "source_returntemp",
                                   "ewt_%d" % j: "source_supplytemp",
                                   "q_%d_device" % j: "sourcefluid_flowrate",
-                                  "outdoor_temperature": "outdoor_temperature",
                                   "heat_flow_%d" % j: "heat_flow_rate"}
 
 
                 print('Working on .db_to_influx...   ', install, 'heat pump ', j)
 
                 data = get_ges_data_for_influx(install, start, stop, msp_columns, data_source)
+                data['created'] = pd.to_datetime(data['created'], utc=True)
+                data = data.set_index('created')
 
-                write_files(db_name, install, hp_uuid, data, column_mapping, chunk_size, j)
+                wx_data = fetch_weather_data.get_hourly_temps(ges_installs[install]['zip_code'],
+                                                              datetime.date(data.index[0]),
+                                                              datetime.date(data.index[-1]))
+
+                wx_data.index = pd.to_datetime(wx_data.index, utc=True)
+                oat_minute = wx_data.resample('60S').backfill()
+                ges_data = pd.merge_asof(data,oat_minute, right_index=True, left_index=True, direction='nearest',
+                                         tolerance=pd.Timedelta("2 Minutes"))
+                ges_data.fillna(-999, axis=1, inplace=True)
+
+                write_files(db_name, install, hp_uuid, ges_data, column_mapping, chunk_size, j)
 
     elif data_source == 'wf':
         column_mapping = {'enteringwatertemp': "source_supplytemp",
@@ -218,7 +238,7 @@ if __name__ == '__main__':
                           'auxpower': "heatpump_aux",
                           'looppumppower': "sourcefluid_pump_power"}
 
-        data_folder = 'C:\\Users\\mattd\\OneDrive - USNH\\Research\\oTherm\\CTGB\\HP Data\\wf_data\\2022Q3Q4\\'
+        data_folder = 'C:\\Users\\mattd\\OneDrive - USNH\\Research\\oTherm\\CTGB\\HP Data\\wf_data\\CY2023\\'
         #data_folder = '..\\temp_files\\'
         #for file in ['E8EB1BCAB8E7-2022-06.csv']:
         for file in os.listdir(data_folder):
@@ -254,45 +274,54 @@ if __name__ == '__main__':
         #                  'auxpower': "heatpump_aux",
         #                  'looppumppower': "sourcefluid_pump_power"}
 
-        #column_mapping = {['timestamp', '[kWh Monthly][kWh][118]', '[Water Flow][gpm][307]',
-        #                   '[Aux Heat Current][A][129]', '[System Power][W][107]',
-        #                   '[System Current][A][106]', '[Return Air][ºF][102]',
-        #                   '[Entering Water][ºF][103]', '[kWh][kWh][116]',
-        #                   '[Leaving Water][ºF][104]', '[Supply Air][ºF][101]']}
+        column_mapping = {'[Aux Heat Current][A][129]': 'aux_amps',
+                          '[Entering Water][ºF][103]': 'ewt_F',
+                          '[Leaving Water][ºF][104]': 'lwt_F',
+                          '[Return Air][ºF][102]': 'return_air_F',
+                          '[Supply Air][ºF][101]': 'supply_air_F',
+                          '[System Current][A][106]': 'system_amps',
+                          '[System Power][W][107]': 'heatpump_power',
+                          '[Water Flow][gpm][307]': 'sourcefluid_flowrate',
+                          '[kWh][kWh][116]': 'kWh',
+                          '[kWh Monthly][kWh][118]': 'kWh_monthly'
+                          }
 
         data_folder = ctgb_de_installs.de_data_folder
-        for file in os.listdir(data_folder):
-            if file.lower().endswith(".csv"):
+        for file in ['111760.xlsx']: #, '111685.xlsx', '111734.xlsx', '111760.xlsx']:
+            if file.lower().endswith(".xlsx"):
                 print('working on  ', file)
                 datafile = data_folder + os.fsdecode(file)
-                basename = file.split('.')[0]
-                dum, ngen, date = basename.split('_')
+                ngen = file.split('.')[0]
+                #dum, ngen, date = basename.split('_')
 
                 hp_uuid = de_installs[ngen]['hp_id']
-                print(ngen, date, datafile)
-
-                #tag = sys_id[6:] + '-' + mo
-
+                print(ngen, datafile)
                 if ngen == '111760':
                     data = get_enertech_data(datafile)
+                    #tag = sys_id[6:] + '-' + mo
 
-                    print('in if block')
+                    if ngen == '111759':
+                        #data = get_enertech_data(datafile)
 
-                #df = df[(df.index > '2022-6-28') & (df.index <= '2022-6-30')]
-                #df.plot(secondary_y='[System Power][W][107]')
-                data = data[(data.index > '2022-7-2') & (data.index <= '2022-7-4')]
-                df = data.resample('60S').ffill()
-                colset1 = ['[System Current][A][106]', '[Entering Water][ºF][103]',
-                           '[Supply Air][ºF][101]']
-                data[colset1[0]].plot()
-                data[colset1[1]].plot(label=colset1[1])
-                data[colset1[2]].plot(label=colset1[2])
-                #data.plot(secondary_y='[System Power][W][107]')
-                plt.legend()
-                plt.title('NGEN 111760  2022-07-02 to 2022-07-04')
-                plt.show()
-                plt.scatter(df['[System Current][A][106]'], df['[Supply Air][ºF][101]'], s=4)
-                plt.xlabel('[System Current][A][106] (ffill 1-min)')
-                plt.ylabel('[Supply Air][ºF][101] (ffill 1-min)')
-                plt.title('NGEN 111760  2022-07-02 to 2022-07-04')
-                plt.show()
+                        print('skipping ngen 111759')
+                    x = pd.concat([df.assign(name=n) for n, df in data.items()])
+                    x.rename(mapper=column_mapping, inplace=True, axis=1)
+
+                    #df = df[(df.index > '2022-6-28') & (df.index <= '2022-6-30')]
+                    #df.plot(secondary_y='[System Power][W][107]')
+                    #data = data[(data.index > '2022-7-2') & (data.index <= '2022-7-4')]
+                    #df = data.resample('60S').ffill()
+                    #colset1 = ['[System Current][A][106]', '[Entering Water][ºF][103]',
+                    #           '[Supply Air][ºF][101]']
+                    #data[colset1[0]].plot()
+                    #data[colset1[1]].plot(label=colset1[1])
+                    #data[colset1[2]].plot(label=colset1[2])
+                    #data.plot(secondary_y='[System Power][W][107]')
+                    #plt.legend()
+                    #plt.title('NGEN 111760  2022-07-02 to 2022-07-04')
+                    #plt.show()
+                    #plt.scatter(df['[System Current][A][106]'], df['[Supply Air][ºF][101]'], s=4)
+                    #plt.xlabel('[System Current][A][106] (ffill 1-min)')
+                    #plt.ylabel('[Supply Air][ºF][101] (ffill 1-min)')
+                    #plt.title('NGEN 111760  2022-07-02 to 2022-07-04')
+                    #plt.show()
